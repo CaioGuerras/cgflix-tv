@@ -199,7 +199,7 @@ export const defaultSettings = {
 	serverSortBy: 'name',
 	exitConfirmation: true,
 	updateNotificationsEnabled: true,
-	navbarPosition: 'top',
+	navbarPosition: 'left',
 	navbarAlwaysExpanded: false,
 	oledMode: 'subtle',
 	screensaverEnabled: true,

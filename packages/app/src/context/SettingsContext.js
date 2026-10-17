@@ -392,6 +392,10 @@ export const localToProfile = (localSettings, keys) => {
 export const SYNC_PROFILES = ['global', 'desktop', 'mobile', 'tv'];
 export const DEVICE_SYNC_PROFILE = 'tv';
 
+// CGFLIX: settings this app takes only from the profile it syncs with, never from the
+// layers under it.
+export const DEVICE_ONLY_KEYS = ['navbarPosition', 'navbarAlwaysExpanded'];
+
 // The profile automatic sync reads and writes. The stored value is empty while it follows
 // this device's own, and anything it doesn't recognize falls back to that too.
 export const activeSyncProfile = (syncProfile) => (
@@ -1044,6 +1048,12 @@ export function SettingsProvider({children}) {
 			// A value the profile carries was chosen somewhere, on this device or
 			// another, so the setup wizard has nothing left to ask about it.
 			noteAnsweredSettings(SETUP_QUESTION_KEYS.filter((key) => resolved[key] !== undefined));
+			// CGFLIX: where the menu sits is a choice made on a TV. The global profile and the
+			// admin defaults carry the web's top bar, so only this device's profile moves it.
+			const deviceProfile = serverData?.[activeSyncProfile(settingsRef.current.syncProfile)];
+			for (const key of DEVICE_ONLY_KEYS) {
+				if (deviceProfile?.[key] === undefined) delete resolved[key];
+			}
 			setSettings(prev => {
 				const nextValues = {};
 				for (const key of SYNCABLE_KEYS) {
