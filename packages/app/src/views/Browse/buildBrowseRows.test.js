@@ -140,6 +140,20 @@ describe('ordering', () => {
 
 		expect(rows.map((r) => r.id)).toEqual(['collections', 'seerr_trending']);
 	});
+
+	test('Coming Soon closes the home even when the stored order puts it early', () => {
+		const rows = build({
+			allRowData: [row('collections')],
+			externalRows: [row('cgflix_embreve'), row('cgflix_emalta'), row('seerr_trending')],
+			homeRowsConfig: [
+				{id: 'cgflix_emalta', enabled: true, order: 0},
+				{id: 'cgflix_embreve', enabled: true, order: 1},
+				{id: 'collections', enabled: true, order: 2}
+			]
+		});
+
+		expect(rows.map((r) => r.id)).toEqual(['cgflix_emalta', 'collections', 'seerr_trending', 'cgflix_embreve']);
+	});
 });
 
 describe('titles', () => {

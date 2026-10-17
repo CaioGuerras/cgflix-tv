@@ -632,7 +632,7 @@ export const SETTINGS_SCHEMA = [
 				keywords: () => ['spinner', 'runner', 'moon', 'logo', 'loading'],
 				rows: [
 					{kind: KIND.SECTION, id: 'loadingAnimationConfiguration', label: () => $L('Loading Animation Configuration')},
-					{kind: KIND.OPTION, key: 'loadingAnimationImage', label: () => $L('Image'), options: getLoadingAnimationImageOptions, fallback: () => $L('Moonfin Logo'), icon: 'movie_filter_outlined'},
+					{kind: KIND.OPTION, key: 'loadingAnimationImage', label: () => $L('Image'), options: getLoadingAnimationImageOptions, fallback: () => 'CGFLIX', icon: 'movie_filter_outlined'},
 					{kind: KIND.CUSTOM, id: 'loadingAnimationPreview', render: 'loadingAnimationPreview', when: whenLoadingAnimation},
 					{kind: KIND.OPTION, key: 'loadingAnimationSize', label: () => $L('Animation Size'), options: getScreensaverSizeOptions, fallback: () => $L('Medium'), icon: 'photo_size_select_actual_outlined', when: whenLoadingAnimation},
 					{kind: KIND.OPTION, key: 'loadingAnimationPosition', label: () => $L('Animation Position'), options: getLoadingAnimationPositionOptions, fallback: () => $L('Middle'), icon: 'grid_view_rounded', when: whenLoadingAnimation},
@@ -655,7 +655,7 @@ export const SETTINGS_SCHEMA = [
 					{kind: KIND.SECTION, id: 'screensaverVisual', label: () => $L('Visual Components'), when: whenScreensaver},
 					{kind: KIND.CUSTOM, id: 'screensaverPreview', render: 'screensaverPreview', when: whenScreensaver},
 					{kind: KIND.OPTION, key: 'screensaverBackdrop', label: () => $L('Backdrop'), options: getScreensaverBackdropOptions, fallback: () => $L('Library Art'), icon: 'auto_awesome', when: whenScreensaver},
-					{kind: KIND.OPTION, key: 'screensaverComponent', label: () => $L('Additional Component'), options: getScreensaverComponentOptions, fallback: () => $L('Moonfin Logo'), icon: 'widgets_outlined', when: whenScreensaver},
+					{kind: KIND.OPTION, key: 'screensaverComponent', label: () => $L('Additional Component'), options: getScreensaverComponentOptions, fallback: () => 'CGFLIX', icon: 'widgets_outlined', when: whenScreensaver},
 					{kind: KIND.OPTION, key: 'screensaverMovement', label: () => $L('Component Movement'), options: getScreensaverMovementOptions, fallback: () => $L('Moderate'), icon: 'speed_rounded', when: whenScreensaverComponent},
 					{kind: KIND.OPTION, key: 'screensaverSize', label: () => $L('Component Size'), options: getScreensaverSizeOptions, fallback: () => $L('Medium'), icon: 'photo_size_select_actual_outlined', when: whenScreensaverComponent},
 					{kind: KIND.OPTION, key: 'screensaverPosition', label: () => $L('Component Position'), options: getScreensaverPositionOptions, fallback: () => $L('Middle'), icon: 'grid_view_rounded', when: whenScreensaverStatic},

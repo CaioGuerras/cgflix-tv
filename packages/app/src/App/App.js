@@ -1207,10 +1207,6 @@ const AppContent = (props) => {
 		navigateTo(PANELS.PLAYER);
 	}, [navigateTo]);
 
-	const handleOpenSeerr = useCallback(() => {
-		navigateTo(PANELS.SEERR_DISCOVER);
-	}, [navigateTo]);
-
 	const handleHome = useCallback(() => {
 		setPanelHistory([]);
 		setSelectedItem(null);
@@ -1573,7 +1569,6 @@ const AppContent = (props) => {
 					onGenres={handleOpenGenres}
 					onFavorites={handleOpenFavorites}
 					onLiveTv={handleOpenLiveTv}
-					onDiscover={handleOpenSeerr}
 					onSyncPlay={settings.syncplayEnabled !== false ? openSyncPlay : undefined}
 					onSettings={handleOpenSettings}
 					onSelectLibrary={handleSelectLibrary}
@@ -1592,7 +1587,6 @@ const AppContent = (props) => {
 					onGenres={handleOpenGenres}
 					onFavorites={handleOpenFavorites}
 					onLiveTv={handleOpenLiveTv}
-					onDiscover={handleOpenSeerr}
 					onSyncPlay={settings.syncplayEnabled !== false ? openSyncPlay : undefined}
 					onSettings={handleOpenSettings}
 					onSelectLibrary={handleSelectLibrary}

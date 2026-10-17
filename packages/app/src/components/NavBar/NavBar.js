@@ -2,11 +2,9 @@ import {memo, useCallback, useMemo, useState} from 'react';
 import $L from '@enact/i18n/$L';
 import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDecorator';
 import {useSettings} from '../../context/SettingsContext';
-import {useSeerr} from '../../context/SeerrContext';
 import {useSyncPlay} from '../../context/SyncPlayContext';
 import {useServerMessages} from '../../context/ServerMessagesContext';
 import {useAchievements} from '../../context/AchievementsContext';
-import SeerrIcon from '../icons/SeerrIcon';
 import SyncPlayIcon from '../icons/SyncPlayIcon';
 import {FavoritesIcon, FriendsIcon, GenresIcon, HomeIcon, LiveTvIcon, MessagesIcon, SearchIcon, SettingsIcon, ShuffleIcon} from '../icons/navIcons';
 import useClock from '../../hooks/useClock';
@@ -39,7 +37,6 @@ const NavBar = ({
 	onGenres,
 	onFavorites,
 	onLiveTv,
-	onDiscover,
 	onSettings,
 	onSelectLibrary,
 	onUserMenu,
@@ -48,7 +45,6 @@ const NavBar = ({
 	onFriends
 }) => {
 	const {settings, activeTheme} = useSettings();
-	const {isEnabled: seerrEnabled, displayName} = useSeerr();
 	const {isInGroup} = useSyncPlay();
 	const {messages, unreadCount} = useServerMessages();
 	const {socialAvailable, badgeCount: friendsBadge} = useAchievements();
@@ -63,7 +59,6 @@ const NavBar = ({
 	// would follow the account to the parent's other devices.
 	const kidsMode = isKidsMode(settings);
 	const showLiveTv = !kidsMode && settings.showLiveTvButton !== false && hasLiveTv;
-	const showSeerr = !kidsMode && seerrEnabled && settings.showSeerrButton !== false;
 	const showSyncPlay = !kidsMode && settings.syncplayEnabled !== false && settings.showSyncPlayButton !== false;
 	const navLibraries = librariesForNav(libraries, showLiveTv, {hideLiveTv: kidsMode});
 	const showLibraries = !kidsMode && settings.showLibrariesInToolbar !== false && navLibraries.length > 0;
@@ -94,14 +89,13 @@ const NavBar = ({
 	// Whatever sits immediately left of the libraries group, which depends on how
 	// many of the optional buttons are turned on.
 	const librariesLeftTargetId = useMemo(() => {
-		if (showSeerr) return 'navbar-discover';
 		if (showSyncPlay) return 'navbar-syncplay';
 		if (showLiveTv) return 'navbar-livetv';
 		if (showFavorites) return 'navbar-favorites';
 		if (showGenres) return 'navbar-genres';
 		if (showShuffle) return 'navbar-shuffle';
 		return 'navbar-search';
-	}, [showSeerr, showSyncPlay, showLiveTv, showFavorites, showGenres, showShuffle]);
+	}, [showSyncPlay, showLiveTv, showFavorites, showGenres, showShuffle]);
 
 	const handlePillFocus = useCallback((e) => {
 		if (pointerHover()) return;
@@ -158,9 +152,6 @@ const NavBar = ({
 						<NavPillButton Icon={SyncPlayIcon} slot={nextSlot()} label={$L('SyncPlay')} onClick={onSyncPlay} spotlightId="navbar-syncplay" active={isInGroup} />
 					)}
 
-					{showSeerr && (
-						<NavPillButton Icon={SeerrIcon} slot={nextSlot()} label={displayName} onClick={onDiscover} spotlightId="navbar-discover" />
-					)}
 
 					{showLibraries && (
 						<NavLibraries

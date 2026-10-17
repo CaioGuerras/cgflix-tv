@@ -82,7 +82,7 @@ describe('loading overlay', () => {
 			mockSettings.loadingAnimationImage = image;
 			const {unmount} = render(<LoadingOverlay />);
 			const found = {
-				logo: count('.logoSpin svg'),
+				logo: count('.logoPulse svg'),
 				spinner: count('.spinner canvas'),
 				moon: count('.moon canvas'),
 				canvases: count('canvas')
@@ -102,11 +102,11 @@ describe('loading overlay', () => {
 	test('draws the image at the size picked, or the one the preview hands in', () => {
 		mockSettings.loadingAnimationSize = 'large';
 		const {unmount} = render(<LoadingOverlay />);
-		expect(find('.logoSpin').style.width).toBe('170px');
+		expect(find('.logoPulse').style.width).toBe('170px');
 		unmount();
 
 		render(<LoadingOverlay pixelSize={104} />);
-		expect(find('.logoSpin').style.width).toBe('104px');
+		expect(find('.logoPulse').style.width).toBe('104px');
 	});
 
 	test('writes the label in capitals under the image', () => {

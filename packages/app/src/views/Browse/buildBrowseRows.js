@@ -168,6 +168,9 @@ const orderRows = (rows, rowOrderMap) => {
 				);
 			} else if (row.isCustomRow) {
 				order = 6000 + index;
+			} else if (row.id === 'cgflix_embreve') {
+				// CGFLIX: Coming Soon always closes the home, whatever place a saved layout gave it.
+				order = Number.MAX_SAFE_INTEGER;
 			}
 			if (!Number.isFinite(order)) {
 				order = row.isPluginRow ? 2000 + index : 1000 + index;

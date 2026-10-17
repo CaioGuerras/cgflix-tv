@@ -86,22 +86,24 @@
 	}
 }
 
-.logoSpin {
-	animation: logoSpin 8s linear infinite;
+.logoPulse {
+	animation: logoPulse 1.8s ease-in-out infinite;
 
 	svg {
 		display: block;
 	}
 }
 
-// Turning the negative way matches the direction the other clients spin the logo, since
-// their depth axis points the opposite way to CSS.
-@keyframes logoSpin {
-	from {
-		transform: perspective(1000px) rotateY(0deg);
+// CGFLIX: the same breath the site gives its emblem while a page or a video loads.
+@keyframes logoPulse {
+	0%,
+	100% {
+		opacity: 0.55;
+		transform: scale(0.94);
 	}
-	to {
-		transform: perspective(1000px) rotateY(-360deg);
+	50% {
+		opacity: 1;
+		transform: scale(1);
 	}
 }
 

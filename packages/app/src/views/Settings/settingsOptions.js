@@ -127,7 +127,7 @@ export const getScreensaverBackdropOptions = () => [
 
 export const getScreensaverComponentOptions = () => [
 	{ value: 'none', label: $L('None') },
-	{ value: 'moonfinLogo', label: $L('Moonfin Logo') },
+	{ value: 'moonfinLogo', label: 'CGFLIX' },
 	{ value: 'clock', label: $L('Clock') },
 	{ value: 'runner', label: $L('Runner') }
 ];
@@ -161,7 +161,7 @@ export const getScreensaverPositionOptions = () => [
 
 export const getLoadingAnimationImageOptions = () => [
 	{ value: 'none', label: $L('None') },
-	{ value: 'moonfinLogo', label: $L('Moonfin Logo') },
+	{ value: 'moonfinLogo', label: 'CGFLIX' },
 	{ value: 'spinner', label: $L('Spinner') },
 	{ value: 'runner', label: $L('Runner') },
 	{ value: 'moonPhases', label: $L('Moon Phases') },
