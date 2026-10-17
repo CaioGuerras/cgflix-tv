@@ -67,6 +67,13 @@ import css from './Details.module.less';
 // draws the screen.
 const DETAIL_CONTENT = {v3: SpotlightDetailContent, v4: NouveauDetailContent, v5: MinimalistDetailContent};
 
+// CGFLIX: the page clips rather than scrolls, but the browser still scrolls a clipped box to bring
+// a focused element into view, and a row wider than the screen slid the whole page sideways. The
+// TV then repainted only part of it, leaving shifted copies of the backdrop behind (Caio, 17/10).
+const keepPageInPlace = (ev) => {
+	if (ev.currentTarget.scrollLeft) ev.currentTarget.scrollLeft = 0;
+};
+
 const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelectPerson, onSelectStudio, onItemDeleted, autoPlay, onAutoPlayed, seerrNav, backHandlerRef}) => {
 	const {api, serverUrl, user} = useAuth();
 	// Kids Mode has its say before anything on this screen reads a setting, and every piece below
@@ -1064,7 +1071,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 	if (settings.detailScreenStyle !== 'v1') {
 		const DetailContent = DETAIL_CONTENT[settings.detailScreenStyle] || ModernDetailContent;
 		return (
-			<div className={css.page}>
+			<div className={css.page} onScroll={keepPageInPlace}>
 				<DetailContent
 					inSyncPlayGroup={isSyncPlayInGroup}
 					onWatchWithGroup={handlePlay}

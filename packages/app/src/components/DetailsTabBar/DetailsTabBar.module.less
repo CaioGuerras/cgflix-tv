@@ -39,3 +39,11 @@
 	border-color: var(--theme-focus-border-color, #ffffff);
 	box-shadow: 0 0 14px 1px rgba(255, 255, 255, 0.25), 0 8px 18px rgba(0, 0, 0, 0.35);
 }
+
+// CGFLIX: the clipped track a long bar scrolls inside (scrollTrack), so it never widens the page.
+// Spacing set on the bar still applies, since the bar keeps its own box inside the track.
+.track {
+	max-width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+}

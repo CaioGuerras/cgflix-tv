@@ -566,6 +566,7 @@ const NouveauDetailContent = (props) => {
 							onActivate={onSeasonActivate}
 							spotlightId="nouveau-season-selector"
 							className={css.seasonBar}
+							scrollTrack
 						/>
 					)}
 					<NouveauRail

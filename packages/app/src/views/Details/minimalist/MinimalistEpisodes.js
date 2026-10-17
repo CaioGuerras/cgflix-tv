@@ -83,6 +83,7 @@ const MinimalistEpisodes = ({
 					onActivate={handleSeasonActivate}
 					spotlightId={SEASON_TABS_ID}
 					className={css.seasonBar}
+					scrollTrack
 				/>
 			)}
 			<NouveauRail
