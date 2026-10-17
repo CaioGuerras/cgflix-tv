@@ -46,6 +46,54 @@ const moonfinTheme = parseThemeSpec({
 	}
 });
 
+// CGFLIX: dark purple identity shared with the site and the phone apps.
+const cgflixTheme = parseThemeSpec({
+	schemaVersion: 1,
+	id: 'cgflix',
+	displayName: 'CGFLIX',
+	fontFamily: 'CGFLIXInter',
+	colors: {
+		background: '#FF07060A',
+		onBackground: '#FFECE9F5',
+		surface: '#FF12101A',
+		onSurface: '#FFECE9F5',
+		surfaceVariant: '#FF2B2238',
+		scrim: '#CC07060A',
+		accent: '#FF9333EA',
+		onAccent: '#FFFFFFFF',
+		buttonNormal: '#FF221B2E',
+		buttonFocused: '#FFF3E8FF',
+		buttonDisabled: '#FF15111D',
+		buttonActive: '#FF3B2F4D',
+		onButtonNormal: '#FFECE9F5',
+		onButtonFocused: '#FF7E22CE',
+		onButtonDisabled: '#FF6B6378',
+		inputBackground: '#FF1A1524',
+		inputFocused: '#FF2B2238',
+		inputBorder: '#FF3B2F4D',
+		inputBorderFocused: '#FFA855F7',
+		rangeTrack: '#FF3B2F4D',
+		rangeProgress: '#FF9333EA',
+		rangeThumb: '#FFC084FC',
+		seekbarBuffered: '#80FFFFFF',
+		badgeBackground: '#FF9333EA',
+		onBadge: '#FFFFFFFF',
+		badgeUnplayed: '#FF9333EA',
+		badgeWatched: '#FF22C55E',
+		recordingActive: '#FFEF4444',
+		recordingScheduled: '#FFF59E0B'
+	},
+	borders: {
+		cardBorder: {color: '#00000000', width: 1},
+		chipBorder: {color: '#55A855F7', width: 1},
+		focusBorder: {color: '#FFC084FC', width: 2},
+		cardRadius: 10,
+		chipRadius: 999,
+		chipBackground: '#1FA855F7',
+		focusGlow: [{color: '#669333EA', blurRadius: 16, spreadRadius: 0, offsetX: 0, offsetY: 0}]
+	}
+});
+
 const neonPulseTheme = parseThemeSpec({
 	schemaVersion: 1,
 	id: 'neon_pulse',
@@ -229,6 +277,7 @@ const eightbitHeroTheme = parseThemeSpec({
 });
 
 const builtInThemes = Object.freeze({
+	cgflix: cgflixTheme,
 	moonfin: moonfinTheme,
 	neon_pulse: neonPulseTheme,
 	glass: glassTheme,
@@ -257,7 +306,7 @@ export const getAvailableThemeList = () => {
 	return [...builtIns, ...customs];
 };
 
-export const resolveThemeById = (id) => getAvailableThemes()[id] || builtInThemes.moonfin;
+export const resolveThemeById = (id) => getAvailableThemes()[id] || builtInThemes.cgflix;
 
 export const replaceCustomThemes = (specs) => {
 	const next = {};

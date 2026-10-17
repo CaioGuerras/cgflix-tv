@@ -83,7 +83,7 @@ describe('ink on a focused row', () => {
 	// A focused settings row fills with the theme's focused button colour and writes on it in that
 	// colour's ink.
 	it('fills every theme\'s focused settings rows with its focused button colour and writes in its ink', () => {
-		for (const id of ['moonfin', 'neon_pulse', '8bit_hero']) {
+		for (const id of ['cgflix', 'moonfin', 'neon_pulse', '8bit_hero']) {
 			const theme = resolveThemeById(id);
 			const fill = theme.colors.buttonFocused;
 			const ink = inkOn(fill);
@@ -115,7 +115,7 @@ describe('ink on a focused row', () => {
 	});
 
 	it('leaves every theme with readable text on a focused button', () => {
-		for (const id of ['moonfin', 'neon_pulse', '8bit_hero']) {
+		for (const id of ['cgflix', 'moonfin', 'neon_pulse', '8bit_hero']) {
 			const theme = resolveThemeById(id);
 			const declared = contrastRatio(theme.colors.buttonFocused, theme.colors.onButtonFocused);
 			const fallback = contrastRatio(theme.colors.buttonFocused, inkOn(theme.colors.buttonFocused) === '0, 0, 0' ? '#FF000000' : '#FFFFFFFF');

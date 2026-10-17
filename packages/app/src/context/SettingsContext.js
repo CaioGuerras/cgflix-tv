@@ -670,7 +670,7 @@ export function SettingsProvider({children}) {
 					migrated = true;
 				}
 				if (!stored.visualTheme) {
-					stored.visualTheme = 'moonfin';
+					stored.visualTheme = 'cgflix';
 					migrated = true;
 				}
 				if (typeof stored.customThemeId !== 'string') {
@@ -853,7 +853,7 @@ export function SettingsProvider({children}) {
 		if (customId && getAvailableThemes()[customId]) {
 			return customId;
 		}
-		return isBuiltInThemeId(settings.visualTheme) ? settings.visualTheme : 'moonfin';
+		return isBuiltInThemeId(settings.visualTheme) ? settings.visualTheme : 'cgflix';
 	}, [settings.customThemeId, settings.visualTheme, themeCatalogVersion]); // eslint-disable-line react-hooks/exhaustive-deps
 	const activeTheme = useMemo(
 		() => applyOledMode(resolveThemeById(activeThemeId), settings.oledMode),
@@ -890,7 +890,7 @@ export function SettingsProvider({children}) {
 			if (!getAvailableThemes()[themeId]) return prev;
 			const updated = isBuiltInThemeId(themeId)
 				? {...prev, visualTheme: themeId, customThemeId: ''}
-				: {...prev, visualTheme: prev.visualTheme || 'moonfin', customThemeId: themeId};
+				: {...prev, visualTheme: prev.visualTheme || 'cgflix', customThemeId: themeId};
 			saveToStorage('settings', updated);
 			queueProfilePush(updated, serverCredsRef, ['visualTheme', 'customThemeId']);
 			return updated;
@@ -1073,8 +1073,13 @@ export function SettingsProvider({children}) {
 					customThemeId = '';
 				}
 				let visualTheme = nextValues.visualTheme;
+				// CGFLIX: other Moonfin clients don't know the cgflix theme and store
+				// 'moonfin' in its place, so that value never replaces this device's own.
+				if (visualTheme === 'moonfin') {
+					visualTheme = prev.visualTheme;
+				}
 				if (!isBuiltInThemeId(visualTheme)) {
-					visualTheme = 'moonfin';
+					visualTheme = 'cgflix';
 				}
 
 				// Unchanged values kept their previous reference, so comparing identity is

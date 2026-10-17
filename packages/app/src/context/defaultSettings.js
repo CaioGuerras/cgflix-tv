@@ -73,7 +73,7 @@ export const defaultSettings = {
 	// the film, which is slow on older sets.
 	cinemaModeEnabled: false,
 	theme: 'dark',
-	visualTheme: 'moonfin',
+	visualTheme: 'cgflix',
 	customThemeId: '',
 	homeRows: DEFAULT_HOME_ROWS,
 	pluginSections: [],
