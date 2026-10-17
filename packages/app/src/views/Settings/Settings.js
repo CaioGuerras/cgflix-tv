@@ -841,7 +841,7 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 
 	const renderAboutHeader = () => (
 		<div className={css.aboutHeader}>
-			<div className={css.aboutLogo} role='img' aria-label='Moonfin' />
+			<div className={css.aboutLogo} role='img' aria-label='CGFLIX' />
 			<div className={css.aboutVersion}>{$L('Version {version}').replace('{version}', process.env.REACT_APP_VERSION || '0.0.0')}</div>
 			<div className={css.aboutDivider} />
 		</div>

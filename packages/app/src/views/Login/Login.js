@@ -1188,7 +1188,7 @@ const Login = ({
 				<div className={css.logoSection}>
 					<img
 						src="resources/banner-dark.png"
-						alt="Moonfin"
+						alt="CGFLIX"
 						className={`${css.logo} ${isNarrow ? css.logoSmall : ''}`}
 					/>
 				</div>

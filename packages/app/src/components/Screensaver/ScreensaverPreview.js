@@ -75,7 +75,7 @@ const ScreensaverPreview = ({
 
 	const renderComponent = () => {
 		if (component === 'moonfinLogo') {
-			return <img src="resources/banner-dark.png" alt="Moonfin" className={css.componentLogo} />;
+			return <img src="resources/banner-dark.png" alt="CGFLIX" className={css.componentLogo} />;
 		}
 		if (component === 'clock') {
 			return (

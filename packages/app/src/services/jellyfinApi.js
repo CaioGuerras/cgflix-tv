@@ -11,7 +11,7 @@ import {SUPPORTED_COMMANDS} from './remoteControl';
 const APP_VERSION = packageJson.version;
 
 const PLATFORM_IDENTITY = {
-	tizen: {appName: 'Moonfin for Tizen', deviceName: 'Samsung Smart TV', tag: 'tizen'},
+	tizen: {appName: 'CGFLIX TV (Moonfin)', deviceName: 'Samsung Smart TV', tag: 'tizen'},
 	vega: {appName: 'Moonfin for Fire TV', deviceName: 'Fire TV', tag: 'vega'},
 	webos: {appName: 'Moonfin for webOS', deviceName: 'LG Smart TV', tag: 'webos'},
 	xbox: {appName: 'Moonfin for Xbox', deviceName: 'Xbox', tag: 'xbox'}

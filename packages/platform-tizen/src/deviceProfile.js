@@ -793,7 +793,7 @@ export const getJellyfinDeviceProfile = async (options = {}) => {
 	];
 
 	return {
-		Name: `Moonfin Tizen ${caps.tizenVersion}`,
+		Name: `CGFLIX Tizen ${caps.tizenVersion}`,
 		MaxStreamingBitrate: maxBitrate,
 		MaxStaticBitrate: maxBitrate,
 		MaxStaticMusicBitrate: 40000000,

@@ -8,7 +8,7 @@
 /* global tizen, webapis, module */
 
 var packageId = tizen.application.getCurrentApplication().appInfo.packageId;
-var applicationId = packageId + '.moonfin';
+var applicationId = packageId + '.CGFLIX';
 var remoteMessagePort;
 
 /**

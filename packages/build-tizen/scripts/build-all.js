@@ -34,8 +34,8 @@ for (const dir of LINT_DIRS) {
 }
 console.log(green('Lint checks passed\n'));
 
-// ── Clean all Moonfin_Tizen_*.wgt from repo root before starting ──────────────
-const existing = fs.readdirSync(REPO_ROOT).filter(f => /^Moonfin_Tizen_.*\.wgt$/.test(f));
+// ── Clean all CGFLIX_Tizen_*.wgt from repo root before starting ──────────────
+const existing = fs.readdirSync(REPO_ROOT).filter(f => /^CGFLIX_Tizen_.*\.wgt$/.test(f));
 for (const f of existing) {
 	fs.unlinkSync(path.join(REPO_ROOT, f));
 	console.log(`Removed ${f}`);
@@ -61,7 +61,7 @@ const version = pkg.version || '0.0.0';
 console.log('\n' + green('═'.repeat(50)));
 console.log(green(`  All Tizen builds complete! (v${version})`));
 console.log(green('═'.repeat(50)));
-console.log(`\n  ${cyan(`Moonfin_Tizen_Regular_v${version}.wgt`)}`);
-console.log(`  ${cyan(`Moonfin_Tizen_Oblong_v${version}.wgt`)}`);
-console.log(`  ${cyan(`Moonfin_Tizen_Legacy_v${version}.wgt`)}`);
+console.log(`\n  ${cyan(`CGFLIX_Tizen_Regular_v${version}.wgt`)}`);
+console.log(`  ${cyan(`CGFLIX_Tizen_Oblong_v${version}.wgt`)}`);
+console.log(`  ${cyan(`CGFLIX_Tizen_Legacy_v${version}.wgt`)}`);
 console.log('');

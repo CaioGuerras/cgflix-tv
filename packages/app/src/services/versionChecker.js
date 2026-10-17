@@ -12,7 +12,7 @@ import {isTizen, isVega, isWebOS, isXbox} from '../platform';
 import packageJson from '../../package.json';
 const APP_VERSION = packageJson.version;
 
-const GITHUB_RELEASES_URL = 'https://api.github.com/repos/Moonfin-Client/Smart-TV/releases';
+const GITHUB_RELEASES_URL = 'https://api.github.com/repos/CaioGuerras/cgflix-tv/releases';
 const CHECK_COOLDOWN_HOURS = 24;
 const STORAGE_KEY_LAST_CHECK = 'version_last_check';
 const STORAGE_KEY_DISMISSED_VERSION = 'version_dismissed';

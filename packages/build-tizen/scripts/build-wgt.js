@@ -618,7 +618,7 @@ async function main() {
 	const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 	const version = pkg.version || '0.0.0';
 	const typeName = isLegacy ? 'Legacy' : isOblong ? 'Oblong' : 'Regular';
-	const wgtName = `Moonfin_Tizen_${typeName}_v${version}.wgt`;
+	const wgtName = `CGFLIX_Tizen_${typeName}_v${version}.wgt`;
 	const finalWgt = path.join(REPO_ROOT, wgtName);
 
 	log('Cleaning up old output...');
@@ -682,8 +682,8 @@ async function main() {
 			process.exit(1);
 		}
 
-		// Find the generated wgt in repo root (exclude already-named Moonfin_Tizen_* files)
-		const wgtFiles = fs.readdirSync(REPO_ROOT).filter(f => f.endsWith('.wgt') && !/^Moonfin_Tizen_/.test(f));
+		// Find the generated wgt in repo root (exclude already-named CGFLIX_Tizen_* files)
+		const wgtFiles = fs.readdirSync(REPO_ROOT).filter(f => f.endsWith('.wgt') && !/^CGFLIX_Tizen_/.test(f));
 		if (wgtFiles.length === 0) {
 			error('No .wgt file generated!');
 			process.exit(1);
@@ -726,7 +726,7 @@ async function main() {
 		success('Installed to TV!');
 		
 		log('Launching app...');
-		run(`"${tizenCLI}" run -p MoonfinApp.moonfin`);
+		run(`"${tizenCLI}" run -p cGFLIXTv01.CGFLIX`);
 	}
 	
 	console.log('\n' + green('═'.repeat(50)));
