@@ -68,6 +68,8 @@ const stripItemForCache = (item) => ({
 	ProviderIds: item.ProviderIds,
 	UserRating: item.UserRating,
 	OfficialRating: item.OfficialRating,
+	// CGFLIX: the calendar and Coming Soon rows carry the episode and date here.
+	Subtitle: item.Subtitle,
 	_representative: stripRepresentativeForCache(item._representative),
 	_external: item._external,
 	_externalPosterUrl: item._externalPosterUrl,

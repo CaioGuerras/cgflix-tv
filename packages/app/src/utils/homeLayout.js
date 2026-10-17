@@ -18,6 +18,10 @@
 export const DEFAULT_HOME_ROWS = [
 	{id: 'resume', name: 'Continue Watching', enabled: true, order: 0},
 	{id: 'nextup', name: 'Next Up', enabled: true, order: 1},
+	// CGFLIX: what's trending in Brazil and what's coming, from the server's own lists. The orders
+	// sit between Next Up and the next row so the upstream ones stay as they are.
+	{id: 'cgflix_emalta', name: 'Trending in Brazil', enabled: true, order: 1.1},
+	{id: 'cgflix_embreve', name: 'Coming Soon', enabled: true, order: 1.2},
 	{id: 'latest-media', name: 'Recently Added Media', enabled: true, order: 2},
 	{id: 'collections', name: 'Collections', enabled: false, order: 3},
 	{id: 'library-tiles', name: 'My Media', enabled: false, order: 4},
@@ -37,12 +41,12 @@ export const DEFAULT_HOME_ROWS = [
 	{id: 'imdb-popular-tv', name: 'IMDb Most Popular TV Shows', enabled: false, order: 18},
 	{id: 'imdb-lowest-rated', name: 'IMDb Lowest Rated Movies', enabled: false, order: 19},
 	{id: 'imdb-top-english', name: 'IMDb Top Rated English Movies', enabled: false, order: 20},
-	{id: 'sinceyouwatched1', name: 'Since You Watched Row 1', enabled: false, order: 21},
-	{id: 'sinceyouwatched2', name: 'Since You Watched Row 2', enabled: false, order: 22},
+	{id: 'sinceyouwatched1', name: 'Since You Watched Row 1', enabled: true, order: 21},
+	{id: 'sinceyouwatched2', name: 'Since You Watched Row 2', enabled: true, order: 22},
 	{id: 'sinceyouwatched3', name: 'Since You Watched Row 3', enabled: false, order: 23},
 	{id: 'sinceyouwatched4', name: 'Since You Watched Row 4', enabled: false, order: 24},
 	{id: 'sinceyouwatched5', name: 'Since You Watched Row 5', enabled: false, order: 25},
-	{id: 'rewatch', name: 'Rewatch', enabled: false, order: 26},
+	{id: 'rewatch', name: 'Rewatch', enabled: true, order: 26},
 	{id: 'playlists', name: 'Playlists', enabled: false, order: 27},
 	{id: 'audioartists', name: 'Music Artists', enabled: false, order: 28},
 	{id: 'audioalbums', name: 'Music Albums', enabled: false, order: 29},
@@ -158,6 +162,21 @@ export const homeRowImageTypesFromServer = (value) => {
 	return overrides;
 };
 
+// CGFLIX: a layout saved before the fork's rows existed gets them switched on, right after
+// Continue Watching and Next Up, the way the seasonal row goes in. Once saved, the viewer's
+// choice holds, since a row the layout has is never added again.
+export const CGFLIX_HOME_ROW_IDS = ['cgflix_emalta', 'cgflix_embreve'];
+
+const withCgflixRows = (rows, defs) => {
+	const sorted = [...rows].sort((left, right) => left.order - right.order);
+	let anchor = -1;
+	sorted.forEach((row, i) => {
+		if (row.id === 'resume' || row.id === 'nextup') anchor = i;
+	});
+	sorted.splice(anchor + 1, 0, ...defs.map((def) => ({...def})));
+	return sorted.map((row, order) => ({...row, order}));
+};
+
 // A row the saved layout lacks is appended switched off, except where `enabledById` says
 // otherwise. The seasonal row uses that: a client that predates it drops it from the layout it
 // pushes, so its own synced toggle decides.
@@ -165,14 +184,19 @@ export const mergeHomeRows = (rows, enabledById = {}) => {
 	if (!Array.isArray(rows)) return [...DEFAULT_HOME_ROWS];
 	const merged = [...rows];
 	let added = false;
+	const cgflixMissing = [];
 	for (const def of DEFAULT_HOME_ROWS) {
 		if (!merged.find((row) => row.id === def.id)) {
-			merged.push({...def, enabled: enabledById[def.id] === true, order: merged.length});
+			if (CGFLIX_HOME_ROW_IDS.includes(def.id)) {
+				cgflixMissing.push(def);
+			} else {
+				merged.push({...def, enabled: enabledById[def.id] === true, order: merged.length});
+			}
 			added = true;
 		}
 	}
 	if (!added) return rows;
-	return merged;
+	return cgflixMissing.length > 0 ? withCgflixRows(merged, cgflixMissing) : merged;
 };
 
 // The seasonal row with its toggle applied. Switching it on puts it right after Continue

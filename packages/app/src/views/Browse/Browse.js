@@ -29,6 +29,7 @@ import BackdropLayer from '../../components/BackdropLayer';
 import useBrowseData from './useBrowseData';
 import useSeerrRows from './useSeerrRows';
 import useExternalRows from './useExternalRows';
+import useCgflixRows from './useCgflixRows';
 import useMediaPreview from './useMediaPreview';
 import {buildBrowseRows, sameRowList} from './buildBrowseRows';
 
@@ -84,8 +85,11 @@ const Browse = ({
 		seerrUserId,
 		homeRows: homeRowsConfig
 	});
-	const {rows: externalRows, pending: externalPending} = useExternalRows({settings, homeRows: homeRowsConfig, kidsMode});
-	const pendingRows = useMemo(() => [...seerrPending, ...externalPending], [seerrPending, externalPending]);
+	const {rows: upstreamExternalRows, pending: upstreamExternalPending} = useExternalRows({settings, homeRows: homeRowsConfig, kidsMode});
+	// CGFLIX: Trending in Brazil and Coming Soon ride along with the external rows.
+	const {rows: cgflixRows, pending: cgflixPending} = useCgflixRows({homeRows: homeRowsConfig, kidsMode});
+	const externalRows = useMemo(() => [...cgflixRows, ...upstreamExternalRows], [cgflixRows, upstreamExternalRows]);
+	const pendingRows = useMemo(() => [...seerrPending, ...cgflixPending, ...upstreamExternalPending], [seerrPending, cgflixPending, upstreamExternalPending]);
 	const unifiedMode = settings.unifiedLibraryMode && hasMultipleServers;
 	const isLegacy = typeof document !== 'undefined' && (' ' + document.documentElement.className + ' ').indexOf(' legacy ') >= 0;
 	const [focusedItemForBackdrop, setFocusedItemForBackdrop] = useState(null);

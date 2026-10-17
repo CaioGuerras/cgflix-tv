@@ -16,7 +16,7 @@ import {
 	SYNCABLE_KEYS, SYNC_PROFILES, __pushQueue, activeSyncProfile, defaultSettings, flushSettingsPush,
 	localToProfile, profileToLocal, resolveFromEnvelope
 } from './SettingsContext';
-import {__resetHomeLayoutPassthrough, homeRowsFromProfile} from '../utils/homeLayout';
+import {CGFLIX_HOME_ROW_IDS, __resetHomeLayoutPassthrough, homeRowsFromProfile} from '../utils/homeLayout';
 
 describe('profileToLocal', () => {
 	test('takes the TV button fields under their own names', () => {
@@ -282,7 +282,7 @@ describe('localToProfile with the keys the viewer changed', () => {
 		expect(without).not.toHaveProperty('homeRowOrder');
 
 		const withRows = localToProfile(local, ['homeRows']);
-		expect(withRows.homeRowOrder).toEqual(['resume']);
+		expect(withRows.homeRowOrder).toEqual(['resume', ...CGFLIX_HOME_ROW_IDS]);
 		expect(withRows.homeSections.length).toBeGreaterThan(0);
 	});
 });
@@ -479,7 +479,7 @@ describe('resolveFromEnvelope', () => {
 			tv: {homeRowOrder: ['nextup']}
 		};
 		const enabledRows = (profile) => resolveFromEnvelope(layouts, null, profile).homeRows
-			.filter((row) => row.enabled)
+			.filter((row) => row.enabled && !CGFLIX_HOME_ROW_IDS.includes(row.id))
 			.map((row) => row.id);
 
 		expect(enabledRows('tv')).toEqual(['nextup']);

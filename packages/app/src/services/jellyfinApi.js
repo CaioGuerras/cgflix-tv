@@ -335,6 +335,18 @@ const matchOnJellyfin = async (wanted) => {
 	return found;
 };
 
+// CGFLIX: library items by id, in the order asked for, for rows whose list the server keeps.
+export const getItemsByIds = async (ids) => {
+	if (!Array.isArray(ids) || ids.length === 0 || !currentUser) return [];
+	const byId = {};
+	for (let i = 0; i < ids.length; i += MATCH_CHUNK) {
+		const chunk = ids.slice(i, i + MATCH_CHUNK);
+		const res = await request(`${userRoutes.items()}Ids=${chunk.join(',')}&Fields=${HOME_ROW_ITEM_FIELDS}`);
+		for (const item of (res?.Items || [])) byId[item.Id] = item;
+	}
+	return ids.map((id) => byId[id]).filter(Boolean);
+};
+
 // Resolves external list items (carrying TMDB/IMDb provider ids) against the
 // local library. Owned titles are swapped for the real library item so they
 // are playable, unowned ones are returned unchanged for the Seerr fallback.

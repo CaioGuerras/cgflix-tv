@@ -1,4 +1,5 @@
 import {
+	CGFLIX_HOME_ROW_IDS,
 	DEFAULT_HOME_ROWS,
 	TV_TO_SERVER_ROW,
 	__resetHomeLayoutPassthrough,
@@ -75,7 +76,7 @@ describe('homeRowsFromSections', () => {
 			{kind: 'pluginDynamic', type: 'none', enabled: true, order: 1},
 			{kind: 'builtin', type: 'not_a_real_row', enabled: true, order: 2}
 		]);
-		expect(enabledIds(rows)).toEqual(['resume']);
+		expect(enabledIds(rows)).toEqual(['resume', ...CGFLIX_HOME_ROW_IDS]);
 	});
 
 	test('an empty or absent payload yields nothing so the caller can fall back', () => {
@@ -101,7 +102,7 @@ describe('homeRowsFromProfile', () => {
 
 	test('falls back to homeRowOrder when there are no sections', () => {
 		const rows = homeRowsFromProfile({homeSections: null, homeRowOrder: ['resume', 'latestmedia']});
-		expect(enabledIds(rows)).toEqual(['resume', 'latest-media']);
+		expect(enabledIds(rows)).toEqual(['resume', 'latest-media', ...CGFLIX_HOME_ROW_IDS]);
 	});
 
 	test('a profile with no layout yields nothing', () => {
@@ -241,5 +242,33 @@ describe('the seasonal row in a saved layout', () => {
 	test('a layout without the row gets one when it is switched on', () => {
 		const rows = withSeasonalRow([{id: 'resume', enabled: true, order: 0}], true);
 		expect(rows.map((row) => row.id)).toEqual(['resume', 'seasonal']);
+	});
+});
+
+describe('CGFLIX rows', () => {
+	test('a layout saved before them gets them on, right after Next Up', () => {
+		const saved = DEFAULT_HOME_ROWS
+			.filter((row) => !CGFLIX_HOME_ROW_IDS.includes(row.id))
+			.map((row, order) => ({...row, order}));
+		const merged = mergeHomeRows(saved);
+		const ids = [...merged].sort((left, right) => left.order - right.order).map((row) => row.id);
+		const nextUp = ids.indexOf('nextup');
+		expect(ids.slice(nextUp + 1, nextUp + 3)).toEqual(CGFLIX_HOME_ROW_IDS);
+		CGFLIX_HOME_ROW_IDS.forEach((id) => expect(rowById(merged, id).enabled).toBe(true));
+		expect(merged.map((row) => row.order)).toEqual(merged.map((_, i) => i));
+	});
+
+	test('a viewer who switched them off keeps them off', () => {
+		const saved = DEFAULT_HOME_ROWS.map((row) => (
+			CGFLIX_HOME_ROW_IDS.includes(row.id) ? {...row, enabled: false} : row
+		));
+		const merged = mergeHomeRows(saved);
+		CGFLIX_HOME_ROW_IDS.forEach((id) => expect(rowById(merged, id).enabled).toBe(false));
+	});
+
+	test('the default layout puts them between Next Up and the rows after it', () => {
+		const ids = [...DEFAULT_HOME_ROWS].sort((left, right) => left.order - right.order).map((row) => row.id);
+		expect(ids.indexOf('cgflix_emalta')).toBe(ids.indexOf('nextup') + 1);
+		expect(ids.indexOf('cgflix_embreve')).toBe(ids.indexOf('nextup') + 2);
 	});
 });
