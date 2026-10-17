@@ -517,8 +517,37 @@ async function main() {
 </script>
 `;
 		html = html.replace(/<script defer="defer" src="main\.js"><\/script>/, preBootPatches + '<script defer="defer" src="main.js"></script>');
+
+		// CGFLIX: the logo splash is plain markup so it paints before the bundle parses.
+		// The app removes it (utils/bootSplash.js); the timer only guards a stuck boot.
+		// Only opacity and transform animate, which old Tizen engines keep smooth.
+		const bootSplash = `<div id="cgf-splash"><img src="cgf-splash.png" alt=""></div>
+<style>
+#cgf-splash{position:fixed;top:0;left:0;right:0;bottom:0;z-index:100000;display:flex;align-items:center;justify-content:center;background:#07060A;background:radial-gradient(ellipse at center,#24123a 0%,#07060A 62%);opacity:1;transition:opacity .45s ease}
+#cgf-splash img{width:720px;height:auto;opacity:0;-webkit-animation:cgfSplashIn .8s ease-out .1s forwards;animation:cgfSplashIn .8s ease-out .1s forwards}
+@-webkit-keyframes cgfSplashIn{from{opacity:0;-webkit-transform:scale(.92)}to{opacity:1;-webkit-transform:scale(1)}}
+@keyframes cgfSplashIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+</style>
+<script>
+(function(){
+	var el = document.getElementById('cgf-splash');
+	if (!el) return;
+	el.setAttribute('data-shown-at', String(Date.now()));
+	setTimeout(function(){
+		if (!el.parentNode || el.getAttribute('data-leaving')) return;
+		el.setAttribute('data-leaving', '1');
+		el.style.opacity = '0';
+		setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 450);
+	}, 10000);
+})();
+</script>`;
+		if (/<div id="root"><\/div>/.test(html)) {
+			html = html.replace(/<div id="root"><\/div>/, '<div id="root"></div>' + bootSplash);
+		} else {
+			warn('No <div id="root"></div> in index.html, boot splash skipped');
+		}
 		fs.writeFileSync(indexPath, html);
-		success('Patched index.html (webapis + globalThis polyfill + XHR mock)');
+		success('Patched index.html (webapis + globalThis polyfill + XHR mock + boot splash)');
 	}
 
 	if (isLegacy) {

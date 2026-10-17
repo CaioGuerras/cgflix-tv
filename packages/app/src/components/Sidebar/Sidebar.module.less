@@ -2,16 +2,23 @@
 
 @accent: var(--accent-color, #00a4dc);
 
+// CGFLIX: a floating panel in the top left corner, in the manner of the Apple TV
+// app, rather than a full height rail. It stays painted while collapsed so the
+// icons never sit bare on top of artwork. No backdrop-filter, which costs too
+// much on Tizen; the surface color carries the translucency on its own.
 .sidebar {
 	position: fixed;
-	top: 0;
-	left: 0;
-	bottom: 0;
+	top: 24px;
+	left: 20px;
+	max-height: calc(100% - 48px);
 	width: @sidebar-collapsed-width;
 	background: transparent;
 	display: flex;
 	flex-direction: column;
 	z-index: 1000;
+	border-radius: 30px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
 	transition: width 0.2s ease, background 0.2s ease;
 	overflow: hidden;
 
@@ -29,7 +36,7 @@
 
 .userSection {
 	flex: 0 0 auto;
-	padding: 20px 10px 10px;
+	padding: 10px 10px 0;
 }
 
 .userBtn {
@@ -51,7 +58,8 @@
 	height: 50px;
 	min-width: 50px;
 	border-radius: 50%;
-	background: linear-gradient(135deg, @accent, var(--theme-accent-secondary, #0077b6));
+	// CGFLIX: the brand purple, not the theme's secondary accent, which reads as cyan.
+	background: linear-gradient(135deg, #a855f7, #7e22ce);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -63,7 +71,8 @@
 }
 
 .navSection {
-	flex: 1;
+	flex: 0 1 auto;
+	min-height: 0;
 	display: flex;
 	flex-direction: column;
 	padding: 10px;
@@ -249,7 +258,12 @@
 
 .footerSection {
 	flex: 0 0 auto;
-	padding: 10px;
+	padding: 0 10px 6px;
+	display: none;
+}
+
+.sidebar.expanded .footerSection {
+	display: block;
 }
 
 .clock {

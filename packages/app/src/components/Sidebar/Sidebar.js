@@ -13,7 +13,6 @@ import useClock from '../../hooks/useClock';
 import {librariesForNav} from '../../utils/liveTvLibrary';
 import {isKidsMode} from '../../utils/kidsMode';
 import {shadowToCss, toCssColor, toCssColorWithAlpha} from '../../theme/themeSpec';
-import {resolveOverlayColor} from '../../theme/overlayColors';
 import {SIDEBAR_CONTENT_FOCUS_TARGETS, focusFirstContentTarget} from '../../utils/navFocusTargets';
 import {KEYS} from '../../utils/keys';
 import SidebarItem from './SidebarItem';
@@ -27,10 +26,6 @@ const SidebarContainer = SpotlightContainerDecorator({
 	enterTo: 'default-element',
 	preserveId: true
 }, 'nav');
-
-// The rail holds its color flat for all but its outer 16 pixels of 280, where it
-// blends out to nothing.
-const RAIL_SOLID_PERCENT = Math.round(((280 - 16) / 280) * 10000) / 100;
 
 // Up and down at the ends of the rail would otherwise leak out to whatever sits
 // behind it, so those two presses get swallowed.
@@ -90,14 +85,11 @@ const Sidebar = ({
 	const showFriends = !kidsMode && socialAvailable && settings.showFriendsButton === true;
 
 	const navStyle = useMemo(() => {
-		// The rail paints the overlay color on every theme. Only the top bar clears
-		// itself for themes that ask for a transparent nav surface.
-		const overlay = toCssColorWithAlpha(resolveOverlayColor(settings.navbarColor), (settings.navbarOpacity ?? 50) / 100);
-		// The stop is a percentage rather than a pixel width so it holds its place
-		// when the interface scale stretches the rail.
-		const rail = `linear-gradient(to right, ${overlay} 0%, ${overlay} ${RAIL_SOLID_PERCENT}%, transparent 100%)`;
+		// CGFLIX: the floating panel takes the theme surface, a touch see through,
+		// whether collapsed or open. It deepens a little when open so the labels read.
+		const panel = toCssColorWithAlpha(activeTheme.colors.surface, expanded ? 0.94 : 0.86);
 		return {
-			background: expanded ? rail : 'transparent',
+			background: panel,
 			backdropFilter: 'none',
 			WebkitBackdropFilter: 'none',
 			borderBottom: activeTheme.borders.navBorder
@@ -106,7 +98,7 @@ const Sidebar = ({
 			color: toCssColor(activeTheme.colors.onSurface),
 			textShadow: activeTheme.textGlow.length ? activeTheme.textGlow.map(shadowToCss).join(', ') : 'none'
 		};
-	}, [activeTheme, settings.navbarColor, settings.navbarOpacity, expanded]);
+	}, [activeTheme, expanded]);
 
 	const handleNavKeyDown = useCallback((e) => {
 		if (e.keyCode === KEYS.RIGHT) {

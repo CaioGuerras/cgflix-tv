@@ -69,6 +69,7 @@ import {resolveOverlayColor} from '../theme/overlayColors';
 import Login from '../views/Login';
 import Browse from '../views/Browse';
 import {isGameLibrary, refreshGameLibraries, resolveGameLibraryId} from '../utils/gameLibrary';
+import {hideBootSplash} from '../utils/bootSplash';
 
 const Details = lazy(() => import('../views/Details'));
 const Library = lazy(() => import('../views/Library'));
@@ -674,6 +675,10 @@ const AppContent = (props) => {
 			}
 		}
 	}, [isLoading, isAuthenticated, authChecked]);
+
+	useEffect(() => {
+		if (!isLoading && authChecked && settingsLoaded) hideBootSplash();
+	}, [isLoading, authChecked, settingsLoaded]);
 
 	const kidsBlockedPanels = useMemo(() => blockedPanels(PANELS), []);
 
