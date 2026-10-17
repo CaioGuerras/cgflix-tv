@@ -34,6 +34,35 @@
 	width: @sidebar-expanded-width;
 }
 
+// CGFLIX: collapsed, the whole menu folds into the user's avatar, a single disc in
+// the corner. The items stay in the DOM at their own size, so Spotlight still lands
+// on Home when focus comes in from the left, and that focus opens the panel.
+@sidebar-folded-size: 66px;
+
+.sidebar:not(.expanded) {
+	width: @sidebar-folded-size;
+	border-radius: (@sidebar-folded-size / 2);
+
+	.userSection {
+		padding: 6px;
+	}
+
+	.userBtn {
+		padding: 0;
+		margin: 0;
+		min-height: 0;
+	}
+
+	.navSection,
+	.footerSection {
+		max-height: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
 .userSection {
 	flex: 0 0 auto;
 	padding: 10px 10px 0;
@@ -76,9 +105,16 @@
 	display: flex;
 	flex-direction: column;
 	padding: 10px;
+	max-height: 100vh;
 	overflow-y: auto;
 	overflow-x: hidden;
 	scrollbar-width: none;
+	transition: max-height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease;
+
+	:global(.perf-low) &,
+	:global(.perf-mid) & {
+		transition: none;
+	}
 
 	&::-webkit-scrollbar {
 		display: none;
@@ -259,11 +295,7 @@
 .footerSection {
 	flex: 0 0 auto;
 	padding: 0 10px 6px;
-	display: none;
-}
-
-.sidebar.expanded .footerSection {
-	display: block;
+	overflow: hidden;
 }
 
 .clock {
