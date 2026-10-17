@@ -4,7 +4,9 @@ import {serverBlurredUrl} from '../../utils/serverBlur';
 
 import css from './BackdropLayer.module.less';
 
-const BACKDROP_DEBOUNCE_MS = 500;
+// CGFLIX: the home already waits for focus to settle before asking, so this only
+// absorbs a burst; 500 on top of it left the picture a beat behind the card.
+const BACKDROP_DEBOUNCE_MS = 200;
 
 const TIER_BLUR_CAPS = {low: 0, mid: 8, high: 20};
 
@@ -66,7 +68,12 @@ const BackdropLayer = memo(({targetUrl: requestedUrl, blurAmount, overlayOpacity
 				activeLayerRef.current = isA ? 'b' : 'a';
 				currentUrlRef.current = targetUrl;
 			};
-			img.onload = apply;
+			// The fade starts only once the picture is decoded, so it never stutters
+			// mid crossfade while the TV unpacks a 1080p JPEG.
+			img.onload = () => {
+				if (typeof img.decode === 'function') img.decode().then(apply, apply);
+				else apply();
+			};
 			img.onerror = apply;
 			img.src = targetUrl;
 		}, BACKDROP_DEBOUNCE_MS);

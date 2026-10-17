@@ -8,6 +8,7 @@ import PlaceholderRow from './PlaceholderRow';
 import {KEYS} from '../../utils/keys';
 import {sameCardUserData} from '../../utils/playedState';
 import {useSettings} from '../../context/SettingsContext';
+import {smoothScrollTo} from '../../utils/smoothScroll';
 
 import css from './MediaRow.module.less';
 
@@ -92,9 +93,9 @@ const MediaRow = ({
 				}
 				const scrollerRect = scrollerRectRef.current;
 				if (cardRect.left < scrollerRect.left) {
-					scroller.scrollLeft -= (scrollerRect.left - cardRect.left + 50);
+					smoothScrollTo(scroller, 'scrollLeft', scroller.scrollLeft - (scrollerRect.left - cardRect.left + 50));
 				} else if (cardRect.right > scrollerRect.right) {
-					scroller.scrollLeft += (cardRect.right - scrollerRect.right + 50);
+					smoothScrollTo(scroller, 'scrollLeft', scroller.scrollLeft + (cardRect.right - scrollerRect.right + 50));
 				}
 			});
 		}

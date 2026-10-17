@@ -1323,9 +1323,20 @@
 	align-items: center;
 }
 
+// CGFLIX: each focused item rises in, Apple TV style; transform and opacity only.
+.detailContent {
+	animation: heroRise 0.45s @hero-ease both;
+}
+
+:global(.perf-low) .detailContent {
+	animation: none;
+}
+
 // The logo and the text title trade places inside the same band, so a set with
 // mixed artwork does not shift the rows underneath as focus moves.
 .detailLogo {
+	opacity: 0;
+	transition: opacity 0.35s @hero-ease;
 	height: 100px;
 	max-width: 800px;
 	object-fit: contain;
@@ -1333,6 +1344,10 @@
 	display: block;
 	margin: 0 0 12px 0;
 	filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.8));
+}
+
+.detailLogoLoaded {
+	opacity: 1;
 }
 
 .detailInfoRow {

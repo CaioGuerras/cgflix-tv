@@ -33,6 +33,7 @@ import useCgflixRows from './useCgflixRows';
 import useMediaPreview from './useMediaPreview';
 import {buildBrowseRows, sameRowList} from './buildBrowseRows';
 import {cgflixFeaturedStyle} from './featuredConfig';
+import {smoothScrollTo} from '../../utils/smoothScroll';
 
 import css from './Browse.module.less';
 
@@ -287,7 +288,7 @@ const Browse = ({
 		// little lower and the gap above it is the blank spacing of the row before.
 		const heroGap = heroRows ? HERO_ROW_GAP : 0;
 		const top = Math.max(0, targetRow.offsetTop - topbarOffset - heroGap);
-		if (Math.abs(container.scrollTop - top) > 1) container.scrollTop = top;
+		if (Math.abs(container.scrollTop - top) > 1) smoothScrollTo(container, 'scrollTop', top);
 	}, [settings.navbarPosition, showTopInfoArea, heroRows]);
 
 	const scrollToRow = useCallback((rowIndex, thenFocus, cardIndex, cardId) => {

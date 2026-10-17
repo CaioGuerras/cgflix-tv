@@ -58,7 +58,12 @@ const DetailSection = forwardRef(({
 }, ref) => {
 	const [focusedItem, setFocusedItem] = useState(null);
 	const [failedLogoId, setFailedLogoId] = useState(null);
+	// CGFLIX: the logo shows once it has loaded, so it fades in rather than popping in late.
+	const [loadedLogoUrl, setLoadedLogoUrl] = useState(null);
 	const focusedItemRef = useRef(null);
+	const handleLogoLoad = useCallback((e) => {
+		setLoadedLogoUrl(e.currentTarget.getAttribute('src'));
+	}, []);
 	const handleLogoError = useCallback(() => {
 		setFailedLogoId((current) => focusedItemRef.current?.Id ?? current);
 	}, []);
@@ -120,12 +125,15 @@ const DetailSection = forwardRef(({
 	return (
 		<div className={`${css.detailSection} ${browseMode === 'rows' ? css.detailVisible : css.detailHidden}`}>
 			{focusedItem ? (
-				<>
+				// CGFLIX: keyed on the item, so each new one rises in softly instead of
+				// swapping its text in place. The full item fetched after keeps the key.
+				<div key={focusedItem.Id} className={css.detailContent}>
 					{showLogo ? (
 						<img
-							className={css.detailLogo}
+							className={`${css.detailLogo} ${loadedLogoUrl === logoUrl ? css.detailLogoLoaded : ''}`}
 							src={logoUrl}
 							alt={detailTitleFor(focusedItem)}
+							onLoad={handleLogoLoad}
 							onError={handleLogoError}
 						/>
 					) : (
@@ -145,7 +153,7 @@ const DetailSection = forwardRef(({
 					{!settings.hideHomeMediaDescription && focusedItem.Overview && (
 						<p className={css.detailSummary}>{focusedItem.Overview}</p>
 					)}
-				</>
+				</div>
 			) : (
 				<div className={css.detailPlaceholder}>
 					<p>{$L('Navigate to an item to see details')}</p>

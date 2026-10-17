@@ -7,6 +7,7 @@ import {sameCardUserData} from '../../utils/playedState';
 import {useSettings} from '../../context/SettingsContext';
 import {getPlatform} from '../../platform';
 import {modernCardMetrics} from '../MediaCard/modernCardLayout';
+import {smoothScrollTo} from '../../utils/smoothScroll';
 import PlaceholderRow from './PlaceholderRow';
 
 import css from './ModernMediaRow.module.less';
@@ -129,8 +130,8 @@ const ModernMediaRow = ({
 				for (let i = 0; i < cards.length && cards[i] !== card; i++) {
 					cardStart += parseFloat(cards[i].style.width) + layout.gap;
 				}
-				scroller.scrollLeft = cardStart;
-				const cardLeft = layout.paddingLeft + cardStart - scroller.scrollLeft;
+				const restLeft = smoothScrollTo(scroller, 'scrollLeft', cardStart);
+				const cardLeft = layout.paddingLeft + cardStart - restLeft;
 				setDetails({
 					spotlightId: card.getAttribute('data-spotlight-id'),
 					width: layout.width - layout.paddingRight - cardLeft
