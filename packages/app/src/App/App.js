@@ -29,7 +29,7 @@ import {OLED_TUNING} from '../utils/oledMode';
 import {isTizen} from '../platform';
 import {initVideo, cleanupVideoElement, setupVisibilityHandler, setupPlatformLifecycle} from '../services/video';
 import {activateApp, exitApp} from '../utils/appLifecycle';
-import {SettingsProvider} from '../context/SettingsContext';
+import {SettingsProvider, normalizeUiLanguage} from '../context/SettingsContext';
 import {seedLanguagePreferences} from '../utils/languagePrefSeed';
 import {shouldRun as shouldRunSetupWizard, beginRerun as beginSetupWizardRerun} from '../utils/setupWizardGate';
 import {getActiveServer} from '../services/multiServerManager';
@@ -1973,14 +1973,15 @@ const AppContent = (props) => {
 	);
 };
 
-let storedLocale = 'en-US';
+// CGFLIX: a fresh install boots in Portuguese, the default the settings store only applies later.
+let storedLocale = 'pt-BR';
 try {
 	const bootLocale = localStorage.getItem('moonfin_uiLanguage');
 	if (bootLocale) {
-		storedLocale = bootLocale;
+		storedLocale = normalizeUiLanguage(bootLocale) || storedLocale;
 	} else {
 		const stored = JSON.parse(localStorage.getItem('moonfin_settings') || '{}');
-		storedLocale = stored.uiLanguage || 'en-US';
+		storedLocale = normalizeUiLanguage(stored.uiLanguage) || storedLocale;
 	}
 } catch (e) { /* use default */ }
 

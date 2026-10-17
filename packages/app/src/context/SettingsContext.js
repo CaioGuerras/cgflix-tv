@@ -135,7 +135,17 @@ const POSTER_SIZES_TO_SERVER = {default: 'medium', xlarge: 'extraLarge'};
 const POSTER_SIZES_FROM_SERVER = {medium: 'default', extraLarge: 'xlarge'};
 const posterSizeFromServer = oneOf(['small', 'default', 'large', 'xlarge', 'grandparents']).fromServer;
 
+// Other clients store "system" (follow the device) or a lowercase region such as
+// pt-br. Neither names a strings folder here, so "system" keeps what this device has
+// and a lowercase region is read as the folder it means.
+export const normalizeUiLanguage = (v) => {
+	const match = typeof v === 'string' && /^([a-z]{2,3})(?:[-_]([a-z]{2}))?$/i.exec(v.trim());
+	if (!match) return undefined;
+	return match[2] ? `${match[1].toLowerCase()}-${match[2].toUpperCase()}` : match[1].toLowerCase();
+};
+
 const VALUE_CONVERSIONS = {
+	uiLanguage: {fromServer: normalizeUiLanguage},
 	homeRowsPosterSize: {
 		toServer: v => POSTER_SIZES_TO_SERVER[v] || v,
 		fromServer: v => posterSizeFromServer(POSTER_SIZES_FROM_SERVER[v] || v)
@@ -786,6 +796,8 @@ export function SettingsProvider({children}) {
 					migrated = true;
 				}
 				const merged = {...defaultSettings, ...stored};
+				// A device that synced "system" before the fix above still holds it.
+				merged.uiLanguage = normalizeUiLanguage(merged.uiLanguage) || defaultSettings.uiLanguage;
 				setSettings(merged);
 				if (migrated) saveToStorage('settings', merged);
 				// seed the boot key for anyone whose language only lived in the

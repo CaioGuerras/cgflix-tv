@@ -176,6 +176,19 @@ describe('profileToLocal', () => {
 	});
 });
 
+describe('uiLanguage from the server', () => {
+	it('keeps the device language when another client stored "system"', () => {
+		expect(profileToLocal({languageOverride: 'system'}).uiLanguage).toBeUndefined();
+		expect(profileToLocal({languageOverride: ''}).uiLanguage).toBeUndefined();
+	});
+
+	it('reads a lowercase region as the strings folder it names', () => {
+		expect(profileToLocal({languageOverride: 'pt-br'}).uiLanguage).toBe('pt-BR');
+		expect(profileToLocal({languageOverride: 'pt_BR'}).uiLanguage).toBe('pt-BR');
+		expect(profileToLocal({languageOverride: 'de'}).uiLanguage).toBe('de');
+	});
+});
+
 describe('localToProfile', () => {
 	test('says nothing about settings this app has no screen for', () => {
 		const profile = localToProfile(defaultSettings);
