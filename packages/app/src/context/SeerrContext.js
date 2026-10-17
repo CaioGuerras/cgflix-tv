@@ -8,6 +8,18 @@ const SeerrContext = createContext(null);
 
 const normalizeMoonfinAuthType = (authType) => (authType === 'local' ? 'local' : 'jellyfin');
 
+// CGFLIX: nobody types a Seerr password on the TV. When the plugin has no Seerr session
+// for this Jellyfin user, Quick Connect opens one from the token we already hold.
+const quickConnectStatus = async () => {
+	try {
+		await seerrApi.moonfinLogin('', '', 'quickconnect');
+		return await seerrApi.getMoonfinStatus();
+	} catch (e) {
+		console.log('[Seerr] Quick Connect sign in failed:', e.message);
+		return null;
+	}
+};
+
 const STREAM_RECONNECT_MIN_MS = 5000;
 const STREAM_RECONNECT_MAX_MS = 60000;
 
@@ -125,7 +137,8 @@ export const SeerrProvider = ({children}) => {
 					setIsMoonfin(true);
 
 					try {
-						const status = await seerrApi.getMoonfinStatus();
+						let status = await seerrApi.getMoonfinStatus();
+						if (!status?.authenticated) status = (await quickConnectStatus()) || status;
 						if (status?.authenticated) {
 							if (status.authType) {
 								setMoonfinAuthTypeState(normalizeMoonfinAuthType(status.authType));
@@ -186,7 +199,7 @@ export const SeerrProvider = ({children}) => {
 		const savedAuthType = normalizeMoonfinAuthType(existingConfig?.moonfinAuthType);
 		setMoonfinAuthTypeState(savedAuthType);
 
-		const [status, pingResult, configResult] = await Promise.all([
+		let [status, pingResult, configResult] = await Promise.all([ // eslint-disable-line prefer-const
 			seerrApi.getMoonfinStatus(),
 			seerrApi.moonfinPing(jellyfinServer, token).catch(() => null),
 			seerrApi.getMoonfinConfig(jellyfinServer, token).catch(() => null)
@@ -207,6 +220,7 @@ export const SeerrProvider = ({children}) => {
 
 		startSettingsStream(jellyfinServer, token);
 
+		if (!status?.authenticated) status = (await quickConnectStatus()) || status;
 		if (status?.authenticated) {
 			const resolvedAuthType = normalizeMoonfinAuthType(status.authType || savedAuthType);
 			if (status.authType) {

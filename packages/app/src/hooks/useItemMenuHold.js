@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useRef} from 'react';
 
 import {useItemMenu} from '../components/ItemContextMenu';
+import {cancelHoldHint, noteHoldUsed, scheduleHoldHint, showHoldProgress} from '../components/ItemContextMenu/holdFeedback';
 import {LONG_PRESS_MS, isSelectKey} from '../utils/longPress';
 import {isMenuKey} from '../utils/keys';
 
@@ -50,16 +51,21 @@ const useItemMenuHold = (itemAt, options) => {
 		pressRef.current?.end();
 	}, []);
 
-	useEffect(() => cancel, [cancel]);
+	useEffect(() => () => {
+		cancel();
+		cancelHoldHint();
+	}, [cancel]);
 
 	const start = useCallback((target) => {
 		if (pressRef.current || !menu) return;
 		const item = itemAt(target);
 		if (!item || !menu.canOpen(item, options)) return;
 
-		const press = {held: false};
+		cancelHoldHint();
+		const press = {held: false, clearProgress: showHoldProgress(target, LONG_PRESS_MS)};
 		press.end = () => {
 			clearTimeout(press.timer);
+			press.clearProgress();
 			window.removeEventListener('keyup', press.onRelease, true);
 			window.removeEventListener('mouseup', press.onRelease, true);
 			pressRef.current = null;
@@ -73,6 +79,8 @@ const useItemMenuHold = (itemAt, options) => {
 		};
 		press.timer = setTimeout(() => {
 			press.held = true;
+			press.clearProgress();
+			noteHoldUsed();
 			menu.open(item, options);
 		}, LONG_PRESS_MS);
 
@@ -101,7 +109,16 @@ const useItemMenuHold = (itemAt, options) => {
 		if (pressRef.current && !pressRef.current.held) cancel();
 	}, [cancel]);
 
+	// CGFLIX: a card that keeps focus for a moment brings up the hint that OK can be held.
+	const handleFocusCapture = useCallback((e) => {
+		const item = itemAt(e.target);
+		if (item && menu?.canOpen(item, options)) scheduleHoldHint();
+		else cancelHoldHint();
+	}, [menu, itemAt, options]);
+
 	return {
+		onFocusCapture: handleFocusCapture,
+		onBlurCapture: cancelHoldHint,
 		onKeyDownCapture: handleKeyDownCapture,
 		onMouseDownCapture: handleMouseDownCapture,
 		onMouseLeave: handleMouseLeave

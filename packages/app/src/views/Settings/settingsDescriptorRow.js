@@ -89,6 +89,7 @@ const renderDescriptorRow = (row, ctx, index, deps) => {
 					label={text(row.label)}
 					value={text(row.value)}
 					icon={text(row.icon)}
+					onClick={row.action ? () => row.action(ctx) : null}
 				/>
 			);
 		case KIND.CUSTOM:

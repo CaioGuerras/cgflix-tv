@@ -68,6 +68,7 @@ import LibraryOrderView from './LibraryOrderView';
 import MediaBarSourceView from './MediaBarSourceView';
 import SeerrAccountPanel from './SeerrAccountPanel';
 import MoonbasePanel from './MoonbasePanel';
+import {ADVANCED_KEY, ADVANCED_TAPS} from './cgflixSimpleSettings';
 import {LOG_RENDER_STEP} from './useDiagnosticsLog';
 import {DETAIL_SECTIONS_HIDDEN_KEY, toggleHiddenSection} from '../../utils/detailSectionLayout';
 
@@ -184,6 +185,17 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 	const [availableRatings, setAvailableRatings] = useState(null);
 	const [ratingsLoadFailed, setRatingsLoadFailed] = useState(false);
 	const ratingsRequestRef = useRef(0);
+	// CGFLIX: OK seven times on Version flips the advanced settings, see cgflixSimpleSettings.
+	const versionTapsRef = useRef({count: 0, at: 0});
+	const tapVersion = useCallback(() => {
+		const now = Date.now();
+		const taps = versionTapsRef.current;
+		taps.count = now - taps.at > 2000 ? 1 : taps.count + 1;
+		taps.at = now;
+		if (taps.count < ADVANCED_TAPS) return;
+		taps.count = 0;
+		updateSetting(ADVANCED_KEY, !settings[ADVANCED_KEY]);
+	}, [settings, updateSetting]);
 	const {blockedRatings} = useParentalFilter();
 	const [customRowsRefreshing, setCustomRowsRefreshing] = useState(false);
 	const [customRowsRefreshMessage, setCustomRowsRefreshMessage] = useState('');
@@ -994,6 +1006,7 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 		activeThemeId,
 		ratingsResetArmed,
 		actions: {
+			tapVersion,
 			openThemes,
 			openThemeStore,
 			openHomeRows,
@@ -1040,7 +1053,7 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 		openPinCode, openKidsMode, openLibraries, openLibraryOrder, openParentalControls, openSubtitleDownloadLanguages, openQrLink, openRatingSources, openRowImageTypes, openExcludedGenres, openMediaBarLibraries,
 		openMediaBarCollections, openScreensaverLibraries, openScreensaverCollections, openScreensaverGenres,
 		openImdbLists, openSeasonalRow, openExternalTmdbLists, openExternalCalendars,
-		openExternalCustomRows, openSeerrHomeRows, openScreen, onRunSetupWizard, canProbeDevice
+		openExternalCustomRows, openSeerrHomeRows, openScreen, onRunSetupWizard, canProbeDevice, tapVersion
 	]);
 
 	const openCategory = useCallback((id) => {

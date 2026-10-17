@@ -76,6 +76,7 @@ import {
 	getRecentlyReleasedSeriesTypeOptions
 } from './settingsOptions';
 import {resolveOverlayColor} from '../../theme/overlayColors';
+import {applySimpleMode, isAdvanced} from './cgflixSimpleSettings';
 
 // This module describes every settings screen as data. Settings.js renders it and the
 // search index reads it, so a row only ever has to be written once. It deliberately
@@ -1014,7 +1015,7 @@ export const SETTINGS_SCHEMA = [
 				rows: [
 					{kind: KIND.CUSTOM, id: 'aboutHeader', render: 'aboutHeader'},
 					{kind: KIND.SECTION, id: 'appInfo', label: () => $L('APP INFO')},
-					{kind: KIND.INFO, id: 'appVersion', label: () => $L('Version'), value: () => process.env.REACT_APP_VERSION || '0.0.0', icon: 'info_outline'},
+					{kind: KIND.INFO, id: 'appVersion', label: () => $L('Version'), value: (ctx) => (process.env.REACT_APP_VERSION || '0.0.0') + (isAdvanced(ctx) ? ` · ${$L('Advanced settings')}` : ''), icon: 'info_outline', action: (ctx) => ctx.actions.tapVersion?.()},
 					{
 						kind: KIND.INFO,
 						id: 'platform',
@@ -1142,6 +1143,8 @@ export const SETTINGS_SCHEMA = [
 		]
 	}
 ];
+
+applySimpleMode(SETTINGS_SCHEMA);
 
 export const SCHEMA_BY_KEY = SETTINGS_SCHEMA.reduce((acc, category) => {
 	category.subcategories.forEach((sub) => {

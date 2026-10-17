@@ -192,7 +192,8 @@ export const moonfinLogin = async (username, password, authType = 'jellyfin') =>
 		throw new Error('Moonfin not configured');
 	}
 
-	const normalizedAuthType = authType === 'local' ? 'local' : 'jellyfin';
+	// CGFLIX: 'quickconnect' signs in as the Jellyfin user behind the token, no password asked.
+	const normalizedAuthType = authType === 'local' || authType === 'quickconnect' ? authType : 'jellyfin';
 
 	return moonfinAuthRequest(
 `${jellyfinServerUrl}/Moonfin/Seerr/Login`,

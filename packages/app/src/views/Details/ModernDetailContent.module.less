@@ -374,7 +374,9 @@
 }
 
 .actionLabel {
-	max-width: 175px;
+	// CGFLIX: wide enough for the longest Portuguese label, so "Marcar como assistido"
+	// reads whole instead of scrolling.
+	max-width: 330px;
 	font-size: 19px;
 	font-weight: 700;
 	line-height: 1.1;
@@ -395,10 +397,33 @@
 }
 
 .actionBtn:focus .actionText {
-	max-width: 175px;
+	max-width: 330px;
 	opacity: 1;
 	padding-left: 9px;
 	padding-right: 23px;
+}
+
+// CGFLIX: a marked button stays lit while focused too, so flipping it shows at once.
+.actionActive:focus {
+	background: var(--theme-accent, #00a4dc);
+	border-color: var(--theme-focus-border-color, #ffffff);
+	color: #fff;
+}
+
+// The icon pops when the button flips. Only transform moves, which the TV hands to the compositor.
+.actionPulse .actionIcon .icon {
+	animation: cgfActionPop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+	:global(.perf-low) & {
+		animation: none;
+	}
+}
+
+@keyframes cgfActionPop {
+	0% { transform: scale(1); }
+	35% { transform: scale(1.45) rotate(-8deg); }
+	65% { transform: scale(0.9); }
+	100% { transform: scale(1); }
 }
 
 // The primary keeps a floor once it opens up, so a short label like Play still

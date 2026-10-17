@@ -1,4 +1,4 @@
-import {Fragment, useState, useCallback, useEffect} from 'react';
+import {Fragment, useState, useCallback, useEffect, useRef} from 'react';
 import {isKidsMode, kidsModeButtons} from '../../utils/kidsMode';
 import $L from '@enact/i18n/$L';
 import Spotlight from '@enact/spotlight';
@@ -29,7 +29,7 @@ const ModernActionButtons = (props) => {
 	// Only what the row itself needs. Everything the buttons are built from is read straight off
 	// props by the catalogue.
 	const {
-		settings, seerrOnly, isBook, isReadableBook, isPlaylist, playlistTracks,
+		item, settings, seerrOnly, isBook, isReadableBook, isPlaylist, playlistTracks,
 		hasPlaybackPosition, resumeTimeText, hasTech,
 		handlePlay, handleResume,
 		onFocusRow, downTarget, maxVisibleButtons, overflowAsMenu, menuBackRef
@@ -120,21 +120,26 @@ const ModernActionButtons = (props) => {
 	const showsResume = !seerrOnly && hasPlaybackPosition && !isBook;
 	const showsPlay = !seerrOnly && (isBook ? isReadableBook : true) && (!isPlaylist || (playlistTracks ? playlistTracks.length > 0 : true));
 	const leading = (showsResume ? 1 : 0) + (showsPlay ? 1 : 0);
+	// CGFLIX: marking a title watched drops Resume, and a split that followed it would pull a
+	// button out of the open menu into the row and lose the focus. The split is counted once per title.
+	const leadingRef = useRef({id: null, count: 0});
+	if (leadingRef.current.id !== item?.Id) leadingRef.current = {id: item?.Id, count: leading};
+	const steadyLeading = leadingRef.current.count;
 
 	// Kids Mode's row is its own short allow list and always fits, so the viewer's cap is one more
 	// of the settings the mode sets aside. Reading it would fold a button the mode does allow behind
 	// a menu, which is the thing a short row exists to avoid.
 	const prefLimit = isKidsMode(settings) ? 0 : (settings?.detailButtonsMaxVisible ?? 0);
 	const {visibleCount, needsOverflow} = countSplit({
-		totalButtons: leading + customizable.length,
+		totalButtons: steadyLeading + customizable.length,
 		...applyButtonLimit(prefLimit, {
 			maxVisible: maxVisibleButtons || 0,
 			overflowAsMenu,
 			countCapped: Boolean(maxVisibleButtons)
 		})
 	});
-	const inline = needsOverflow ? customizable.slice(0, Math.max(0, visibleCount - leading)) : customizable;
-	const behindMenu = needsOverflow ? customizable.slice(Math.max(0, visibleCount - leading)) : [];
+	const inline = needsOverflow ? customizable.slice(0, Math.max(0, visibleCount - steadyLeading)) : customizable;
+	const behindMenu = needsOverflow ? customizable.slice(Math.max(0, visibleCount - steadyLeading)) : [];
 
 	const handleRowFocus = useCallback((ev) => {
 		handleScrollerFocus(ev);

@@ -16,7 +16,8 @@ const KEYED = [KIND.TOGGLE, KIND.OPTION, KIND.SLIDER];
 
 // Enough of a context that every label, value and condition can be called.
 const ctx = {
-	settings: defaultSettings,
+	// The full schema, as the advanced mode shows it; cgflixSimpleSettings.test covers the simple one.
+	settings: {...defaultSettings, cgflixAdvancedSettings: true},
 	capabilities: {tizenVersionDisplay: '7.0', firmwareVersion: '1.0'},
 	seerr: {isEnabled: true, pluginInfo: {version: '1', settingsSyncEnabled: true, seerrEnabled: true}},
 	achievements: {available: true, leaderboardEnabled: true, questsEnabled: true, socialAvailable: true},

@@ -119,10 +119,10 @@ export const NavRow = ({id, spotlightId, title, desc, icon, onClick}) => {
 };
 
 // A fact rather than a setting. It still takes the focus, so the screen can be read row by row.
-export const InfoRow = ({id, label, value, icon}) => {
+export const InfoRow = ({id, label, value, icon, onClick}) => {
 	const [lineRef, wraps] = useWraps(value);
 	return (
-		<SpottableDiv className={rowClass(false)} spotlightId={`info-${id}`}>
+		<SpottableDiv className={rowClass(false)} spotlightId={`info-${id}`} onClick={onClick}>
 			{renderSettingsIcon(icon)}
 			<div className={bodyClass(!!value, wraps)}>
 				<div className={css.listItemHeading}>{label}</div>

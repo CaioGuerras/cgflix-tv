@@ -2,6 +2,7 @@ import {useCallback, useState} from 'react';
 import $L from '@enact/i18n/$L';
 
 import {DETAIL_ICON_PATHS} from './detailIcons';
+import useChangePulse from '../../hooks/useChangePulse';
 import {iconViewBox} from '../../components/icons/iconViewBox';
 import LoopMarquee from '../../components/LoopMarquee';
 import {personalRatingIconPath, personalRatingLabel} from './personalRatingAction';
@@ -21,10 +22,12 @@ export const ActionButton = ({path, label, detail, onClick, active, group, prima
 	const [focused, setFocused] = useState(false);
 	const handleFocus = useCallback(() => setFocused(true), []);
 	const handleBlur = useCallback(() => setFocused(false), []);
+	// CGFLIX: marking watched or favorite answers with a pop of the icon, not just a new label.
+	const pulsing = useChangePulse(Boolean(active));
 
 	return (
 		<SpottableDiv
-			className={`${css.actionBtn} ${primary ? css.actionPrimary : ''} ${active ? css.actionActive : ''} ${group ? css.actionGroup : ''}`}
+			className={`${css.actionBtn} ${primary ? css.actionPrimary : ''} ${active ? css.actionActive : ''} ${group ? css.actionGroup : ''} ${pulsing ? css.actionPulse : ''}`}
 			onClick={onClick}
 			onFocus={handleFocus}
 			onBlur={handleBlur}
@@ -51,15 +54,22 @@ export const detailActionCatalogue = (props) => {
 	const {
 		item, seerr,
 		isSeries, isSeason, isBoxSet, isEpisode, isBook, isPerson, isPlaylist, playlistTracks,
-		hasTrailer, played, isFavorite, inSyncPlayGroup, onWatchWithGroup,
+		hasTrailer, inSyncPlayGroup, onWatchWithGroup,
 		supportsMediaSourceSelection, hasMultipleVersions, hasMultipleAudio,
 		handleShuffle, handleTrailer, handleToggleWatched, handleToggleFavorite, handleGoToSeries,
-		showsPersonalRating, personalRatingStyle, handleOpenRatingDialog,
+		personalRatingStyle, handleOpenRatingDialog,
 		handleOpenVersionModal, handleOpenAudioModal, handleOpenSubtitleModal, handleOpenPlaylistModal,
 		handleOpenCollectionModal, handleOpenDeleteDialog, handleOpenIdentifyModal,
-		canChangeArtwork, handleOpenArtworkModal
+		handleOpenArtworkModal
 	} = props;
+	// CGFLIX: only Modern passes these two, so Minimalist, Spotlight and Nouveau showed Watched and
+	// Favorite as never set. The item's own user data answers for the screens that leave them out.
+	const played = props.played ?? Boolean(item?.UserData?.Played);
+	const isFavorite = props.isFavorite ?? Boolean(item?.UserData?.IsFavorite);
 
+	// CGFLIX: the TV is for watching. Rating, playlists, collections, deleting, artwork,
+	// request management and the admin tools stay on the site, so those entries never show.
+	//
 	// Asking and taking back are separate buttons sharing one arrangement
 	// slot, so a partly available series with an open request offers both at
 	// once.
@@ -110,15 +120,15 @@ export const detailActionCatalogue = (props) => {
 		{id: 'watchWithGroup', when: inSyncPlayGroup && !isBook, render: () => <ActionButton path={DETAIL_ICON_PATHS.group} label={$L('Watch with group')} group onClick={onWatchWithGroup} spotlightId="details-watch-with-group-btn" />},
 		{id: 'watched', when: !isPerson, render: () => <ActionButton path={DETAIL_ICON_PATHS.watched} label={played ? $L('Watched') : $L('Mark as Watched')} active={played} onClick={handleToggleWatched} spotlightId="details-watched-btn" />},
 		{id: 'favorite', when: true, render: () => <ActionButton path={DETAIL_ICON_PATHS.favorite} label={isFavorite ? $L('Favorited') : $L('Favorite')} active={isFavorite} onClick={handleToggleFavorite} spotlightId="details-favorite-btn" />},
-		{id: 'personalRating', when: showsPersonalRating, render: () => <ActionButton path={personalRatingIconPath(personalRatingStyle, item.UserData)} label={personalRatingLabel(personalRatingStyle, item.UserData)} onClick={handleOpenRatingDialog} spotlightId="details-rating-btn" />},
+		{id: 'personalRating', when: false, render: () => <ActionButton path={personalRatingIconPath(personalRatingStyle, item.UserData)} label={personalRatingLabel(personalRatingStyle, item.UserData)} onClick={handleOpenRatingDialog} spotlightId="details-rating-btn" />},
 		{id: 'goToSeries', when: isEpisode && item.SeriesId, render: () => <ActionButton path={DETAIL_ICON_PATHS.series} label={$L('Series')} onClick={handleGoToSeries} />},
-		{id: 'playlist', when: !isPerson, render: () => <ActionButton path={DETAIL_ICON_PATHS.playlist} label={$L('Add to Playlist')} onClick={handleOpenPlaylistModal} />},
-		{id: 'collection', when: Boolean(handleOpenCollectionModal), render: () => <ActionButton path={DETAIL_ICON_PATHS.collection} label={$L('Add to Collection')} onClick={handleOpenCollectionModal} />},
-		{id: 'deleteFiles', when: item.CanDelete, render: () => <ActionButton path={DETAIL_ICON_PATHS.delete} label={$L('Delete')} onClick={handleOpenDeleteDialog} />},
-		{id: 'artwork', when: canChangeArtwork, render: () => <ActionButton path={DETAIL_ICON_PATHS.artwork} label={$L('Change Artwork')} onClick={handleOpenArtworkModal} spotlightId="details-artwork-btn" />},
+		{id: 'playlist', when: false, render: () => <ActionButton path={DETAIL_ICON_PATHS.playlist} label={$L('Add to Playlist')} onClick={handleOpenPlaylistModal} />},
+		{id: 'collection', when: false, render: () => <ActionButton path={DETAIL_ICON_PATHS.collection} label={$L('Add to Collection')} onClick={handleOpenCollectionModal} />},
+		{id: 'deleteFiles', when: false, render: () => <ActionButton path={DETAIL_ICON_PATHS.delete} label={$L('Delete')} onClick={handleOpenDeleteDialog} />},
+		{id: 'artwork', when: false, render: () => <ActionButton path={DETAIL_ICON_PATHS.artwork} label={$L('Change Artwork')} onClick={handleOpenArtworkModal} spotlightId="details-artwork-btn" />},
 		{id: 'seerrWatchlist', when: seerr.showsWatchlist, render: () => <ActionButton path={seerr.onWatchlist ? DETAIL_ICON_PATHS.watchlistOn : DETAIL_ICON_PATHS.watchlist} label={seerr.onWatchlist ? $L('On Watchlist') : $L('Add to Watchlist')} active={seerr.onWatchlist} onClick={seerr.toggleWatchlist} />},
 		{id: 'seerrReportIssue', when: seerr.showsReportIssue, render: () => <ActionButton path={DETAIL_ICON_PATHS.reportIssue} label={$L('Report Issue')} onClick={seerr.handleReportIssueClick} />},
-		{id: 'seerrManage', when: seerr.showsManage, render: () => <ActionButton path={DETAIL_ICON_PATHS.manageRequests} label={$L('Manage Requests')} onClick={seerr.handleManageRequestsClick} />},
-		{id: 'admin', when: Boolean(handleOpenIdentifyModal), render: () => <ActionButton path={DETAIL_ICON_PATHS.admin} label={$L('Admin Controls')} onClick={handleOpenIdentifyModal} />}
+		{id: 'seerrManage', when: false, render: () => <ActionButton path={DETAIL_ICON_PATHS.manageRequests} label={$L('Manage Requests')} onClick={seerr.handleManageRequestsClick} />},
+		{id: 'admin', when: false, render: () => <ActionButton path={DETAIL_ICON_PATHS.admin} label={$L('Admin Controls')} onClick={handleOpenIdentifyModal} />}
 	];
 };

@@ -52,8 +52,6 @@ const DetailActionButtons = ({
 	selectedSubtitleIndex,
 	currentAudioStream,
 	currentSubtitleStream,
-	canAddToCollection,
-	canIdentify,
 	playLongPress,
 	resumeLongPress,
 	onFocusRow,
@@ -64,7 +62,6 @@ const DetailActionButtons = ({
 	onTrailer,
 	onToggleWatched,
 	onToggleFavorite,
-	showsPersonalRating,
 	personalRatingStyle,
 	onOpenRatingDialog,
 	onGoToSeries,
@@ -203,7 +200,7 @@ const DetailActionButtons = ({
 				<span className={css.btnLabel}>{item.UserData?.IsFavorite ? $L('Favorited') : $L('Favorite')}</span>
 			</SpottableDiv>
 		)},
-		{id: 'personalRating', when: showsPersonalRating, render: () => (
+		{id: 'personalRating', when: false, render: () => (
 			<SpottableDiv className={css.btnWrapper} onClick={onOpenRatingDialog} spotlightId="details-rating-btn">
 				<div className={css.btnAction}>
 					<BtnIcon path={personalRatingIconPath(personalRatingStyle, item.UserData)}/>
@@ -219,7 +216,7 @@ const DetailActionButtons = ({
 				<span className={css.btnLabel}>{$L('Series')}</span>
 			</SpottableDiv>
 		)},
-		{id: 'playlist', when: true, render: () => (
+		{id: 'playlist', when: false, render: () => (
 			<SpottableDiv className={css.btnWrapper} onClick={onOpenPlaylistModal}>
 				<div className={css.btnAction}>
 					<BtnIcon path={DETAIL_ICON_PATHS.playlist}/>
@@ -227,7 +224,7 @@ const DetailActionButtons = ({
 				<span className={css.btnLabel}>{$L('Add to Playlist')}</span>
 			</SpottableDiv>
 		)},
-		{id: 'collection', when: canAddToCollection, render: () => (
+		{id: 'collection', when: false, render: () => (
 			<SpottableDiv className={css.btnWrapper} onClick={onOpenCollectionModal}>
 				<div className={css.btnAction}>
 					<BtnIcon path={DETAIL_ICON_PATHS.collection}/>
@@ -235,7 +232,7 @@ const DetailActionButtons = ({
 				<span className={css.btnLabel}>{$L('Add to Collection')}</span>
 			</SpottableDiv>
 		)},
-		{id: 'deleteFiles', when: item.CanDelete, render: () => (
+		{id: 'deleteFiles', when: false, render: () => (
 			<SpottableDiv className={css.btnWrapper} onClick={onOpenDeleteDialog}>
 				<div className={css.btnAction}>
 					<BtnIcon path={DETAIL_ICON_PATHS.delete}/>
@@ -258,7 +255,7 @@ const DetailActionButtons = ({
 				<span className={css.btnLabel}>{$L('Report Issue')}</span>
 			</SpottableDiv>
 		)},
-		{id: 'seerrManage', when: seerr.showsManage, render: () => (
+		{id: 'seerrManage', when: false, render: () => (
 			<SpottableDiv className={css.btnWrapper} onClick={seerr.handleManageRequestsClick}>
 				<div className={css.btnAction}>
 					<BtnIcon path={DETAIL_ICON_PATHS.manageRequests}/>
@@ -266,7 +263,7 @@ const DetailActionButtons = ({
 				<span className={css.btnLabel}>{$L('Manage Requests')}</span>
 			</SpottableDiv>
 		)},
-		{id: 'admin', when: canIdentify, render: () => (
+		{id: 'admin', when: false, render: () => (
 			<SpottableDiv className={css.btnWrapper} onClick={onOpenIdentifyModal}>
 				<div className={css.btnAction}>
 					<BtnIcon path={DETAIL_ICON_PATHS.admin}/>

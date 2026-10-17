@@ -1,6 +1,7 @@
 import {fireEvent, render, renderHook, screen} from '@testing-library/react';
 
 import useItemMenuHold from './useItemMenuHold';
+import {HINT_DELAY_MS, HINT_SHOW_LIMIT, resetHoldFeedback} from '../components/ItemContextMenu/holdFeedback';
 
 const mockMenu = {open: jest.fn(), canOpen: jest.fn(() => true)};
 
@@ -46,6 +47,8 @@ const sendKey = (type, element) => fireEvent[type](element, {keyCode: OK, which:
 
 beforeEach(() => {
 	jest.useFakeTimers();
+	window.localStorage.clear();
+	resetHoldFeedback();
 	mockMenu.open.mockClear();
 	mockMenu.canOpen.mockClear();
 	mockMenu.canOpen.mockReturnValue(true);
@@ -189,5 +192,78 @@ describe('useItemMenuHold', () => {
 		sendKey('keyUp', element);
 		expect(mockMenu.open).toHaveBeenCalledTimes(1);
 		expect(onClick).toHaveBeenCalledTimes(1);
+	});
+
+	// CGFLIX: the hold shows itself, and a hint says it exists.
+	describe('feedback', () => {
+		const bar = () => document.querySelector('[data-cgf-hold-progress]');
+		const hint = () => document.querySelector('[data-cgf-hold-hint]');
+		const hintShown = () => Boolean(hint()) && hint().className.split(' ').length > 1;
+		const focusCard = (hold) => {
+			hold.onFocusCapture({target: card});
+			// The delay, then a frame for the slide in.
+			jest.advanceTimersByTime(HINT_DELAY_MS + 50);
+		};
+
+		test('a bar fills under the card while OK is held, gone once the menu opens', () => {
+			const hold = setup();
+			hold.onKeyDownCapture(press());
+			expect(bar()).not.toBeNull();
+			jest.advanceTimersByTime(600);
+			expect(mockMenu.open).toHaveBeenCalledTimes(1);
+			expect(bar()).toBeNull();
+		});
+
+		test('a short press takes its bar away with it', () => {
+			const hold = setup();
+			hold.onKeyDownCapture(press());
+			release('keyup');
+			expect(bar()).toBeNull();
+		});
+
+		test('a card that keeps focus brings up the hint, and leaving it puts it away', () => {
+			const hold = setup();
+			focusCard(hold);
+			expect(hintShown()).toBe(true);
+			hold.onBlurCapture();
+			expect(hintShown()).toBe(false);
+		});
+
+		test('moving on before the delay shows nothing', () => {
+			const hold = setup();
+			hold.onFocusCapture({target: card});
+			jest.advanceTimersByTime(HINT_DELAY_MS - 100);
+			hold.onBlurCapture();
+			jest.advanceTimersByTime(HINT_DELAY_MS);
+			expect(hint()).toBeNull();
+		});
+
+		test('the hint retires after a few showings', () => {
+			const hold = setup();
+			for (let i = 0; i < HINT_SHOW_LIMIT; i++) {
+				focusCard(hold);
+				hold.onBlurCapture();
+			}
+			focusCard(hold);
+			expect(hintShown()).toBe(false);
+		});
+
+		test('the hint retires once the viewer has held OK twice', () => {
+			const hold = setup();
+			for (let i = 0; i < 2; i++) {
+				hold.onKeyDownCapture(press());
+				jest.advanceTimersByTime(600);
+				release('keyup');
+			}
+			focusCard(hold);
+			expect(hint()).toBeNull();
+		});
+
+		test('a card the menu cant open for gets no hint', () => {
+			mockMenu.canOpen.mockReturnValue(false);
+			const hold = setup();
+			focusCard(hold);
+			expect(hint()).toBeNull();
+		});
 	});
 });

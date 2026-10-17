@@ -465,14 +465,22 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 	const handleToggleWatched = useCallback(async () => {
 		if (!item) return;
 		const newState = !item.UserData?.Played;
-		await effectiveApi.setWatched(item.Id, newState);
+		const previousUserData = item.UserData;
+		// CGFLIX: the button flips (and pops) on the press, and goes back if the server says no.
 		setItem(prev => ({
 			...prev,
 			UserData: {...prev.UserData, Played: newState, PlayedPercentage: newState ? 100 : 0}
 		}));
+		try {
+			await effectiveApi.setWatched(item.Id, newState);
+		} catch {
+			setItem(prev => ({...prev, UserData: previousUserData}));
+			showToast($L('Could not update watched status'));
+			return;
+		}
 		window.dispatchEvent(new CustomEvent('moonfin:browseRefresh'));
 		window.requestAnimationFrame(() => Spotlight.focus('details-watched-btn') || Spotlight.focus('season-watched-btn'));
-	}, [effectiveApi, item, setItem]);
+	}, [effectiveApi, item, setItem, showToast]);
 
 	// A rating shows on the screen before the server answers, and goes back to
 	// what it was if the save fails.

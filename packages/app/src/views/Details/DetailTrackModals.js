@@ -25,7 +25,6 @@ const DetailTrackModals = ({
 	onSelectVersion,
 	onSelectAudio,
 	onSelectSubtitle,
-	onOpenRemoteSubtitleSearch,
 	isSearchingRemoteSubtitles,
 	isDownloadingRemoteSubtitle,
 	remoteSubtitleError,
@@ -142,13 +141,7 @@ const DetailTrackModals = ({
 									onClick={onSelectSubtitle}
 								/>
 							))}
-							<TrackDivider />
-							<TrackOptionRow
-								label={$L('Download subtitles...')}
-								detail={$L('Search using the OpenSubtitles plugin')}
-								spotlightId="btn-subtitle-download"
-								onClick={onOpenRemoteSubtitleSearch}
-							/>
+							{/* CGFLIX: no subtitle search on the TV, Bazarr fetches them on the server. */}
 							<TrackDivider />
 							<TrackOptionRow label={$L('Cancel')} dimmed onClick={onCloseModal} />
 						</div>

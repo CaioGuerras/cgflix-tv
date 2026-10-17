@@ -10,7 +10,7 @@ const episode = (userData = {}) => ({Id: 'e1', Type: 'Episode', SeriesId: 's1', 
 
 describe('itemMenuActions', () => {
 	test('offers a viewer the everyday entries, Play first', () => {
-		expect(ids(movie())).toEqual(['play', 'watched', 'favorite', 'addToPlaylist']);
+		expect(ids(movie())).toEqual(['play', 'watched', 'favorite']);
 	});
 
 	test('reads Resume with a resume point and flips the toggles to what would change', () => {
@@ -29,41 +29,26 @@ describe('itemMenuActions', () => {
 	});
 
 	test('gives an episode its series entries', () => {
-		expect(ids(episode())).toEqual(['play', 'watched', 'hideNextUp', 'favorite', 'addToPlaylist', 'goToSeries']);
+		expect(ids(episode())).toEqual(['play', 'watched', 'hideNextUp', 'favorite', 'goToSeries']);
 	});
 
-	test('gives a playlist row its own entries, View Details right after Play', () => {
+	test('opens the item from a playlist row, View Details right after Play', () => {
 		const playlist = {canManage: true, first: false, last: false};
-		expect(ids(movie(), {playlist})).toEqual(['play', 'viewDetails', 'watched', 'favorite', 'addToPlaylist', 'removeFromPlaylist', 'moveUp', 'moveDown']);
-		expect(ids(movie(), {playlist: {canManage: true, first: true, last: false}})).not.toContain('moveUp');
-		expect(ids(movie(), {playlist: {canManage: true, first: false, last: true}})).not.toContain('moveDown');
-		expect(ids(movie(), {playlist: {canManage: false}})).toEqual(['play', 'viewDetails', 'watched', 'favorite', 'addToPlaylist']);
-		expect(ids(movie(), {playlist: {canManage: true, canMove: false, first: false, last: false}}))
-			.toEqual(['play', 'viewDetails', 'watched', 'favorite', 'addToPlaylist', 'removeFromPlaylist']);
+		expect(ids(movie(), {playlist})).toEqual(['play', 'viewDetails', 'watched', 'favorite']);
 	});
 
 	test('leaves View Details off a song, which has no page to open', () => {
 		const song = {Id: 'a1', Type: 'Audio', Name: 'A song', UserData: {}};
-		expect(ids(song, {playlist: {canManage: true, first: true, last: true}})).toEqual(['play', 'watched', 'favorite', 'addToPlaylist', 'removeFromPlaylist']);
+		expect(ids(song, {playlist: {canManage: true, first: true, last: true}})).toEqual(['play', 'watched', 'favorite']);
 	});
 
-	test('adds the collection entries only for someone who can manage collections', () => {
-		expect(ids(movie(), {canManageCollections: true})).toContain('addToCollection');
-		expect(ids(movie(), {canManageCollections: true})).not.toContain('removeFromCollection');
-		expect(ids(movie(), {canManageCollections: true, inCollection: true})).toContain('removeFromCollection');
-		expect(ids(movie(), {inCollection: true})).not.toContain('removeFromCollection');
-	});
-
-	test('keeps the server tools to an admin on Jellyfin', () => {
-		const admin = {isAdmin: true, isJellyfin: true};
-		expect(ids(movie(), admin)).toEqual(['play', 'watched', 'favorite', 'addToPlaylist', 'refreshMetadata', 'identify', 'changeArtwork']);
-		expect(ids(movie(), {isAdmin: true, isJellyfin: false})).toEqual(['play', 'watched', 'favorite', 'addToPlaylist']);
-		expect(ids({Id: 'a1', Type: 'Audio'}, admin)).not.toContain('identify');
-	});
-
-	test('offers an admin artwork alone on a library or a genre', () => {
-		expect(ids({Id: 'g1', Type: 'Genre'}, {isAdmin: true})).toEqual(['changeArtwork']);
-		expect(ids({Id: 'l1', Type: 'CollectionFolder'}, {isAdmin: true})).toEqual(['changeArtwork']);
+	// CGFLIX: the TV is for watching, so playlists, collections and the admin tools stay on the site.
+	test('keeps playlist, collection and server tools off the TV, even for an admin', () => {
+		const everything = {isAdmin: true, isJellyfin: true, canManageCollections: true, inCollection: true, playlist: {canManage: true, first: false, last: false}};
+		const offered = ids(movie(), everything);
+		['addToPlaylist', 'removeFromPlaylist', 'moveUp', 'moveDown', 'addToCollection', 'removeFromCollection', 'refreshMetadata', 'identify', 'changeArtwork']
+			.forEach((id) => expect(offered).not.toContain(id));
+		expect(ids({Id: 'g1', Type: 'Genre'}, {isAdmin: true})).toEqual([]);
 	});
 
 	test("has nothing for what it doesn't know how to act on", () => {

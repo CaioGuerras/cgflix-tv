@@ -392,7 +392,7 @@ const Player = ({item, resume, initialMediaSourceId, initialAudioIndex, initialS
 		isPaused, audioStreams, subtitleStreams, chapters,
 		nextEpisode, isAudioMode, isLiveTV, hasNextTrack, hasPrevTrack,
 		shuffleMode, repeatMode, selectedQuality,
-		selectedSubtitleIndex, canDownloadRemoteSubtitles: !isAudioMode && Boolean(item?.Id), hasCastMembers, zoomModeLabel, zoomModeKey: zoomMode,
+		selectedSubtitleIndex, canDownloadRemoteSubtitles: false /* CGFLIX: Bazarr fetches subtitles on the server */, hasCastMembers, zoomModeLabel, zoomModeKey: zoomMode,
 		sleepMinutes,
 		canBrowseEpisodes: canBrowseEpisodes({item, isLiveTV, isAudioMode})
 	});
@@ -3316,7 +3316,7 @@ const Player = ({item, resume, initialMediaSourceId, initialAudioIndex, initialS
 				handleOpenSubtitleSettings={handleOpenSubtitleSettings}
 				handleOpenRemoteSubtitleSearch={handleOpenRemoteSubtitleSearch}
 				handleSelectRemoteSubtitle={handleSelectRemoteSubtitle}
-				canDownloadRemoteSubtitles={!isAudioMode && Boolean(item?.Id)}
+				canDownloadRemoteSubtitles={false}
 				isSearchingRemoteSubtitles={isSearchingRemoteSubtitles}
 				isDownloadingRemoteSubtitle={isDownloadingRemoteSubtitle}
 				remoteSubtitleError={remoteSubtitleError}

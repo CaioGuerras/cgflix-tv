@@ -1,0 +1,77 @@
+@import '../../styles/mixins.less';
+
+// CGFLIX: what tells a viewer that holding OK on a card does something. Both sit on the body,
+// outside the rows, so no card's own focus styles or clipping get in the way.
+
+// A bar under the focused card fills while OK is held, and the menu opens as it reaches the end.
+.holdBar {
+	position: fixed;
+	z-index: 9997;
+	height: 8px;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.28);
+	overflow: hidden;
+	pointer-events: none;
+	opacity: 0;
+	// A quick press is over before the bar shows, so it never flashes on an ordinary click.
+	animation: cgfHoldShow 0.1s linear 0.12s forwards;
+}
+
+.holdFill {
+	width: 100%;
+	height: 100%;
+	background: var(--theme-focus-border-color, var(--theme-accent, #00a4dc));
+	transform: scaleX(0);
+	transform-origin: left center;
+	// The hold's length comes from script, so the bar and the timer that opens the menu agree.
+	animation: cgfHoldFill var(--cgf-hold-ms, 600ms) linear forwards;
+}
+
+@keyframes cgfHoldShow {
+	to { opacity: 1; }
+}
+
+@keyframes cgfHoldFill {
+	to { transform: scaleX(1); }
+}
+
+// A quiet line at the bottom of the screen, shown the first few times a card keeps focus.
+.hint {
+	position: fixed;
+	z-index: 9997;
+	left: 50%;
+	bottom: 48px;
+	display: flex;
+	align-items: center;
+	padding: 12px 26px 12px 14px;
+	.glass-panel(40px);
+	color: #fff;
+	font-size: 20px;
+	font-weight: 600;
+	pointer-events: none;
+	opacity: 0;
+	transform: translate(-50%, 16px);
+	transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+	:global(.perf-low) & {
+		transition: none;
+	}
+}
+
+.hintShown {
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+.hintKey {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 44px;
+	height: 44px;
+	margin-right: 14px;
+	border-radius: 22px;
+	border: 2px solid rgba(255, 255, 255, 0.85);
+	font-size: 16px;
+	font-weight: 700;
+}
