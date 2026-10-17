@@ -2274,5 +2274,9 @@
 	"{seerrLabel} is disabled by your server administrator.": "{seerrLabel} is disabled by your server administrator.",
 	"{time} remaining": "{time} remaining",
 	"◀ ▶ Navigate": "◀ ▶ Navigate",
-	"◀ ▶ to re-order · DEL to remove": "◀ ▶ to re-order · DEL to remove"
+	"◀ ▶ to re-order · DEL to remove": "◀ ▶ to re-order · DEL to remove",
+	"CGFLIX for Tizen {version}": "CGFLIX for Tizen {version}",
+	"Made with love, for Isis and Heitor": "Made with love, for Isis and Heitor",
+	"Built on Moonfin for Smart TVs, free software under the Mozilla Public License 2.0.": "Built on Moonfin for Smart TVs, free software under the Mozilla Public License 2.0.",
+	"Moonfin, the original project": "Moonfin, the original project"
 }

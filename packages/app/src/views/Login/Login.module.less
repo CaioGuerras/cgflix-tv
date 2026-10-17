@@ -2,7 +2,9 @@
 // sizes are in logical pixels on a half-scale surface, so every measurement here
 // is twice the one over there and the two look the same on a 1080p panel.
 
-@accent: var(--theme-accent, #00a4dc);
+// CGFLIX: the fallbacks are what the older engines draw, since the build bakes them in
+// over every var(). Sign-in runs before anyone picks a theme, so they carry our colors.
+@accent: var(--theme-accent, #a855f7);
 @error: var(--theme-recording-active, #ef4444);
 @fg: var(--theme-on-surface, #fff);
 
@@ -18,12 +20,8 @@
 	bottom: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
-	background: linear-gradient(
-		135deg,
-		var(--theme-background, #0a0a0a) 0%,
-		var(--theme-surface-variant, #1a1a2e) 50%,
-		var(--theme-surface, #16213e) 100%
-	);
+	background-color: #07060a;
+	background-image: radial-gradient(ellipse at 50% 0%, rgba(147, 51, 234, 0.28) 0%, rgba(7, 6, 10, 0) 60%);
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
@@ -90,8 +88,8 @@
 }
 
 .card {
-	background: rgba(17, 21, 40, 0.8);
-	border: 2px solid rgba(255, 255, 255, 0.2);
+	background: rgba(18, 16, 26, 0.88);
+	border: 2px solid rgba(168, 85, 247, 0.22);
 	border-radius: 40px;
 	padding: 64px;
 	text-align: left;
@@ -166,7 +164,7 @@
 	transition: background 0.12s ease, border-color 0.12s ease;
 
 	&:focus {
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.18);
+		background: rgba(var(--theme-accent-rgb, 168, 85, 247), 0.18);
 		border-color: @accent;
 	}
 }
@@ -224,12 +222,14 @@
 	background: transparent;
 	cursor: pointer;
 	outline: none;
-	transition: border-color 0.12s ease, color 0.12s ease;
+	transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 	.fg(0.8);
 
+	// CGFLIX: focus fills the pill, which reads from across the room better than a thin ring
 	&:focus {
-		border-color: @accent;
-		color: @accent;
+		background: #f3e8ff;
+		border-color: #f3e8ff;
+		color: #3b0764;
 	}
 
 	&:disabled {
@@ -437,8 +437,9 @@
 	color: @fg;
 
 	&:focus {
-		border-color: @fg;
-		color: @fg;
+		background: #f3e8ff;
+		border-color: @accent;
+		color: #3b0764;
 	}
 }
 
@@ -616,7 +617,7 @@
 }
 
 .spinnerAccent {
-	border-color: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.25);
+	border-color: rgba(var(--theme-accent-rgb, 168, 85, 247), 0.25);
 	border-top-color: @accent;
 }
 
@@ -655,8 +656,8 @@
 	padding: 24px 32px;
 	font-size: 26px;
 	border-radius: 24px;
-	background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.18);
-	border: 3px solid rgba(var(--theme-accent-rgb, 0, 164, 220), 0.4);
+	background: rgba(var(--theme-accent-rgb, 168, 85, 247), 0.18);
+	border: 3px solid rgba(var(--theme-accent-rgb, 168, 85, 247), 0.4);
 	color: @accent;
 }
 

@@ -35,6 +35,10 @@ const formatQuickConnectCode = (code) => (code.length === 6 ? `${code.slice(0, 3
 
 const hasQuickConnect = (target) => target?.serverType !== 'emby';
 
+// CGFLIX: the family server is Jellyfin, so the Emby Connect entry stays out of the server
+// list. The flow is kept so upstream changes still merge cleanly.
+const SHOW_EMBY_CONNECT = false;
+
 // Where a press should land once the password half of the screen is showing
 const credentialFocusTarget = (user) => {
 	if (!user) return 'username-input';
@@ -787,18 +791,22 @@ const Login = ({
 			>
 				<MaterialIcon name="add" className={css.outlineButtonIcon} />
 				{$L('Add Server')}
-			</SpottableButton>,
-			<SpottableButton
-				key="emby"
-				data-spotlight-id="emby-connect-btn"
-				className={css.outlineButton}
-				onClick={handleEmbyConnectStart}
-				disabled={isConnecting}
-			>
-				<ServerTypeIcon serverType="emby" className={css.outlineButtonIcon} />
-				{$L('Emby Connect')}
 			</SpottableButton>
 		];
+		if (SHOW_EMBY_CONNECT) {
+			actions.push(
+				<SpottableButton
+					key="emby"
+					data-spotlight-id="emby-connect-btn"
+					className={css.outlineButton}
+					onClick={handleEmbyConnectStart}
+					disabled={isConnecting}
+				>
+					<ServerTypeIcon serverType="emby" className={css.outlineButtonIcon} />
+					{$L('Emby Connect')}
+				</SpottableButton>
+			);
+		}
 
 		if (isAdding) {
 			actions.push(
@@ -854,7 +862,7 @@ const Login = ({
 
 				{error && <div className={css.errorText}>{error}</div>}
 
-				<div className={`${css.actionRow} ${actions.length === 2 ? '' : css.actionColumn}`}>
+				<div className={`${css.actionRow} ${actions.length === 3 ? css.actionColumn : ''}`}>
 					{actions}
 				</div>
 			</FocusArea>
@@ -1203,7 +1211,7 @@ const Login = ({
 
 				{step === 'servers' && (
 					<div className={css.versionFooter}>
-						{$L('Moonfin version {version}').replace('{version}', process.env.REACT_APP_VERSION || '')}
+						{$L('CGFLIX for Tizen {version}').replace('{version}', process.env.REACT_APP_VERSION || '')}
 					</div>
 				)}
 

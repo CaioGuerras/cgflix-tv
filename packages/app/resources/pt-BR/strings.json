@@ -2499,5 +2499,9 @@
     "{count} unread messages": "{count} mensagens não lidas",
     "{count} waiting for you": "{count} esperando por você",
     "{name} keeps their profile private.": "{name} mantém o perfil privado.",
-    "{name} wants to be friends": "{name} quer ser seu amigo"
+    "{name} wants to be friends": "{name} quer ser seu amigo",
+    "CGFLIX for Tizen {version}": "CGFLIX para Tizen {version}",
+    "Made with love, for Isis and Heitor": "Feito com amor, para Isis e Heitor",
+    "Built on Moonfin for Smart TVs, free software under the Mozilla Public License 2.0.": "Feito a partir do Moonfin para Smart TVs, software livre sob a Mozilla Public License 2.0.",
+    "Moonfin, the original project": "Moonfin, o projeto original"
 }
