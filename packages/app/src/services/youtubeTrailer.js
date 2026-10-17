@@ -12,6 +12,9 @@ const MANIFEST_URL = /\/manifest\/(hls|dash)_|\.(m3u8|mpd)(\?|$)/;
 // hls.js guesses 500 kbps until it has measured, which opens a trailer at 480p on a TV that
 // has bandwidth to spare for YouTube's 2.6 Mbps 1080p.
 const HLS_START_BANDWIDTH = 8000000;
+// CGFLIX: hls.js may not settle below this, which on YouTube's H.264 ladder is 720p. A link
+// too slow for it stalls, and the stall watch hands over to the muxed file.
+const HLS_MIN_AUTO_BITRATE = 1500000;
 // LG's own player is held to 1080p. The rungs above it are VP9 only, and it cant change codec
 // partway through a stream.
 const LG_MAX_WIDTH = 1920;
@@ -518,6 +521,7 @@ export function attachTrailerStream (video, url, {Hls = null, audioLanguage = ''
 		enableWorker: false,
 		startPosition: startTime > 0 ? startTime : -1,
 		abrEwmaDefaultEstimate: HLS_START_BANDWIDTH,
+		minAutoBitrate: HLS_MIN_AUTO_BITRATE,
 		// VP9 stalls in Tizen's MSE, and YouTube always offers H.264 beside it
 		videoPreference: {videoCodec: 'avc1'},
 		...(audioLanguage ? {audioPreference: {lang: audioLanguage}} : {})

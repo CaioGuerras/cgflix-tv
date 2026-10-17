@@ -44,7 +44,7 @@ const MakdBanner = memo(({
 		if (featuredItems.length > 1) setCurrentIndex((prev) => (prev + 1) % featuredItems.length);
 	}, [featuredItems.length]);
 
-	const {trailerActive, trailerHolding, trailerContainerRef} = useTrailerPreview({
+	const {trailerActive, trailerShowing, trailerHolding, trailerContainerRef} = useTrailerPreview({
 		currentItem: currentFeatured,
 		isVisible: isVisible && browseVisible,
 		enabled: settingsLoaded && settings.featuredTrailerPreview,
@@ -203,7 +203,7 @@ const MakdBanner = memo(({
 	return (
 		<div className={css.makdBanner}>
 			<SpottableDiv
-				className={`${css.makdInner} ${trailerActive ? css.makdTrailerActive : ''}`}
+				className={`${css.makdInner} ${trailerShowing ? css.makdTrailerShowing : ''} ${trailerActive ? css.makdTrailerActive : ''}`}
 				spotlightId='featured-banner'
 				onClick={handleFeaturedClick}
 				onKeyDown={handleFeaturedKeyDown}

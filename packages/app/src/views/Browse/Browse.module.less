@@ -113,7 +113,9 @@
 	opacity: 1;
 }
 
-.trailerActive .featuredBackdrop {
+/* CGFLIX: the picture gives way as soon as the video shows; the info and its
+   scrim follow when trailerActive arrives. */
+.trailerShowing .featuredBackdrop {
 	opacity: 0;
 	transition: opacity 0.25s ease;
 }
@@ -412,6 +414,10 @@
 	transition: opacity 0.25s ease;
 }
 
+.makdTrailerShowing .makdBackdrop {
+	opacity: 0;
+}
+
 .makdTrailerActive {
 	.makdBackdrop,
 	.makdGradient,
@@ -649,7 +655,7 @@
 	overflow: hidden;
 }
 
-.galleryTrailerActive .galleryPanelBackdrop {
+.galleryTrailerShowing .galleryPanelBackdrop {
 	opacity: 0;
 }
 

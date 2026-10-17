@@ -52,7 +52,7 @@ const GalleryBanner = memo(({
 		if (featuredItems.length > 1) setActiveIndex((prev) => (prev + 1) % featuredItems.length);
 	}, [featuredItems.length]);
 
-	const {trailerActive, trailerHolding, trailerContainerRef} = useTrailerPreview({
+	const {trailerActive, trailerShowing, trailerHolding, trailerContainerRef} = useTrailerPreview({
 		currentItem: currentFeatured,
 		// The banner stays mounted behind the settings overlay so the hero keeps its
 		// place, but the trailer has to stop or it plays on underneath it.
@@ -242,7 +242,7 @@ const GalleryBanner = memo(({
 						return (
 							<div
 								key={item.Id || absoluteIndex}
-								className={`${css.galleryPanel} ${isActive ? css.galleryPanelActive : ''} ${isActive && trailerActive ? css.galleryTrailerActive : ''}`}
+								className={`${css.galleryPanel} ${isActive ? css.galleryPanelActive : ''} ${isActive && trailerShowing ? css.galleryTrailerShowing : ''} ${isActive && trailerActive ? css.galleryTrailerActive : ''}`}
 							>
 								<div className={css.galleryPanelBackdrop}>
 									{backdropUrl && <img src={backdropUrl} alt='' />}

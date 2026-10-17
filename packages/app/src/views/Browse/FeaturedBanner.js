@@ -46,7 +46,7 @@ const FeaturedBanner = memo(({
 		if (featuredItems.length > 1) setCurrentIndex((prev) => (prev + 1) % featuredItems.length);
 	}, [featuredItems.length]);
 
-	const {trailerActive, trailerHolding, trailerContainerRef} = useTrailerPreview({
+	const {trailerActive, trailerShowing, trailerHolding, trailerContainerRef} = useTrailerPreview({
 		currentItem: currentFeatured,
 		// The banner stays mounted behind the settings overlay so the hero keeps its
 		// place, but the trailer has to stop or it plays on underneath it.
@@ -202,7 +202,7 @@ const FeaturedBanner = memo(({
 	return (
 		<div className={css.featuredBanner}>
 			<SpottableDiv
-				className={`${css.featuredInner} ${trailerActive ? css.trailerActive : ''}`}
+				className={`${css.featuredInner} ${trailerShowing ? css.trailerShowing : ''} ${trailerActive ? css.trailerActive : ''}`}
 				spotlightId="featured-banner"
 				onClick={handleFeaturedClick}
 				onKeyDown={handleFeaturedKeyDown}

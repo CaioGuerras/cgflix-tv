@@ -8,6 +8,9 @@ import serverLogger from '../../services/serverLogger';
 import css from './Browse.module.less';
 
 const TRAILER_REVEAL_MS = 3000;
+// CGFLIX: the title, rating and synopsis stay over the playing trailer this long
+// before they step aside.
+const TRAILER_INFO_HOLD_MS = 10000;
 // The element keeps the trailer's own shape and overhangs the container, which crops
 // it instead of squashing it into a frame that isnt 16:9.
 const TRAILER_ZOOM = 1.15;
@@ -22,6 +25,8 @@ const LOCAL_TRAILER_STREAM_PARAMS = {
 // the caller renders, and reveals it after a short delay.
 export default function useTrailerPreview({currentItem, isVisible, enabled, preferMuted, showCaptions = false, captionLanguage = '', api, getItemServerUrl, onEnded}) {
 	const [trailerActive, setTrailerActive] = useState(false);
+	// Set when the video shows. trailerActive follows once the info has had its time.
+	const [trailerShowing, setTrailerShowing] = useState(false);
 	// Set from the playing event, a few seconds before trailerActive reveals the video, so the
 	// banners can hold their carousel while the trailer is already audible.
 	const [trailerHolding, setTrailerHolding] = useState(false);
@@ -40,6 +45,7 @@ export default function useTrailerPreview({currentItem, isVisible, enabled, pref
 	const trailerStateRef = useRef('idle');
 	const trailerVideoIdRef = useRef(null);
 	const trailerRevealTimerRef = useRef(null);
+	const trailerInfoTimerRef = useRef(null);
 	const sponsorSegmentsRef = useRef([]);
 	const trailerCaptionBlobRef = useRef(null);
 	const trailerCaptionBoxRef = useRef(null);
@@ -87,11 +93,16 @@ export default function useTrailerPreview({currentItem, isVisible, enabled, pref
 			clearTimeout(trailerRevealTimerRef.current);
 			trailerRevealTimerRef.current = null;
 		}
+		if (trailerInfoTimerRef.current) {
+			clearTimeout(trailerInfoTimerRef.current);
+			trailerInfoTimerRef.current = null;
+		}
 		if (trailerSkipIntervalRef.current) {
 			clearInterval(trailerSkipIntervalRef.current);
 			trailerSkipIntervalRef.current = null;
 		}
 		setTrailerActive(false);
+		setTrailerShowing(false);
 		setTrailerHolding(false);
 		// The element is only touched while this is its owner, so the cleanups that run
 		// on an item change or a hide can't clear a card preview that took it over.
@@ -244,7 +255,9 @@ export default function useTrailerPreview({currentItem, isVisible, enabled, pref
 		const markUnavailable = () => {
 			trailerStateRef.current = 'unavailable';
 			video.classList.remove(css.trailerVisible);
+			if (trailerInfoTimerRef.current) clearTimeout(trailerInfoTimerRef.current);
 			setTrailerActive(false);
+			setTrailerShowing(false);
 			setTrailerHolding(false);
 		};
 
@@ -334,10 +347,16 @@ export default function useTrailerPreview({currentItem, isVisible, enabled, pref
 					// A seek past a sponsor segment can fire this again, so the pending
 					// reveal is dropped rather than left to run after the trailer stops.
 					if (trailerRevealTimerRef.current) clearTimeout(trailerRevealTimerRef.current);
+					if (trailerInfoTimerRef.current) clearTimeout(trailerInfoTimerRef.current);
 					trailerRevealTimerRef.current = setTimeout(() => {
 						if (trailerStateRef.current === 'playing' && trailerVideoIdRef.current === requestId) {
 							video.classList.add(css.trailerVisible);
-							setTrailerActive(true);
+							setTrailerShowing(true);
+							trailerInfoTimerRef.current = setTimeout(() => {
+								if (trailerStateRef.current === 'playing' && trailerVideoIdRef.current === requestId) {
+									setTrailerActive(true);
+								}
+							}, TRAILER_INFO_HOLD_MS);
 						}
 					}, TRAILER_REVEAL_MS);
 				}
@@ -490,5 +509,5 @@ export default function useTrailerPreview({currentItem, isVisible, enabled, pref
 		return () => stopTrailer();
 	}, [stopTrailer]);
 
-	return {trailerActive, trailerHolding, trailerContainerRef};
+	return {trailerActive, trailerShowing, trailerHolding, trailerContainerRef};
 }
