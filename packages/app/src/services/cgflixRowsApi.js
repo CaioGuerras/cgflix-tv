@@ -62,6 +62,8 @@ export const fetchUpcoming = () => cached('embreve', async () => {
 		getJson(`/HomeScreen/Section/UpcomingMovies?UserId=${userId}`, {auth: true}),
 		getJson('/cgflix/embreve.json')
 	]);
-	const payload = {shows: shows?.Items || [], movies: movies?.Items || [], map: map || {}};
+	// Without the map every entry is dropped, so a failed read of it is not cached as an empty row.
+	if (!map) return null;
+	const payload = {shows: shows?.Items || [], movies: movies?.Items || [], map};
 	return payload.shows.length > 0 || payload.movies.length > 0 ? payload : null;
 });
