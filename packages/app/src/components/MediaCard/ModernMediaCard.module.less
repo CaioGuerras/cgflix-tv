@@ -325,3 +325,31 @@
 .platformWebos .previewRing {
 	border-radius: calc(var(--theme-card-radius, 20px) + 2px);
 }
+
+// CGFLIX: under the home hero the overview and ratings of the focused card are
+// already up top, so the card keeps only its title and metadata, and the focused
+// artwork grows a little with a glow in the accent, as on Apple TV. Only the
+// transform animates, which the TV sets composite without a repaint.
+:global(.cgf-hero-rows) {
+	.extendedSection {
+		display: none;
+	}
+
+	.imageContainer {
+		overflow: visible;
+		transform-origin: left center;
+		transition: transform 0.2s ease-out;
+	}
+
+	.card:focus .imageContainer {
+		transform: scale(1.04);
+	}
+
+	.card:focus .image {
+		box-shadow: 0 10px 34px rgba(var(--theme-accent-rgb, 147, 51, 234), 0.45);
+	}
+}
+
+:global(.perf-low) :global(.cgf-hero-rows) .imageContainer {
+	transition: none;
+}

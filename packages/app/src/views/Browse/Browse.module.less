@@ -1445,6 +1445,20 @@
 	padding-left: 110px;
 }
 
+// CGFLIX: with the menu at the side nothing sits over the top of the screen, so
+// the hero starts at the safe area instead of under a navbar, and the overview
+// keeps a readable measure rather than running the width of the screen.
+.sidebarOffset .detailSection {
+	padding-top: 60px;
+	height: 420px;
+	box-sizing: border-box;
+
+	.detailSummary {
+		font-size: 26px;
+		max-width: 1100px;
+	}
+}
+
 .sidebarOffset .featuredLogoContainer {
 	left: 186px;
 }

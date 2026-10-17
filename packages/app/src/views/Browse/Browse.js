@@ -37,6 +37,8 @@ import css from './Browse.module.less';
 
 const FOCUS_DELAY_MS = 100;
 const TRANSITION_DELAY_MS = 450;
+const HERO_ROW_SPACING = 48;
+const HERO_ROW_GAP = 28;
 
 const LOADING_ROW_TITLE_WIDTHS = skeletonTitleWidths(4, 24);
 
@@ -151,11 +153,16 @@ const Browse = ({
 
 	const useModernRows = settings.homeRowsStyle !== 'v1';
 	const RowComponent = useModernRows ? ModernMediaRow : ClassicMediaRow;
-	const showTopInfoArea = !useModernRows && settings.homeRowOverlay !== false;
+	// CGFLIX: modern rows get the info overlay too, as the hero above the focused
+	// row (the Apple TV layout), so the focused row rests below it instead of at
+	// the top edge. Full screen rows keep the card details, having no room for it.
+	const heroRows = useModernRows && settings.homeRowOverlay !== false && !settings.fullScreenRows;
+	const showTopInfoArea = heroRows || (!useModernRows && settings.homeRowOverlay !== false);
 	// The other clients size these sliders in their own units, so the stored value
 	// lands here as the space below each row. Full screen rows pace themselves.
+	// Under the hero a row needs a clear gap to the next one.
 	const rowSpacing = settings.fullScreenRows ? null : useModernRows
-		? modernRowSpacing(settings)
+		? Math.max(modernRowSpacing(settings), heroRows ? HERO_ROW_SPACING : 0)
 		: Math.max(0, settings.classicHomeRowsPadding ?? 30);
 
 	const {
@@ -274,9 +281,12 @@ const Browse = ({
 			: container.querySelector(`[data-row-index="${rowIndex}"]`);
 		if (!targetRow) return;
 		const topbarOffset = showTopInfoArea && settings.navbarPosition !== 'left' ? 20 : 0;
-		const top = Math.max(0, targetRow.offsetTop - topbarOffset);
+		// Under the hero the row title would touch the overview, so the row rests a
+		// little lower and the gap above it is the blank spacing of the row before.
+		const heroGap = heroRows ? HERO_ROW_GAP : 0;
+		const top = Math.max(0, targetRow.offsetTop - topbarOffset - heroGap);
 		if (Math.abs(container.scrollTop - top) > 1) container.scrollTop = top;
-	}, [settings.navbarPosition, showTopInfoArea]);
+	}, [settings.navbarPosition, showTopInfoArea, heroRows]);
 
 	const scrollToRow = useCallback((rowIndex, thenFocus, cardIndex, cardId) => {
 		if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
@@ -743,7 +753,7 @@ const Browse = ({
 				<MediaPreviewContext.Provider value={mediaPreview}>
 				<div
 					ref={contentRowsRef}
-					className={`${css.contentRows} ${browseMode === 'rows' ? css.rowsMode : ''} ${rowsClipClass}`}
+					className={`${css.contentRows} ${browseMode === 'rows' ? css.rowsMode : ''} ${rowsClipClass} ${heroRows ? 'cgf-hero-rows' : ''}`}
 				>
 					{filteredRows.map((row, index) => {
 						if (row.isPlaceholder) {
