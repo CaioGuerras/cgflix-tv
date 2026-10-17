@@ -29,7 +29,24 @@
 	z-index: 1;
 }
 
-/* Featured Banner */
+/* Featured Banner
+   CGFLIX: the hero the way the Apple TV app draws it. The picture runs edge to edge, the
+   title sits large at the bottom left over a short line of facts and the synopsis, and a
+   turn fades the next picture in over the last one instead of swapping it. Only opacity
+   and transform move, the two things the TV hands to its compositor. */
+@hero-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+@hero-inset: 110px;
+
+@keyframes heroFade {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes heroRise {
+	from { opacity: 0; transform: translateY(16px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
 .featuredBanner {
 	position: relative;
 	width: 100%;
@@ -37,7 +54,7 @@
 	overflow: hidden;
 	z-index: 10;
 	flex-shrink: 0;
-	transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, height 0.4s ease;
+	transition: transform 0.4s @hero-ease, opacity 0.4s ease;
 }
 
 .featuredInner {
@@ -56,13 +73,19 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	transition: opacity 0.8s ease-in-out;
+	transition: opacity 0.8s ease;
+}
 
-	img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
+// Each picture gets its own layer and fades in over the one under it, which stays put
+// until the next turn drops it.
+.heroLayer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	animation: heroFade 0.7s @hero-ease both;
 }
 
 /* Trailer Preview */
@@ -113,15 +136,16 @@
 	opacity: 1;
 }
 
-/* CGFLIX: the picture gives way as soon as the video shows; the info and its
-   scrim follow when trailerActive arrives. */
+/* CGFLIX: the picture gives way as soon as the video shows. The title, the facts and the
+   synopsis stay over it for the first 10 s (trailerShowing), then the facts drift away
+   slowly and the title settles smaller in its corner (trailerActive). */
 .trailerShowing .featuredBackdrop {
 	opacity: 0;
-	transition: opacity 0.25s ease;
 }
 
-/* Scrim behind the info card, gone while a trailer plays so the video stands
-   clear. */
+// Darkens the bottom and the left, where the text sits, and leaves the rest of the
+// picture alone. Thinned rather than removed once the trailer has the screen, so the
+// title that stays still reads.
 .featuredGradient {
 	position: absolute;
 	top: 0;
@@ -130,97 +154,66 @@
 	bottom: 0;
 	z-index: 1;
 	pointer-events: none;
-	background: -webkit-linear-gradient(top, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.3) 0%, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.1) 40%, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.8) 100%);
-	background: linear-gradient(to bottom, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.3) 0%, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.1) 40%, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.8) 100%);
-	transition: opacity 0.25s ease;
+	background:
+		linear-gradient(to top, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.92) 0%, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.55) 32%, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0) 62%),
+		linear-gradient(to right, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.7) 0%, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.25) 38%, rgba(var(--theme-scrim-rgb, 0, 0, 0), 0) 60%);
+	transition: opacity 0.9s ease;
 }
 
 .trailerActive .featuredGradient {
-	opacity: 0;
+	opacity: 0.45;
 }
 
 .featuredContent {
 	position: absolute;
-	bottom: 52px;
-	left: 36px;
-	right: 36px;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-align-items: flex-end;
-	align-items: flex-end;
-	-webkit-justify-content: space-between;
-	justify-content: space-between;
+	left: @hero-inset;
+	bottom: 120px;
+	width: 820px;
 	z-index: 2;
-}
-
-.featuredInfoBox {
-	.glass-panel(23px);
-	padding: 17px 23px;
-	width: 100%;
-	box-sizing: border-box;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-direction: column;
-	flex-direction: column;
-	transition: background-color 0.25s ease, border-color 0.25s ease;
-}
-
-/* While the trailer plays the card melts away and only the metadata row stays,
-   sitting straight on the video. The glow arrives as an inline style from the
-   theme, so only important beats it. */
-.trailerActive .featuredInfoBox {
-	background-color: transparent;
-	background-image: none;
-	border-color: transparent;
-	-webkit-backdrop-filter: none;
-	backdrop-filter: none;
-	box-shadow: none !important;
-	padding: 9px 23px;
-}
-
-/* The ratings and the description under the metadata row. Collapsed rather
-   than just faded while a trailer plays, so the bare row hugs the bottom. */
-.featuredDetails {
-	overflow: hidden;
-	max-height: 200px;
-	margin-top: 9px;
-	opacity: 1;
-	transition: max-height 0.25s ease, opacity 0.25s ease;
-}
-
-.trailerActive .featuredDetails {
-	max-height: 0;
-	opacity: 0;
+	animation: heroRise 0.6s @hero-ease both;
 }
 
 .featuredLogoContainer {
-	position: absolute;
-	top: 81px;
-	left: 58px;
-	z-index: 3;
-	width: 406px;
-	max-height: 174px;
+	margin-bottom: 24px;
+	transform-origin: left bottom;
+	transition: transform 0.9s @hero-ease;
+}
 
-	img {
-		max-width: 100%;
-		max-height: 174px;
-		object-fit: contain;
-		object-position: left center;
-	}
+.trailerActive .featuredLogoContainer {
+	transform: scale(0.8);
+}
+
+.heroLogoImg {
+	display: block;
+	max-width: 620px;
+	max-height: 190px;
+	object-fit: contain;
+	object-position: left bottom;
+	animation: heroFade 0.5s ease both;
 }
 
 /* Stands in for the logo when the item has none. */
 .featuredTitle {
-	font-size: 41px;
+	font-size: 76px;
 	font-weight: 800;
+	letter-spacing: -0.5px;
 	margin: 0;
 	color: var(--theme-text-primary, #fff);
-	text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
-	line-height: 1.05;
+	text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6);
+	line-height: 1.02;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
+}
+
+.featuredDetails {
+	transition: opacity 0.9s ease, transform 0.9s @hero-ease;
+}
+
+.trailerActive .featuredDetails {
+	opacity: 0;
+	transform: translateY(12px);
 }
 
 .featuredMeta {
@@ -230,42 +223,44 @@
 	align-items: center;
 	-webkit-flex-wrap: wrap;
 	flex-wrap: wrap;
-	width: 100%;
+	margin-bottom: 10px;
 }
 
 .metaItem {
-	font-size: 17px;
+	font-size: 24px;
 	font-weight: 600;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.9));
+	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.85);
 
 	&:not(:last-child)::after {
-		content: '•';
-		margin-left: 9px;
-		margin-right: 9px;
-		color: var(--theme-text-muted, rgba(255, 255, 255, 0.5));
+		content: '·';
+		margin: 0 12px;
+		color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.55);
 	}
 }
 
 .metaBadge {
 	display: inline-block;
-	padding: 1px 7px;
-	border: 1px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.4);
-	border-radius: 4px;
-	font-size: 16px;
+	margin-left: 14px;
+	padding: 0 8px;
+	border: 2px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.55);
+	border-radius: 6px;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 26px;
+	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.85);
 }
 
 .featuredOverview {
-	font-size: 20px;
-	line-height: 1.4;
-	height: 84px;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.9);
-	margin: 12px 0 0;
-	text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.9);
+	font-size: 24px;
+	line-height: 1.45;
+	max-width: 760px;
+	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.88);
+	margin: 14px 0 0;
+	text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
 	display: -webkit-box;
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-	width: 100%;
 }
 
 /* Carousel navigation buttons */
@@ -304,21 +299,28 @@
 	right: 20px;
 }
 
-/* Carousel Indicators */
+// CGFLIX: the arrows are for a pointer only. The remote turns the hero with left and right,
+// so on a TV they would just sit over the picture.
+.heroNav {
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.featuredInner:hover .heroNav {
+	opacity: 1;
+}
+
+/* Carousel Indicators: small dots at the bottom right, level with the text. */
 .featuredIndicators {
 	position: absolute;
-	bottom: 12px;
-	left: 50%;
-	transform: translateX(-50%);
+	right: @hero-inset;
+	bottom: 128px;
 	display: -webkit-flex;
 	display: flex;
 	-webkit-align-items: center;
 	align-items: center;
 	z-index: 10;
-	background: rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.55);
-	padding: 9px 17px;
-	border-radius: 17px;
-	transition: opacity 0.25s ease;
+	transition: opacity 0.9s ease;
 
 	> * + * {
 		margin-left: 12px;
@@ -330,16 +332,15 @@
 }
 
 .indicatorDot {
-	width: 12px;
-	height: 12px;
+	width: 10px;
+	height: 10px;
 	border-radius: 50%;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.5);
-	transition: background 0.3s ease, width 0.2s ease, height 0.2s ease;
+	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.35);
+	transition: background 0.3s ease, transform 0.3s @hero-ease;
 
 	&.active {
-		width: 14px;
-		height: 14px;
 		background: var(--theme-on-surface, #ffffff);
+		transform: scale(1.3);
 	}
 }
 

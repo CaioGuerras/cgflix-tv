@@ -32,6 +32,7 @@ import useExternalRows from './useExternalRows';
 import useCgflixRows from './useCgflixRows';
 import useMediaPreview from './useMediaPreview';
 import {buildBrowseRows, sameRowList} from './buildBrowseRows';
+import {cgflixFeaturedStyle} from './featuredConfig';
 
 import css from './Browse.module.less';
 
@@ -120,7 +121,8 @@ const Browse = ({
 	const isVisibleRef = useRef(isVisible);
 	isVisibleRef.current = isVisible;
 
-	const showFeaturedBar = (settings.featuredBarStyle !== 'off');
+	const featuredBarStyle = cgflixFeaturedStyle(settings.featuredBarStyle);
+	const showFeaturedBar = (featuredBarStyle !== 'off');
 
 	const registerRowRef = useCallback((rowIndex, element) => {
 		if (element) {
@@ -453,7 +455,7 @@ const Browse = ({
 	const targetBackdropUrl = useMemo(() => {
 		// The aya frame floats inside the page, so its ambient backdrop stays up
 		// in featured mode where the full screen bars blank it.
-		if (browseMode === 'featured' && settings.featuredBarStyle !== 'aya') return '';
+		if (browseMode === 'featured' && featuredBarStyle !== 'aya') return '';
 		if (!focusedItemForBackdrop || isLegacy || settings.showHomeBackdrop === false) return '';
 
 		if (focusedItemForBackdrop._externalBackdropUrl) {
@@ -469,7 +471,7 @@ const Browse = ({
 		if (!backdropId) return '';
 		const itemUrl = getItemServerUrl(targetItem);
 		return getImageUrl(itemUrl, backdropId, 'Backdrop', {maxWidth: 1280, quality: 80});
-	}, [browseMode, focusedItemForBackdrop, isLegacy, settings.showHomeBackdrop, getItemServerUrl, settings.featuredBarStyle]);
+	}, [browseMode, focusedItemForBackdrop, isLegacy, settings.showHomeBackdrop, getItemServerUrl, featuredBarStyle]);
 
 	const rememberFocus = useCallback(() => {
 		const rowIndex = lastFocusedRowRef.current;
@@ -659,7 +661,7 @@ const Browse = ({
 				/>
 
 				{featuredItems.length > 0 && showFeaturedBar !== false && (
-					settings.featuredBarStyle === 'aya' ? (
+					featuredBarStyle === 'aya' ? (
 						<AyaBanner
 							isVisible={browseMode === 'featured'}
 							browseVisible={isVisible}
@@ -673,7 +675,7 @@ const Browse = ({
 							onFeaturedFocus={handleFeaturedFocusCallback}
 							onAmbientItemChange={setFocusedItemForBackdrop}
 						/>
-					) : settings.featuredBarStyle === 'gallery' ? (
+					) : featuredBarStyle === 'gallery' ? (
 						<GalleryBanner
 							isVisible={browseMode === 'featured'}
 							browseVisible={isVisible}
@@ -686,7 +688,7 @@ const Browse = ({
 							onNavigateDown={handleNavigateDownFromFeatured}
 							onFeaturedFocus={handleFeaturedFocusCallback}
 						/>
-					) : settings.featuredBarStyle === 'banner' ? (
+					) : featuredBarStyle === 'banner' ? (
 						<BannerBar
 							isVisible={browseMode === 'featured'}
 							featuredItems={featuredItems}
@@ -696,7 +698,7 @@ const Browse = ({
 							onNavigateDown={handleNavigateDownFromFeatured}
 							onFeaturedFocus={handleFeaturedFocusCallback}
 						/>
-					) : settings.featuredBarStyle === 'bookshelf' ? (
+					) : featuredBarStyle === 'bookshelf' ? (
 						<BookshelfBar
 							isVisible={browseMode === 'featured'}
 							featuredItems={featuredItems}
@@ -706,7 +708,7 @@ const Browse = ({
 							onNavigateDown={handleNavigateDownFromFeatured}
 							onFeaturedFocus={handleFeaturedFocusCallback}
 						/>
-					) : settings.featuredBarStyle === 'makd' ? (
+					) : featuredBarStyle === 'makd' ? (
 						<MakdBanner
 							isVisible={browseMode === 'featured'}
 							browseVisible={isVisible}

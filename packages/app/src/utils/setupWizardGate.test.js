@@ -27,12 +27,12 @@ describe('setupWizardGate', () => {
 	});
 
 	test('asks everything plus the tour when nothing is answered', () => {
-		expect(remainingSteps()).toEqual(['navbar', 'mediaBar', 'homeRows', 'detailStyle', 'tour']);
+		expect(remainingSteps()).toEqual(['navbar', 'homeRows', 'detailStyle', 'tour']);
 	});
 
 	test('drops answered questions and keeps the tour', () => {
 		noteAnsweredSettings(['navbarPosition', 'homeRowsStyle']);
-		expect(remainingSteps()).toEqual(['mediaBar', 'detailStyle', 'tour']);
+		expect(remainingSteps()).toEqual(['detailStyle', 'tour']);
 	});
 
 	test('drops the tour when every question is answered', () => {
@@ -42,7 +42,7 @@ describe('setupWizardGate', () => {
 
 	test('ignores keys that arent wizard questions', () => {
 		noteAnsweredSettings(['uiLanguage', 'homeRowOverlay']);
-		expect(remainingSteps()).toEqual(['navbar', 'mediaBar', 'homeRows', 'detailStyle', 'tour']);
+		expect(remainingSteps()).toEqual(['navbar', 'homeRows', 'detailStyle', 'tour']);
 	});
 
 	test('keys by server id and user, falling back to the normalized url', () => {
@@ -82,7 +82,7 @@ describe('setupWizardGate', () => {
 		deferThisLaunch();
 		beginRerun();
 		await expect(shouldRun('s1', 'https://jf.example.com', 'u1')).resolves.toBe(true);
-		expect(remainingSteps()).toEqual(['navbar', 'mediaBar', 'homeRows', 'detailStyle', 'tour']);
+		expect(remainingSteps()).toEqual(['navbar', 'homeRows', 'detailStyle', 'tour']);
 	});
 
 	test('markComplete ends a re run', async () => {

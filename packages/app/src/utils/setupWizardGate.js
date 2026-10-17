@@ -14,9 +14,9 @@ const STORE_KEY = 'setupWizard';
 // Which questions the wizard can ask, in the order shown. The navbar leads
 // because it is the frame everything after it sits in. The tour is never
 // suppressed, since it asks nothing that could already have been answered.
+// CGFLIX: no media bar question, the home always draws our hero.
 export const SETUP_QUESTION_STEPS = [
 	{step: 'navbar', settingKey: 'navbarPosition'},
-	{step: 'mediaBar', settingKey: 'featuredBarStyle'},
 	{step: 'homeRows', settingKey: 'homeRowsStyle'},
 	{step: 'detailStyle', settingKey: 'detailScreenStyle'}
 ];

@@ -1,4 +1,4 @@
-import {featuredConfigKey} from './featuredConfig';
+import {cgflixFeaturedStyle, featuredConfigKey} from './featuredConfig';
 
 const base = {
 	useMoonfinPlugin: false,
@@ -42,5 +42,17 @@ describe('featuredConfigKey', () => {
 		['excludedGenres', {excludedGenres: ['Horror']}]
 	])('%s changes the key', (_label, change) => {
 		expect(featuredConfigKey({...base, ...change})).not.toBe(featuredConfigKey(base));
+	});
+});
+
+describe('cgflixFeaturedStyle', () => {
+	test('draws the CGFLIX hero for any stored style', () => {
+		expect(cgflixFeaturedStyle('gallery')).toBe('moonfin');
+		expect(cgflixFeaturedStyle('makd')).toBe('moonfin');
+		expect(cgflixFeaturedStyle(undefined)).toBe('moonfin');
+	});
+
+	test('keeps off as off', () => {
+		expect(cgflixFeaturedStyle('off')).toBe('off');
 	});
 });

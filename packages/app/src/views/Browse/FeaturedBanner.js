@@ -2,16 +2,38 @@ import {useState, useEffect, useCallback, useRef, memo} from 'react';
 import {isMdblistEnabled} from '../../services/mdblistApi';
 import Spottable from '@enact/spotlight/Spottable';
 import Spotlight from '@enact/spotlight';
-import $L from '@enact/i18n/$L';
 import {getImageUrl, getBackdropId, formatDuration} from '../../utils/helpers';
 import RatingsRow from '../../components/RatingsRow';
 import {KEYS} from '../../utils/keys';
 import useTrailerPreview from './useTrailerPreview';
 import css from './Browse.module.less';
 import {carouselIntervalMs} from '../../utils/carouselTiming';
+import {autocropLogoUrl} from '../../utils/logoAutocrop';
 
-const FEATURED_GENRES_LIMIT = 3;
+const FEATURED_GENRES_LIMIT = 2;
 const PRELOAD_ADJACENT_SLIDES = 2;
+// CGFLIX: two pictures at most are on screen, the one fading in over the one it replaces.
+const BACKDROP_LAYERS = 2;
+const HERO_LOGO_MAX_WIDTH = 620;
+const HERO_LOGO_MAX_HEIGHT = 190;
+
+const backdropUrlFor = (getItemServerUrl, item) => {
+	const backdropId = item && getBackdropId(item);
+	return backdropId ? getImageUrl(getItemServerUrl(item), backdropId, 'Backdrop', {maxWidth: 1920, quality: 85}) : null;
+};
+
+// Resolves once the picture is decoded, so the fade starts on a finished frame rather than
+// one the TV is still painting. Older engines without decode() wait for the load instead,
+// and a failed load resolves too, which lets the fade show the broken one rather than none.
+const whenDecoded = (url) => new Promise((resolve) => {
+	const img = new window.Image();
+	img.onload = () => {
+		if (typeof img.decode === 'function') img.decode().then(resolve, resolve);
+		else resolve();
+	};
+	img.onerror = resolve;
+	img.src = url;
+});
 
 const SpottableDiv = Spottable('div');
 const SpottableButton = Spottable('button');
@@ -20,7 +42,6 @@ const FeaturedBanner = memo(({
 	isVisible,
 	browseVisible = true,
 	featuredItems,
-	serverUrl,
 	api,
 	settings,
 	settingsLoaded,
@@ -28,7 +49,6 @@ const FeaturedBanner = memo(({
 	onSelectItem,
 	onNavigateDown,
 	onFeaturedFocus,
-	uiPanelStyle,
 	uiButtonStyle,
 	onCurrentItemChange
 }) => {
@@ -39,6 +59,39 @@ const FeaturedBanner = memo(({
 	const carouselIntervalRef = useRef(null);
 
 	const currentFeatured = featuredItems[currentIndex];
+	const currentBackdropUrl = backdropUrlFor(getItemServerUrl, currentFeatured);
+	const currentLogoUrl = currentFeatured?.LogoUrl || null;
+
+	// CGFLIX: the backdrop never swaps in place. Each new picture is decoded first and then
+	// laid over the last one, fading in on its own layer, the way the Apple TV hero turns.
+	const [backdropLayers, setBackdropLayers] = useState([]);
+	const layerKeyRef = useRef(0);
+	useEffect(() => {
+		if (!currentBackdropUrl) return undefined;
+		let cancelled = false;
+		whenDecoded(currentBackdropUrl).then(() => {
+			if (cancelled) return;
+			setBackdropLayers((prev) => {
+				if (prev.length && prev[prev.length - 1].url === currentBackdropUrl) return prev;
+				layerKeyRef.current += 1;
+				return [...prev, {url: currentBackdropUrl, key: layerKeyRef.current}].slice(-BACKDROP_LAYERS);
+			});
+		});
+		return () => { cancelled = true; };
+	}, [currentBackdropUrl]);
+
+	// Studios pad their logos with very different amounts of empty margin, which is what left
+	// some of them as a thumbnail in the corner. Trimmed, they all fill the same box.
+	const [logo, setLogo] = useState(null);
+	useEffect(() => {
+		setLogo(null);
+		if (!currentLogoUrl) return undefined;
+		let cancelled = false;
+		autocropLogoUrl(currentLogoUrl).then((result) => {
+			if (!cancelled) setLogo({url: result?.url || currentLogoUrl, aspectRatio: result?.aspectRatio || null});
+		});
+		return () => { cancelled = true; };
+	}, [currentLogoUrl]);
 
 	// A trailer outlives the carousel interval, so finishing one moves the hero on
 	// itself rather than waiting out another full turn on a still backdrop.
@@ -85,16 +138,14 @@ const FeaturedBanner = memo(({
 			const index = (currentIndex + offset + featuredItems.length) % featuredItems.length;
 			const item = featuredItems[index];
 			if (item) {
-				const backdropId = getBackdropId(item);
-				if (backdropId) {
-					preloadImage(getImageUrl(serverUrl, backdropId, 'Backdrop', {maxWidth: 1920, quality: 85}));
-				}
+				// The same url the hero shows, so the preload is the picture it ends up using.
+				preloadImage(backdropUrlFor(getItemServerUrl, item));
 				if (item.LogoUrl) {
 					preloadImage(item.LogoUrl);
 				}
 			}
 		}
-	}, [currentIndex, featuredItems, serverUrl]);
+	}, [currentIndex, featuredItems, getItemServerUrl]);
 
 	const startCarouselTimer = useCallback(() => {
 		if (carouselIntervalRef.current) {
@@ -199,6 +250,20 @@ const FeaturedBanner = memo(({
 
 	if (!isVisible || !currentFeatured) return null;
 
+	const duration = currentFeatured.RunTimeTicks && currentFeatured.Type !== 'Series'
+		? formatDuration(currentFeatured.RunTimeTicks)
+		: null;
+	const metaParts = [
+		...(currentFeatured.Genres || []).slice(0, FEATURED_GENRES_LIMIT),
+		currentFeatured.ProductionYear,
+		duration && duration !== '0m' ? duration : null
+	].filter(Boolean);
+	// A trimmed logo is sized off its own shape, so a wide wordmark and a tall stacked one
+	// cover about the same area instead of the wide one towering over the text.
+	const logoStyle = logo?.aspectRatio
+		? {width: `${Math.min(HERO_LOGO_MAX_WIDTH, HERO_LOGO_MAX_HEIGHT * logo.aspectRatio)}px`}
+		: null;
+
 	return (
 		<div className={css.featuredBanner}>
 			<SpottableDiv
@@ -210,10 +275,9 @@ const FeaturedBanner = memo(({
 				onBlur={handleFeaturedBlur}
 			>
 				<div className={css.featuredBackdrop}>
-					<img
-						src={getImageUrl(getItemServerUrl(currentFeatured), getBackdropId(currentFeatured), 'Backdrop', {maxWidth: 1920, quality: 85})}
-						alt=""
-					/>
+					{backdropLayers.map((layer) => (
+						<img key={layer.key} className={css.heroLayer} src={layer.url} alt="" />
+					))}
 				</div>
 
 				<div className={css.trailerContainer} ref={trailerContainerRef} />
@@ -224,7 +288,7 @@ const FeaturedBanner = memo(({
 					<>
 						{settings.navbarPosition !== 'left' && (
 							<SpottableButton
-								className={`${css.carouselNav} ${css.carouselNavLeft}`}
+								className={`${css.carouselNav} ${css.carouselNavLeft} ${css.heroNav}`}
 								onClick={handleCarouselPrevClick}
 								style={uiButtonStyle}
 							>
@@ -234,7 +298,7 @@ const FeaturedBanner = memo(({
 							</SpottableButton>
 						)}
 						<SpottableButton
-							className={`${css.carouselNav} ${css.carouselNavRight}`}
+							className={`${css.carouselNav} ${css.carouselNavRight} ${css.heroNav}`}
 							onClick={handleCarouselNextClick}
 							style={uiButtonStyle}
 						>
@@ -245,52 +309,44 @@ const FeaturedBanner = memo(({
 					</>
 				)}
 
-				<div className={css.featuredLogoContainer}>
-					{currentFeatured.LogoUrl ? (
-						<img
-							src={currentFeatured.LogoUrl}
-							alt={`${currentFeatured.Name} logo`}
-						/>
-					) : (
-						<h1 className={css.featuredTitle}>{currentFeatured.Name}</h1>
-					)}
-				</div>
-
-				<div className={css.featuredContent}>
-					<div className={css.featuredInfoBox} style={uiPanelStyle}>
-						<div className={css.featuredMeta}>
-							{currentFeatured.ProductionYear && (
-								<span className={css.metaItem}>{currentFeatured.ProductionYear}</span>
-							)}
-							{currentFeatured.OfficialRating && (
-								<span className={css.metaItem}><span className={css.metaBadge}>{currentFeatured.OfficialRating}</span></span>
-							)}
-							{(() => {
-								if (!currentFeatured.RunTimeTicks || currentFeatured.Type === 'Series') return null;
-								const dur = formatDuration(currentFeatured.RunTimeTicks);
-								return dur && dur !== '0m' ? <span className={css.metaItem}>{dur}</span> : null;
-							})()}
-							{currentFeatured.Genres?.slice(0, FEATURED_GENRES_LIMIT).map((g, i) => (
-								<span key={i} className={css.metaItem}>{g}</span>
-							))}
-						</div>
-						<div className={css.featuredDetails}>
-							<RatingsRow item={currentFeatured} serverUrl={getItemServerUrl(currentFeatured)} compact pluginEnabled={isMdblistEnabled(settings)} />
-							{!settings.hideHomeMediaDescription && (
-								<p className={css.featuredOverview}>
-									{currentFeatured.Overview || $L('No description available.')}
-								</p>
-							)}
-						</div>
+				{/* Keyed by the item, so every turn replays the fade in rather than
+				    swapping the text under the reader's eyes. */}
+				<div key={currentFeatured.Id} className={css.featuredContent}>
+					<div className={css.featuredLogoContainer}>
+						{currentLogoUrl ? (
+							logo && (
+								<img
+									className={css.heroLogoImg}
+									src={logo.url}
+									style={logoStyle}
+									alt={currentFeatured.Name}
+								/>
+							)
+						) : (
+							<h1 className={css.featuredTitle}>{currentFeatured.Name}</h1>
+						)}
 					</div>
-
+					<div className={css.featuredDetails}>
+						<div className={css.featuredMeta}>
+							{metaParts.map((part) => (
+								<span key={part} className={css.metaItem}>{part}</span>
+							))}
+							{currentFeatured.OfficialRating && (
+								<span className={css.metaBadge}>{currentFeatured.OfficialRating}</span>
+							)}
+						</div>
+						<RatingsRow item={currentFeatured} serverUrl={getItemServerUrl(currentFeatured)} compact pluginEnabled={isMdblistEnabled(settings)} />
+						{!settings.hideHomeMediaDescription && currentFeatured.Overview && (
+							<p className={css.featuredOverview}>{currentFeatured.Overview}</p>
+						)}
+					</div>
 				</div>
 
 				{featuredItems.length > 1 && (
 					<div className={css.featuredIndicators}>
-						{featuredItems.map((_, idx) => (
+						{featuredItems.map((item, idx) => (
 							<div
-								key={idx}
+								key={item.Id || idx}
 								className={`${css.indicatorDot} ${idx === currentIndex ? css.active : ''}`}
 							/>
 						))}

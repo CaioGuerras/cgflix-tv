@@ -22,13 +22,9 @@ export const getContentTypeOptions = () => [
 	{ value: 'tv', label: $L('TV Shows Only') }
 ];
 
+// CGFLIX: one hero, ours, or none. The home draws the CGFLIX hero for any other stored style.
 export const getFeaturedBarStyleOptions = () => [
-	{ value: 'moonfin', label: $L('Moonfin') },
-	{ value: 'makd', label: $L('MakD') },
-	{ value: 'bookshelf', label: $L('Bookshelf') },
-	{ value: 'gallery', label: $L('Gallery') },
-	{ value: 'banner', label: $L('Banner') },
-	{ value: 'aya', label: $L('Aya') },
+	{ value: 'moonfin', label: 'CGFLIX' },
 	{ value: 'off', label: $L('Off') }
 ];
 

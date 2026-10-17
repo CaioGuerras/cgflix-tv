@@ -10,3 +10,7 @@ export const featuredConfigKey = (settings = {}, unifiedMode) => JSON.stringify(
 	settings.mediaBarCollectionIds || [],
 	settings.excludedGenres || []
 ]);
+
+// CGFLIX: the home has one hero, ours, the same as the site and the other apps. Whatever style a
+// synced profile or the setup wizard left behind lands on it, and off still turns it off.
+export const cgflixFeaturedStyle = (style) => (style === 'off' ? 'off' : 'moonfin');
