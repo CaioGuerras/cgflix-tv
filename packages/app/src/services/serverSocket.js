@@ -82,6 +82,8 @@ export const connect = () => {
 
 	const serverUrl = getServerUrl();
 	if (!serverUrl) return;
+	// CGFLIX: o Plex não tem o socket de sessão do Jellyfin/Emby; progresso e assistido vão pela timeline.
+	if (getServerType() === 'plex') return;
 
 	try {
 		ws = new WebSocket(socketUrl(serverUrl));

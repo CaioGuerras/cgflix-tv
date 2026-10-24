@@ -1,3 +1,4 @@
+import {supportsFavorites} from '../../utils/serverCapabilities';
 import {useState, useEffect, useCallback, useMemo} from 'react';
 import $L from '@enact/i18n/$L';
 import {useAuth} from '../../context/AuthContext';
@@ -155,7 +156,7 @@ const Person = ({personId, onSelectItem, onSelectSeerrItem, onSelectSeerrPerson}
 	);
 
 	const actions = [
-		{key: 'favorite', label: person.UserData?.IsFavorite ? $L('Favorited') : $L('Favorite'), icon: favoriteIcon, onClick: handleToggleFavorite}
+		...(supportsFavorites(person) ? [{key: 'favorite', label: person.UserData?.IsFavorite ? $L('Favorited') : $L('Favorite'), icon: favoriteIcon, onClick: handleToggleFavorite}] : [])
 	];
 	if (showSeerrButton) {
 		actions.push({key: 'seerr', label: $L('Seerr'), icon: null, onClick: handleOpenSeerr});

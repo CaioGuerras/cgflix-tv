@@ -8,6 +8,10 @@ import {getPlatform} from '../platform';
 import {makeUserRoutes, trimQuerySeparator, legacyAuthHeader, buildUserImageUrl} from '../utils/serverRoutes';
 import * as userDataSync from './userDataSync';
 import {SUPPORTED_COMMANDS} from './remoteControl';
+// CGFLIX: servidor Plex (adaptador com o mesmo contrato do `api`; ver PLEX.md)
+import {createPlexApi, plexUnsupported} from './plexApi';
+import {setPlexDevice} from './plexTv';
+import {isPlexServerUrl, plexTokenFor} from './plexImages';
 const APP_VERSION = packageJson.version;
 
 const PLATFORM_IDENTITY = {
@@ -35,18 +39,38 @@ const parentIdOf = (endpoint) => {
 	return match ? match[1] : null;
 };
 
+// CGFLIX: cliente Plex do servidor ativo, refeito quando servidor, tipo ou token mudam.
+let plexApi = null;
+const syncPlexApi = () => {
+	if (serverType !== 'plex' || !currentServer || !accessToken) {
+		plexApi = null;
+		return;
+	}
+	const key = `${currentServer}|${accessToken}|${currentUser}`;
+	if (plexApi?.cgfKey !== key) {
+		plexApi = createPlexApi({serverUrl: currentServer, token: accessToken, userId: currentUser});
+		plexApi.cgfKey = key;
+	}
+};
+
 export const setServer = (serverUrl) => {
 	currentServer = normalizeServerUrl(serverUrl);
+	syncPlexApi();
 };
 
 export const setServerType = (type) => {
-	serverType = type === 'emby' ? 'emby' : 'jellyfin';
+	serverType = type === 'emby' ? 'emby' : type === 'plex' ? 'plex' : 'jellyfin';
+	syncPlexApi();
 };
 
 export const getServerType = () => serverType;
 
 // Jellyfin 12 drops the lowercase api_key param while Emby still requires it
-export const getTokenParam = (type) => ((type || serverType) === 'emby' ? 'api_key' : 'ApiKey');
+export const getTokenParam = (type) => {
+	const t = type || serverType;
+	if (t === 'plex') return 'X-Plex-Token';
+	return t === 'emby' ? 'api_key' : 'ApiKey';
+};
 
 // Exported for the callers that build a raw URL instead of going through request().
 export const userRoutes = makeUserRoutes(() => serverType, () => currentUser);
@@ -68,7 +92,8 @@ export const setAuth = (userId, token) => {
 	accessToken = token;
 	accessDeniedParentIds.clear();
 	libraryIndex = null;
-	if (token) reportCapabilities();
+	syncPlexApi();
+	if (token && serverType !== 'plex') reportCapabilities();
 };
 
 const sanitizeHeaderValue = (value) => {
@@ -95,6 +120,7 @@ export const initDeviceId = async () => {
 		const stored = await getFromStorage('_deviceId');
 		if (stored) {
 			deviceId = stored;
+			setPlexDevice({clientId: deviceId, version: APP_VERSION, deviceName: DEVICE_NAME});
 			return deviceId;
 		}
 	} catch (e) {
@@ -102,6 +128,7 @@ export const initDeviceId = async () => {
 	}
 
 	deviceId = `moonfin_${platformTag}_` + Date.now().toString(36) + Math.random().toString(36).substring(2);
+	setPlexDevice({clientId: deviceId, version: APP_VERSION, deviceName: DEVICE_NAME});
 
 	try {
 		const {saveToStorage} = await import('./storage');
@@ -962,6 +989,17 @@ export const api = {
 	})
 };
 
+// CGFLIX: com servidor Plex ativo, cada método do `api` vai para o adaptador (services/plexApi.js).
+// Método que o Plex não tem responde vazio (get/search) ou com erro 501, nunca com rota do Jellyfin.
+const jellyfinMethods = {...api};
+for (const name of Object.keys(jellyfinMethods)) {
+	api[name] = (...args) => {
+		if (serverType !== 'plex') return jellyfinMethods[name](...args);
+		const fn = plexApi?.[name] || plexUnsupported(name);
+		return fn(...args);
+	};
+}
+
 /**
  * Create an API instance for a specific server
  * Used for cross-server content aggregation
@@ -970,7 +1008,19 @@ export const api = {
  * @param {string} userId - User ID
  * @returns {Object} API object with all methods bound to the specified server
  */
+// CGFLIX: completa o cliente Plex com o contrato inteiro do `api` (o que não existe no Plex responde vazio).
+const withFullContract = (plex) => {
+	for (const name of Object.keys(jellyfinMethods)) {
+		if (!plex[name]) plex[name] = plexUnsupported(name);
+	}
+	return plex;
+};
+
 export const createApiForServer = (serverUrl, token, userId, serverTypeOverride = 'jellyfin') => {
+	// Endereço já registrado como Plex é Plex, mesmo quando quem chama não informa o tipo.
+	if (serverTypeOverride === 'plex' || isPlexServerUrl(serverUrl)) {
+		return withFullContract(createPlexApi({serverUrl, token: token || plexTokenFor(serverUrl), userId}));
+	}
 	// Normalize server URL
 	let url = serverUrl?.trim();
 	if (url) {

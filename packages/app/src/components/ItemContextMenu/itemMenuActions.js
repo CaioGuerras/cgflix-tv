@@ -1,6 +1,7 @@
 import $L from '@enact/i18n/$L';
 
 import {DETAIL_ICON_PATHS} from '../../views/Details/detailIcons';
+import {supportsFavorites} from '../../utils/serverCapabilities';
 
 // The long press menu on a card: what can be done to that one item without opening it. Which
 // entries show depends on the item's type and on what the signed in user may do.
@@ -58,11 +59,13 @@ export const itemMenuActions = (item, {playlist = null} = {}) => {
 		if (type === 'Episode' && hasSeries) {
 			actions.push({id: 'hideNextUp', icon: MENU_ICON_PATHS.visibilityOff, label: $L('Hide from Next Up')});
 		}
-		actions.push({
-			id: 'favorite',
-			icon: userData.IsFavorite ? DETAIL_ICON_PATHS.favorite : MENU_ICON_PATHS.favoriteBorder,
-			label: userData.IsFavorite ? $L('Remove from Favorites') : $L('Add to Favorites')
-		});
+		if (supportsFavorites(item)) {
+			actions.push({
+				id: 'favorite',
+				icon: userData.IsFavorite ? DETAIL_ICON_PATHS.favorite : MENU_ICON_PATHS.favoriteBorder,
+				label: userData.IsFavorite ? $L('Remove from Favorites') : $L('Add to Favorites')
+			});
+		}
 		// CGFLIX: the TV is for watching. Collections, playlists and the admin tools
 		// live on the site, so the menu stops here.
 	}

@@ -21,8 +21,15 @@ export const MaterialIcon = ({name, className}) => (
 	</svg>
 );
 
+// CGFLIX: Plex = divisa (chevron), na cor do texto como os outros tipos.
+const PLEX_PATH = 'M6 2h5.2l7 10-7 10H6l7-10z';
+
 export const ServerTypeIcon = ({serverType, className}) => (
-	serverType === 'emby' ? (
+	serverType === 'plex' ? (
+		<svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+			<path d={PLEX_PATH} />
+		</svg>
+	) : serverType === 'emby' ? (
 		<svg className={className} viewBox="0 0 712.601 712.601" fill="currentColor" aria-hidden="true">
 			<g transform="translate(64 64) scale(0.82)">
 				<path d={EMBY_PATH} />

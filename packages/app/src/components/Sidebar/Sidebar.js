@@ -1,3 +1,4 @@
+import {supportsFavorites} from '../../utils/serverCapabilities';
 import {memo, useCallback, useMemo} from 'react';
 import $L from '@enact/i18n/$L';
 import SpotlightContainerDecorator, {spotlightDefaultClass} from '@enact/spotlight/SpotlightContainerDecorator';
@@ -67,7 +68,8 @@ const Sidebar = ({
 
 	const showShuffle = settings.showShuffleButton !== false;
 	const showGenres = settings.showGenresButton !== false;
-	const showFavorites = settings.showFavoritesButton !== false;
+	// CGFLIX: servidor Plex não tem favoritos
+	const showFavorites = settings.showFavoritesButton !== false && supportsFavorites(null);
 	const kidsMode = isKidsMode(settings);
 	const showLiveTv = !kidsMode && settings.showLiveTvButton !== false && hasLiveTv;
 	const showSyncPlay = !kidsMode && settings.syncplayEnabled !== false && settings.showSyncPlayButton !== false;

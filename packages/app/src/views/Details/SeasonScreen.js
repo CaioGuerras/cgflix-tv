@@ -87,6 +87,7 @@ const SeasonScreen = ({
 					</div>
 					<span className={css.btnLabel}>{item.UserData?.Played ? $L('Watched') : $L('Unwatched')}</span>
 				</SpottableDiv>
+				{onToggleFavorite && (
 				<SpottableDiv className={css.btnWrapper} onClick={onToggleFavorite} spotlightId="season-favorite-btn">
 					<div className={css.btnAction}>
 						<svg className={`${css.btnIcon} ${item.UserData?.IsFavorite ? css.favorited : ''}`} viewBox="0 -960 960 960" fill="currentColor">
@@ -95,6 +96,7 @@ const SeasonScreen = ({
 					</div>
 					<span className={css.btnLabel}>{item.UserData?.IsFavorite ? $L('Favorited') : $L('Favorite')}</span>
 				</SpottableDiv>
+				)}
 			</HorizontalContainer>
 		)}
 

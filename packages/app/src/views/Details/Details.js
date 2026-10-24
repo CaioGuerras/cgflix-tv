@@ -1,3 +1,4 @@
+import {supportsFavorites} from '../../utils/serverCapabilities';
 import {useState, useEffect, useCallback, useRef, useMemo} from 'react';
 import {isKidsMode, kidsModeSettings} from '../../utils/kidsMode';
 import {sectionVisibility} from '../../utils/detailSectionLayout';
@@ -461,6 +462,8 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 		}));
 		window.requestAnimationFrame(() => Spotlight.focus('details-favorite-btn') || Spotlight.focus('season-favorite-btn'));
 	}, [effectiveApi, item, setItem]);
+	// CGFLIX: servidor sem favoritos (Plex) não mostra o botão
+	const toggleFavorite = supportsFavorites(item) ? handleToggleFavorite : undefined;
 
 	const handleToggleWatched = useCallback(async () => {
 		if (!item) return;
@@ -1152,7 +1155,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 					hasTrailer={hasTrailer}
 					handleTrailer={trailer.handleTrailer}
 					handleToggleWatched={handleToggleWatched}
-					handleToggleFavorite={handleToggleFavorite}
+					handleToggleFavorite={toggleFavorite}
 					showsPersonalRating={isRatable}
 					personalRatingStyle={ratingStyle}
 					handleOpenRatingDialog={modals.handleOpenRatingDialog}
@@ -1221,7 +1224,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 					onPlay={handlePlay}
 					onShuffle={handleShuffle}
 					onToggleWatched={handleToggleWatched}
-					onToggleFavorite={handleToggleFavorite}
+					onToggleFavorite={toggleFavorite}
 					onEpisodeSelect={handleEpisodeSelect}
 					onFocusRow={handleButtonRowFocus}
 				/>
@@ -1244,7 +1247,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 					playlistItems={playlistItems}
 					onPlay={handlePlay}
 					onShuffle={handlePlaylistShuffle}
-					onToggleFavorite={handleToggleFavorite}
+					onToggleFavorite={toggleFavorite}
 					onItemSelect={handlePlaylistItemSelect}
 					playlistMenu={playlistMenu}
 					onItemKeyDown={handlePlaylistItemKeyDown}
@@ -1270,7 +1273,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 					similar={shownSimilar}
 					onPlay={handlePlay}
 					onShuffle={handleShuffle}
-					onToggleFavorite={handleToggleFavorite}
+					onToggleFavorite={toggleFavorite}
 					onTrackPlay={handleTrackPlay}
 					onSelectItem={onSelectItem}
 					onFocusRow={handleButtonRowFocus}
@@ -1290,7 +1293,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 					similar={shownSimilar}
 					onPlay={handleArtistPlay}
 					onShuffle={handleArtistShuffle}
-					onToggleFavorite={handleToggleFavorite}
+					onToggleFavorite={toggleFavorite}
 					onSelectItem={onSelectItem}
 					onFocusRow={handleButtonRowFocus}
 				/>
@@ -1310,7 +1313,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 					year={year}
 					runtime={runtime}
 					onPlay={handlePlay}
-					onToggleFavorite={handleToggleFavorite}
+					onToggleFavorite={toggleFavorite}
 					onFocusRow={handleButtonRowFocus}
 				/>
 			</DetailScrollPage>
@@ -1353,7 +1356,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 			onOpenSubtitleModal={modals.handleOpenSubtitleModal}
 			onTrailer={trailer.handleTrailer}
 			onToggleWatched={handleToggleWatched}
-			onToggleFavorite={handleToggleFavorite}
+			onToggleFavorite={toggleFavorite}
 			showsPersonalRating={isRatable}
 			personalRatingStyle={ratingStyle}
 			onOpenRatingDialog={modals.handleOpenRatingDialog}

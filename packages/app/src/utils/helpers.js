@@ -1,5 +1,6 @@
 import {buildQueryString} from './urlCompat';
 import {uiLocale} from './uiLocale';
+import {isPlexServerUrl, plexImageUrl} from '../services/plexImages';
 
 export const formatDuration = (ticks) => {
 	if (!ticks) return '';
@@ -20,6 +21,8 @@ export const formatDate = (dateString) => {
 
 export const getImageUrl = (serverUrl, itemId, imageType = 'Primary', options = {}) => {
 	if (!serverUrl || !itemId) return null;
+	// CGFLIX: servidor Plex usa o transcodificador de fotos dele (services/plexImages.js)
+	if (isPlexServerUrl(serverUrl)) return plexImageUrl(serverUrl, itemId, imageType, options);
 	const params = {};
 	if (options.maxWidth) params.maxWidth = options.maxWidth;
 	if (options.maxHeight) params.maxHeight = options.maxHeight;

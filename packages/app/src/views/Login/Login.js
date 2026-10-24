@@ -14,6 +14,7 @@ import {KEYS} from '../../utils/keys';
 import SpottableInput from '../../components/SpottableInput/SpottableInput';
 import {subscribeTvKeyboardVisibility} from '../../components/TVKeyboard/keyboardBus';
 import {MaterialIcon, ServerTypeIcon} from './loginIcons';
+import usePlexLogin from './usePlexLogin';
 
 import css from './Login.module.less';
 
@@ -100,6 +101,8 @@ const Login = ({
 
 	const pageRef = useRef(null);
 	const quickConnectTimer = useRef(null);
+	// CGFLIX: servidor Plex salvo sem usuário abre o código do plex.tv/link (o Plex não tem usuário e senha por servidor)
+	const plexStartRef = useRef(null);
 	const bootstrapped = useRef(false);
 	const suppressClick = useRef(false);
 	const longPressTimer = useRef(null);
@@ -260,6 +263,10 @@ const Login = ({
 		setStatus(null);
 
 		if (merged.length === 0) {
+			if (target.serverType === 'plex' && plexStartRef.current) {
+				plexStartRef.current();
+				return;
+			}
 			goToSignIn(resolved, null);
 			return;
 		}
@@ -409,6 +416,16 @@ const Login = ({
 			onLoggedIn?.();
 		}
 	}, [isAdding, completeAddServerFlow, onServerAdded, onLoggedIn]);
+
+	const {plexCode, plexServers, handlePlexStart, handlePlexServerClick, newPin, resetPlex, plexLinkUrl} = usePlexLogin({
+		loginWithToken, finishLogin, isAdding, setStep, setStatus, setError, setIsConnecting
+	});
+	plexStartRef.current = handlePlexStart;
+
+	useEffect(() => {
+		if (step === 'plex-link') focusLater('plex-back-btn');
+		if (step === 'plex-servers') focusLater('plex-server-0');
+	}, [step]);
 
 	const signIn = useCallback(async (name, secret) => {
 		if (!server || !name) return false;
@@ -599,6 +616,12 @@ const Login = ({
 			closeDialog();
 			return true;
 		}
+		if (step === 'plex-link' || step === 'plex-servers') {
+			resetPlex();
+			setError(null);
+			goToServers();
+			return true;
+		}
 		if (step === 'embyconnect-servers') {
 			setConnectServers([]);
 			setConnectSession(null);
@@ -630,7 +653,7 @@ const Login = ({
 			return true;
 		}
 		return false;
-	}, [dialog, closeDialog, step, users.length, isAdding, goToServers, stopQuickConnect, cancelAddServerFlow, onServerAdded]);
+	}, [dialog, closeDialog, step, users.length, isAdding, goToServers, stopQuickConnect, cancelAddServerFlow, onServerAdded, resetPlex]);
 
 	useEffect(() => {
 		if (!backHandlerRef) return undefined;
@@ -793,6 +816,18 @@ const Login = ({
 				{$L('Add Server')}
 			</SpottableButton>
 		];
+		actions.push(
+			<SpottableButton
+				key="plex"
+				data-spotlight-id="plex-login-btn"
+				className={css.outlineButton}
+				onClick={handlePlexStart}
+				disabled={isConnecting}
+			>
+				<ServerTypeIcon serverType="plex" className={css.outlineButtonIcon} />
+				Entrar com Plex
+			</SpottableButton>
+		);
 		if (SHOW_EMBY_CONNECT) {
 			actions.push(
 				<SpottableButton
@@ -1083,6 +1118,58 @@ const Login = ({
 		</FocusArea>
 	);
 
+	const renderPlexLink = () => (
+		<FocusArea className={css.card}>
+			<div className={css.quickConnect}>
+				<p className={css.quickConnectInstruction}>No celular ou no computador, abra <b>{plexLinkUrl}</b> e digite o código:</p>
+				{plexCode ? (
+					<div>
+						<div className={css.quickConnectCode}>{plexCode}</div>
+						{!error && <div className={`${css.spinner} ${css.spinnerAccent}`} />}
+						{!error && <div className={css.statusLine}>Esperando você confirmar no Plex...</div>}
+					</div>
+				) : (!error && <div className={css.spinnerRow}><div className={css.spinner} /></div>)}
+				{error && <div className={css.fieldError}>{error}</div>}
+				<div className={css.buttonWrap}>
+					{error && (
+						<SpottableButton data-spotlight-id="plex-new-code-btn" className={css.outlineButton} onClick={newPin}>
+							Gerar outro código
+						</SpottableButton>
+					)}
+					<SpottableButton data-spotlight-id="plex-back-btn" className={css.outlineButton} onClick={handleBack}>
+						{$L('Back')}
+					</SpottableButton>
+				</div>
+			</div>
+		</FocusArea>
+	);
+
+	const renderPlexServers = () => (
+		<FocusArea className={css.card}>
+			<div className={css.sectionTitle}>Escolha o servidor Plex</div>
+			{plexServers.map((entry, index) => renderTile({
+				key: entry.machineId || index,
+				spotlightId: `plex-server-${index}`,
+				serverType: 'plex',
+				name: entry.name,
+				detail: entry.owned ? 'Seu servidor' : 'Compartilhado com você',
+				'data-index': index,
+				onClick: handlePlexServerClick
+			}))}
+			{error && <div className={css.errorText}>{error}</div>}
+			<div className={css.actionRow}>
+				<SpottableButton
+					data-spotlight-id="plex-servers-back-btn"
+					className={css.outlineButton}
+					onClick={handleBack}
+					disabled={isConnecting}
+				>
+					{$L('Back')}
+				</SpottableButton>
+			</div>
+		</FocusArea>
+	);
+
 	const renderEmbyServers = () => (
 		<FocusArea className={css.card}>
 			<div className={css.sectionTitle}>{$L('Select a Server')}</div>
@@ -1187,7 +1274,7 @@ const Login = ({
 		return null;
 	};
 
-	const isNarrow = step === 'signin' || step === 'embyconnect';
+	const isNarrow = step === 'signin' || step === 'embyconnect' || step === 'plex-link';
 
 	return (
 		<div className={css.page} ref={pageRef}>
@@ -1208,6 +1295,8 @@ const Login = ({
 				{step === 'signin' && renderSignIn()}
 				{step === 'embyconnect' && renderEmbyConnect()}
 				{step === 'embyconnect-servers' && renderEmbyServers()}
+				{step === 'plex-link' && renderPlexLink()}
+				{step === 'plex-servers' && renderPlexServers()}
 
 				{step === 'servers' && (
 					<div className={css.versionFooter}>

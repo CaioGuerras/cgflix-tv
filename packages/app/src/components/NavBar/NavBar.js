@@ -1,3 +1,4 @@
+import {supportsFavorites} from '../../utils/serverCapabilities';
 import {memo, useCallback, useMemo, useState} from 'react';
 import $L from '@enact/i18n/$L';
 import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDecorator';
@@ -54,7 +55,8 @@ const NavBar = ({
 
 	const showShuffle = settings.showShuffleButton !== false;
 	const showGenres = settings.showGenresButton !== false;
-	const showFavorites = settings.showFavoritesButton !== false;
+	// CGFLIX: servidor Plex não tem favoritos
+	const showFavorites = settings.showFavoritesButton !== false && supportsFavorites(null);
 	// Checked alongside the show* preferences and never written into them, since those sync and
 	// would follow the account to the parent's other devices.
 	const kidsMode = isKidsMode(settings);

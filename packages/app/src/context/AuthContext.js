@@ -128,7 +128,8 @@ export const AuthProvider = ({children}) => {
 
 						try {
 							const userInfo = await jellyfinApi.api.getUserConfiguration();
-							setUser(userInfo);
+							// CGFLIX: no Plex o nome é o da conta plex.tv guardada no login
+							setUser(restoreTarget.serverType === 'plex' ? {...userInfo, Name: restoreTarget.username || userInfo.Name} : userInfo);
 							setIsAuthenticated(true);
 							if (userInfo.PrimaryImageTag && restoreTarget.serverId) {
 								multiServerManager.updateServer(restoreTarget.serverId, null, restoreTarget.userId, {
@@ -330,7 +331,8 @@ export const AuthProvider = ({children}) => {
 			setServerName(active.name);
 			setAccessToken(active.accessToken);
 			setServerType(active.serverType || 'jellyfin');
-			setUser(userInfo);
+			// CGFLIX: no Plex o nome é o da conta plex.tv guardada no login
+			setUser(active.serverType === 'plex' ? {...userInfo, Name: active.username || userInfo.Name} : userInfo);
 
 			// Update old auth format for compatibility
 			await saveToStorage('auth', {

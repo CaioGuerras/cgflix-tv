@@ -1,4 +1,5 @@
 import * as jellyfinApi from './jellyfinApi';
+import {parseSubtitleText} from '../utils/subtitleText';
 import {getDeviceProfile, getDeviceCapabilities} from './deviceProfile';
 import {getPlayMethod, getMimeType, isAudioStreamPlayable, canRenderEmbeddedPgsInBand, rendersSubtitleInHost} from './video';
 import {getFromStorage} from './storage';
@@ -273,6 +274,11 @@ const buildPlaybackUrl = (itemId, mediaSource, playSessionId, playMethod, creden
 		isAudio
 	});
 
+	// CGFLIX: no Plex o arquivo original sai do caminho da parte (/library/parts/...).
+	if (serverType === 'plex' && playMethod === PlayMethod.DirectPlay) {
+		return `${serverUrl}${mediaSource.PlexPartKey}?X-Plex-Token=${encodeURIComponent(apiKey)}`;
+	}
+
 	if (playMethod === PlayMethod.DirectPlay) {
 		// Build query string manually for Chromium 47 compat (no URLSearchParams)
 		const queryParts = [
@@ -323,7 +329,7 @@ const buildPlaybackUrl = (itemId, mediaSource, playSessionId, playMethod, creden
 		const url = transcodeUrl.startsWith('http')
 			? transcodeUrl
 			: `${serverUrl}${transcodeUrl}`;
-		return /api_?key=/i.test(url) ? url : `${url}&${jellyfinApi.getTokenParam(serverType)}=${apiKey}`;
+		return /api_?key=|x-plex-token=/i.test(url) ? url : `${url}&${jellyfinApi.getTokenParam(serverType)}=${apiKey}`;
 	}
 
 	throw new Error('No playback URL available');
@@ -352,6 +358,9 @@ const extractAudioStreams = (mediaSource) => {
 
 const extractSubtitleStreams = (mediaSource, itemId = null, creds = null, assBurnsIn = false, streamUrl = null, playMethod = null) => {
 	if (!mediaSource.MediaStreams) return [];
+	// CGFLIX: no Plex só a legenda externa vem por URL; a embutida fica com o AVPlay (play direto)
+	// ou é queimada pelo Plex (conversão).
+	const isPlex = (creds?.serverType || jellyfinApi.getServerType()) === 'plex';
 	const serverUrl = creds?.serverUrl || jellyfinApi.getServerUrl();
 	const apiKey = creds?.accessToken || jellyfinApi.getApiKey();
 	const tokenParam = jellyfinApi.getTokenParam(creds?.serverType);
@@ -379,7 +388,7 @@ const extractSubtitleStreams = (mediaSource, itemId = null, creds = null, assBur
 			if (s.DeliveryUrl) {
 				// External URLs are used as-is, internal URLs need server prefix
 				deliveryUrl = s.IsExternalUrl ? s.DeliveryUrl : `${serverUrl}${s.DeliveryUrl}`;
-			} else if (isImageBased && itemId && !s.IsExternal) {
+			} else if (isImageBased && itemId && !s.IsExternal && !isPlex) {
 				deliveryUrl = `${serverUrl}/Videos/${itemId}/${mediaSource.Id}/Subtitles/${s.Index}/0/Stream.sup?${tokenParam}=${apiKey}`;
 			}
 			// Encode is the server saying the only way it can deliver this track is
@@ -402,7 +411,7 @@ const extractSubtitleStreams = (mediaSource, itemId = null, creds = null, assBur
 				isTextBased,
 				// With direct play turned off the server burns ASS in, so the client
 				// renderer must stay out of the way.
-				isAss: !assBurnsIn && isAssSubtitleCodec(codec),
+				isAss: !assBurnsIn && isAssSubtitleCodec(codec) && (!isPlex || s.IsExternal),
 				isImageBased,
 				isBurnIn,
 				hostRendered,
@@ -411,7 +420,7 @@ const extractSubtitleStreams = (mediaSource, itemId = null, creds = null, assBur
 				// server that cant transcode cant extract either, and then the copy in the
 				// container is the only one text has.
 				isEmbeddedNative: !isBurnIn && !s.IsExternal && s.DeliveryMethod !== 'External' &&
-					(isImageBased || (isTextBased && mediaSource.SupportsTranscoding === false)),
+					(isPlex || isImageBased || (isTextBased && mediaSource.SupportsTranscoding === false)),
 				inBand,
 				deliveryUrl: deliveryUrl,
 				deliveryMethod: s.DeliveryMethod
@@ -588,7 +597,7 @@ export const getPlaybackInfo = async (itemId, options = {}) => {
 
 		let mimeType;
 		if (playMethod === PlayMethod.Transcode) {
-			if (url.includes('/master.m3u8') || url.includes('TranscodingProtocol=hls')) {
+			if (url.includes('/master.m3u8') || url.includes('TranscodingProtocol=hls') || mediaSource.TranscodingSubProtocol === 'hls') {
 				mimeType = 'application/x-mpegURL';
 			} else if (url.includes('.ts') || mediaSource.TranscodingContainer === 'ts') {
 				mimeType = 'video/mp2t';
@@ -820,7 +829,7 @@ export const getPlaybackInfo = async (itemId, options = {}) => {
 
 	let mimeType;
 	if (playMethod === PlayMethod.Transcode) {
-		if (url.includes('/master.m3u8') || url.includes('TranscodingProtocol=hls')) {
+		if (url.includes('/master.m3u8') || url.includes('TranscodingProtocol=hls') || mediaSource.TranscodingSubProtocol === 'hls') {
 			mimeType = 'application/x-mpegURL';
 		} else if (url.includes('.ts') || mediaSource.TranscodingContainer === 'ts') {
 			mimeType = 'video/mp2t';
@@ -901,6 +910,7 @@ export const getSubtitleUrl = (subtitleStream) => {
 // Raw ASS/SSA subtitle URL that preserves styling (vs getSubtitleUrl which converts to VTT)
 export const getAssSubtitleUrl = (subtitleStream) => {
 	if (!subtitleStream?.isAss || !currentSession) return null;
+	if (currentSession.serverCredentials?.serverType === 'plex' || jellyfinApi.getServerType() === 'plex') return subtitleStream.deliveryUrl || null;
 
 	const {itemId, mediaSourceId, serverCredentials} = currentSession;
 	const serverUrl = serverCredentials?.serverUrl || jellyfinApi.getServerUrl();
@@ -952,6 +962,19 @@ export const fetchSubtitleData = async (subtitleStream) => {
 	if (!subtitleStream.isTextBased) {
 		console.log('[Playback] Subtitle stream is not text-based, cannot fetch as JSON');
 		return null;
+	}
+
+	// CGFLIX: o Plex entrega a legenda externa crua (SRT/VTT/ASS); vira o mesmo JSON do Jellyfin aqui.
+	if (serverCredentials?.serverType === 'plex' || jellyfinApi.getServerType() === 'plex') {
+		if (!subtitleStream.deliveryUrl) return null;
+		try {
+			const response = await fetch(subtitleStream.deliveryUrl);
+			if (!response.ok) throw new Error(`Failed to fetch subtitles: ${response.status}`);
+			return parseSubtitleText(await response.text());
+		} catch (err) {
+			console.error('[Playback] Failed to fetch Plex subtitle:', err);
+			return null;
+		}
 	}
 
 	// Jellyfin returns JSON when requesting .js format instead of .vtt
@@ -1191,6 +1214,9 @@ const stopRequest = (positionTicks) => {
 
 	serverUrl = serverUrl.trim().replace(/\/+$/, '');
 	if (!/^https?:\/\//i.test(serverUrl)) serverUrl = 'http://' + serverUrl;
+
+	// CGFLIX: no Plex o fim da sessão vai pela timeline (reportStop); o beacon é rota do Jellyfin.
+	if (creds?.serverType === 'plex' || (!creds && jellyfinApi.getServerType() === 'plex')) return null;
 
 	const liveStreamId = currentSession.liveStreamClosed ? null : currentSession.liveStreamId;
 	return {

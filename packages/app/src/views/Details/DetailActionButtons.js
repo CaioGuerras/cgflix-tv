@@ -192,7 +192,7 @@ const DetailActionButtons = ({
 				<span className={css.btnLabel}>{item.UserData?.Played ? $L('Watched') : $L('Mark as Watched')}</span>
 			</SpottableDiv>
 		)},
-		{id: 'favorite', when: true, render: () => (
+		{id: 'favorite', when: !!onToggleFavorite, render: () => (
 			<SpottableDiv className={css.btnWrapper} onClick={onToggleFavorite} spotlightId="details-favorite-btn">
 				<div className={css.btnAction}>
 					<BtnIcon path={DETAIL_ICON_PATHS.favorite} stateClass={item.UserData?.IsFavorite ? css.favorited : ''}/>
