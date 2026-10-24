@@ -40,3 +40,10 @@ Ids: biblioteca `plexlib-{seção}`, pessoa `plexperson-{tag}`, gênero `plexgen
 - Interface no Chrome 1920×1080 por `file://` (VPS, `tizen/cgftv_plex.py`): login pelo código, lista com o servidor próprio
   primeiro e os de amigos, Início, ficha de filme, biblioteca Séries (158) e ficha de série com temporadas.
 - **Não testado:** reprodução no AVPlay de uma TV de verdade (o navegador da VPS não tem AVPlay).
+
+## LG (webOS) — 2.1.0, ramo `cgflix/p19-webos`
+O mesmo app (e o Plex) também sai para TVs LG: `npm run build:webos` gera `CGFLIX_webOS_v2.1.0.ipk`, com id próprio
+`br.com.docaio.cgflix.tv` (serviço `br.com.docaio.cgflix.tv.service`, banco local do mesmo dono), nome CGFLIX, ícones e
+splash da marca. Instalação: `INSTALAR_LG.md`. No Chrome de mesa o pacote LG só abre com o tratamento de XHR do Tizen
+(arquivo local inexistente lança erro no Chrome; a TV não), por isso o teste da VPS injeta esse tratamento só na cópia de
+teste. O Moonfin oficial faz a mesma poda de idiomas no pacote LG.

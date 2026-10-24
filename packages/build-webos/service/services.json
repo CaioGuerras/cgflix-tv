@@ -1,9 +1,9 @@
 {
-	"id": "org.moonfin.webos.service",
+	"id": "br.com.docaio.cgflix.tv.service",
 	"description": "Moonfin network proxy service",
 	"services": [
 		{
-			"name": "org.moonfin.webos.service",
+			"name": "br.com.docaio.cgflix.tv.service",
 			"description": "Performs HTTP(S) requests outside the WebView TLS stack with an up-to-date CA bundle",
 			"commands": [
 				{

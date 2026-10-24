@@ -1,3 +1,4 @@
+import {getPlatform} from '../../platform';
 import {Fragment, useCallback, useState, useEffect, useMemo, useRef} from 'react';
 import {
 	hashPin, pinMatches, lockoutRemaining, registerFailedAttempt, clearedLockout, tooManyAttempts,
@@ -854,7 +855,7 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 	const renderAboutHeader = () => (
 		<div className={css.aboutHeader}>
 			<div className={css.aboutLogo} role='img' aria-label='CGFLIX' />
-			<div className={css.aboutVersion}>{$L('CGFLIX for Tizen {version}').replace('{version}', process.env.REACT_APP_VERSION || '0.0.0')}</div>
+			<div className={css.aboutVersion}>{({webos: 'CGFLIX para TVs LG {version}', tizen: $L('CGFLIX for Tizen {version}')}[getPlatform()] || 'CGFLIX TV {version}').replace('{version}', process.env.REACT_APP_VERSION || '0.0.0')}</div>
 			<div className={css.aboutDedication}>{$L('Made with love, for Isis and Heitor')}</div>
 			<div className={css.aboutHearts} aria-hidden='true'>
 				<span className={css.heartPurple}>{'\u2665'}</span>

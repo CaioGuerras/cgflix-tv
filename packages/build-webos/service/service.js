@@ -7,7 +7,7 @@
  * root-CA store predates the current Let's Encrypt roots. The app falls back to
  * this service for those servers; see packages/app/src/services/secureFetch.js.
  *
- * Method: luna://org.moonfin.webos.service/fetch
+ * Method: luna://br.com.docaio.cgflix.tv.service/fetch
  *   params: { url, method, headers, body, timeoutMs, insecure }
  *   reply (success): { returnValue: true, status, headers, body }
  *   reply (failure): { returnValue: false, errorText, errorClass: 'cert'|'network' }
@@ -21,7 +21,7 @@ var fs = require('fs');
 var path = require('path');
 var tls = require('tls');
 
-var service = new Service('org.moonfin.webos.service');
+var service = new Service('br.com.docaio.cgflix.tv.service');
 
 // Build a CA list = bundled Let's Encrypt roots + Node's built-in roots (when
 // the runtime exposes them). Passing `ca` replaces the default trust list, so

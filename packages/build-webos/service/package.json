@@ -1,5 +1,5 @@
 {
-	"name": "org.moonfin.webos.service",
+	"name": "br.com.docaio.cgflix.tv.service",
 	"version": "1.0.0",
 	"description": "Moonfin network proxy service (TLS fallback for older webOS TVs)",
 	"main": "service.js",

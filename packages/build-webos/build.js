@@ -81,7 +81,7 @@ const ENACT_ALIAS = JSON.stringify({
 });
 
 try {
-	console.log(' Building Moonfin for webOS...\n');
+	console.log(' Building CGFLIX for webOS...\n');
 
 	// Apply Enact compatibility patches
 	console.log('Applying Enact compatibility patches...');
@@ -217,7 +217,7 @@ try {
 	}
 
 	// Remove previous Moonfin_webOS_*.ipk files before packaging
-	for (const f of fs.readdirSync(ROOT_DIR).filter(f => /^Moonfin_webOS_.*\.ipk$/.test(f))) {
+	for (const f of fs.readdirSync(ROOT_DIR).filter(f => /^(Moonfin|CGFLIX)_webOS_.*\.ipk$/.test(f))) {
 		fs.unlinkSync(path.join(ROOT_DIR, f));
 	}
 
@@ -236,8 +236,8 @@ try {
 
 	run(`npx ares-package ${DIST_DIR}${packageServiceArg} -o ${ROOT_DIR} --no-minify`);
 
-	const generatedIpk = path.join(ROOT_DIR, `org.moonfin.webos_${appPkg.version}_all.ipk`);
-	const finalIpk = path.join(ROOT_DIR, `Moonfin_webOS_v${appPkg.version}.ipk`);
+	const generatedIpk = path.join(ROOT_DIR, `br.com.docaio.cgflix.tv_${appPkg.version}_all.ipk`);
+	const finalIpk = path.join(ROOT_DIR, `CGFLIX_webOS_v${appPkg.version}.ipk`);
 	if (fs.existsSync(generatedIpk)) {
 		fs.renameSync(generatedIpk, finalIpk);
 		console.log(`  Renamed to ${path.basename(finalIpk)}`);

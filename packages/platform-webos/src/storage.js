@@ -11,7 +11,7 @@ const loadLS2Request = async () => {
 	}
 };
 
-const DB_KIND = 'org.moonfin.webos:1';
+const DB_KIND = 'br.com.docaio.cgflix.tv:1';
 const DB_SERVICES = [
 	'luna://com.webos.service.db',
 	'luna://com.palm.db'
@@ -112,7 +112,7 @@ export const initStorage = async () => {
 			method: 'putKind',
 			parameters: {
 				id: DB_KIND,
-				owner: 'org.moonfin.webos',
+				owner: 'br.com.docaio.cgflix.tv',
 				indexes: [{name: 'key', props: [{name: 'key'}]}]
 			},
 			onSuccess: () => {

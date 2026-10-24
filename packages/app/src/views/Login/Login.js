@@ -1,3 +1,4 @@
+import {getPlatform} from '../../platform';
 import {useState, useCallback, useEffect, useMemo, useRef} from 'react';
 import Spottable from '@enact/spotlight/Spottable';
 import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDecorator';
@@ -1300,7 +1301,7 @@ const Login = ({
 
 				{step === 'servers' && (
 					<div className={css.versionFooter}>
-						{$L('CGFLIX for Tizen {version}').replace('{version}', process.env.REACT_APP_VERSION || '')}
+						{({webos: 'CGFLIX para TVs LG {version}', tizen: $L('CGFLIX for Tizen {version}')}[getPlatform()] || 'CGFLIX TV {version}').replace('{version}', process.env.REACT_APP_VERSION || '')}
 					</div>
 				)}
 

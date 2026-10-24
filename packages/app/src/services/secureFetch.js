@@ -10,7 +10,7 @@
  *
  * We cannot override the WebView's certificate validation from JS. The only
  * workaround is to run the request inside the bundled Node.js Luna service
- * (`luna://org.moonfin.webos.service/fetch`), which carries its own up-to-date
+ * (`luna://br.com.docaio.cgflix.tv.service/fetch`), which carries its own up-to-date
  * CA bundle. On a network error against an https:// server on webOS we retry
  * through the service; if that succeeds we remember it per-server so subsequent
  * calls skip the failing native attempt. If the service also reports a TLS/cert
@@ -24,7 +24,7 @@ import {isWebOS} from '../platform';
 import {getFromStorage} from './storage';
 import {loadShellBridge} from './shellBridge';
 
-const SERVICE_URI = 'luna://org.moonfin.webos.service/fetch';
+const SERVICE_URI = 'luna://br.com.docaio.cgflix.tv.service/fetch';
 
 // Per-server memory: hosts for which the native path failed but the proxy
 // worked. Keyed by origin (protocol//host). Lives for the app session.

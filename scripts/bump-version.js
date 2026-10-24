@@ -108,7 +108,7 @@ if (doWebos) {
 		const ipkRe = /org\.moonfin\.webos_\d+\.\d+\.\d+_all\.ipk/g;
 		const count = (readme.match(ipkRe) || []).length;
 		if (count) {
-			readme = readme.replace(ipkRe, `org.moonfin.webos_${newVersion}_all.ipk`);
+			readme = readme.replace(ipkRe, `br.com.docaio.cgflix.tv_${newVersion}_all.ipk`);
 			fs.writeFileSync(readmePath, readme);
 			console.log(`  README.md: updated ${count} ipk reference(s)`);
 		}
