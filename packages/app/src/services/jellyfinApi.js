@@ -11,7 +11,7 @@ import {SUPPORTED_COMMANDS} from './remoteControl';
 // CGFLIX: servidor Plex (adaptador com o mesmo contrato do `api`; ver PLEX.md)
 import {createPlexApi, plexUnsupported} from './plexApi';
 import {setPlexDevice} from './plexTv';
-import {isPlexServerUrl, plexTokenFor} from './plexImages';
+import {isPlexServerUrl, plexTokenFor, unregisterPlexServer} from './plexImages';
 const APP_VERSION = packageJson.version;
 
 const PLATFORM_IDENTITY = {
@@ -43,6 +43,10 @@ const parentIdOf = (endpoint) => {
 let plexApi = null;
 const syncPlexApi = () => {
 	if (serverType !== 'plex' || !currentServer || !accessToken) {
+		// A troca de servidor chama setServer antes de setServerType: por um instante o endereço novo
+		// (Jellyfin) conviveu com o tipo antigo (plex) e o createPlexApi o registrou como Plex. Endereço
+		// que não é do Plex ativo sai do registro, senão as imagens dele iam para o adaptador do Plex.
+		if (serverType !== 'plex' && currentServer) unregisterPlexServer(currentServer);
 		plexApi = null;
 		return;
 	}
