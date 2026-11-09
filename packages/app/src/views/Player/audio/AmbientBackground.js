@@ -12,7 +12,7 @@ const readThemeAccent = () => {
 };
 
 const AmbientBackground = ({artworkUrl, children}) => {
-	const accentColor = useMemo(() => readThemeAccent() || '#00a4dc', []);
+	const accentColor = useMemo(() => readThemeAccent() || '#dcb875', []);
 	const [palette, setPalette] = useState(() => accentPalette(accentColor));
 
 	useEffect(() => {

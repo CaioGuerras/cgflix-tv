@@ -25,7 +25,6 @@ import * as remoteControl from '../services/remoteControl';
 import {isBackKey, KEYS} from '../utils/keys';
 import {applyPerfTier} from '../utils/perfTier';
 import {isLiveTvChannel, isLiveTvLibrary} from '../utils/liveTvLibrary';
-import {OLED_TUNING} from '../utils/oledMode';
 import {isTizen} from '../platform';
 import {initVideo, cleanupVideoElement, setupVisibilityHandler, setupPlatformLifecycle} from '../services/video';
 import {activateApp, exitApp} from '../utils/appLifecycle';
@@ -63,6 +62,7 @@ import useInactivityTimer from '../hooks/useInactivityTimer';
 import {useThemeMusic} from '../hooks/useThemeMusic';
 import {buildThemeCssVars, toRgbTriplet} from '../theme/themeSpec';
 import {applyThemeOverrides} from '../theme/themeOverrides';
+import {OLED_THEME_ID, resolveThemeById} from '../theme/themeRegistry';
 import {resolveOverlayColor} from '../theme/overlayColors';
 import Login from '../views/Login';
 import Browse from '../views/Browse';
@@ -450,52 +450,46 @@ const AppContent = (props) => {
 		fetchLibraries();
 	}, [fetchLibraries]);
 
+	// The player always wears the Sumi neutrals, whichever theme is chosen for the rest of the app.
+	const appliedTheme = useMemo(
+		() => (panelIndex === PANELS.PLAYER ? resolveThemeById(OLED_THEME_ID) : activeTheme),
+		[panelIndex, activeTheme]
+	);
+
 	useEffect(() => {
 		const root = document.documentElement;
-		const vars = buildThemeCssVars(activeTheme);
-		for (let index = 0; index < 16; index += 1) {
-			const navVarName = `--theme-nav-color-${index + 1}`;
-			if (!Object.prototype.hasOwnProperty.call(vars, navVarName)) {
-				root.style.removeProperty(navVarName);
-			}
-		}
+		const vars = buildThemeCssVars(appliedTheme);
 		for (const [key, value] of Object.entries(vars)) {
 			root.style.setProperty(key, value);
 		}
-		if (activeTheme?.id) {
-			root.setAttribute('data-theme-id', activeTheme.id);
+		if (appliedTheme?.id) {
+			root.setAttribute('data-theme-id', appliedTheme.id);
 		}
-	}, [activeTheme]);
+	}, [appliedTheme]);
 
 	// The custom properties above only reach the newer engines. The injected
 	// stylesheet carries the same theme as literal colors for everything older.
 	useEffect(() => {
-		applyThemeOverrides(activeTheme, {
+		applyThemeOverrides(appliedTheme, {
 			focusBorderColor: settings.focusBorderColor,
 			mediaBarOverlayColor: settings.mediaBarOverlayColor,
 			mediaBarOverlayOpacity: settings.mediaBarOverlayOpacity
 		});
-	}, [activeTheme, settings.focusBorderColor, settings.mediaBarOverlayColor, settings.mediaBarOverlayOpacity]);
+	}, [appliedTheme, settings.focusBorderColor, settings.mediaBarOverlayColor, settings.mediaBarOverlayOpacity]);
 
 	useEffect(() => {
 		applyPerfTier(settings.performanceMode === 'auto' ? null : settings.performanceMode);
 	}, [settings.performanceMode]);
 
-	// The surfaces are crushed on the theme itself, so all this has to do is tell
-	// the stylesheet which artwork boost to draw with.
-	useEffect(() => {
-		const root = document.documentElement;
-		if (OLED_TUNING[settings.oledMode]) root.setAttribute('data-oled', settings.oledMode);
-		else root.removeAttribute('data-oled');
-	}, [settings.oledMode]);
-
 	useEffect(() => {
 		const root = document.documentElement;
 		if (settings.focusBorderColor) {
 			root.style.setProperty('--theme-focus-border-color', settings.focusBorderColor);
+		} else {
+			root.style.removeProperty('--theme-focus-border-color');
 		}
 		root.style.setProperty('--theme-navbar-color-rgb', toRgbTriplet(resolveOverlayColor(settings.navbarColor)));
-	}, [activeTheme, settings.focusBorderColor, settings.navbarColor]);
+	}, [appliedTheme, settings.focusBorderColor, settings.navbarColor]);
 
 	useEffect(() => {
 		const scale = settings.uiScale || 1.0;

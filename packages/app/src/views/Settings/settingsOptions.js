@@ -115,10 +115,8 @@ export const getUiScaleOptions = () => [
 export const getScreensaverBackdropOptions = () => [
 	{ value: 'library', label: $L('Library Art') },
 	{ value: 'black', label: $L('Black') },
-	{ value: 'moonfin', label: $L('Moonfin') },
-	{ value: 'calm', label: $L('Calm') },
-	{ value: 'neonPulse', label: $L('Neon Pulse') },
-	{ value: 'aurora', label: $L('Aurora') }
+	{ value: 'moonfin', label: $L('Shikkoku') },
+	{ value: 'calm', label: $L('Sumi') }
 ];
 
 export const getScreensaverComponentOptions = () => [
@@ -404,12 +402,6 @@ export const getSortOrderOptions = () => [
 	{ value: 'Descending', label: $L('Descending') }
 ];
 
-export const getOledModeOptions = () => [
-	{ value: 'off', label: $L('Off') },
-	{ value: 'subtle', label: $L('Subtle') },
-	{ value: 'vivid', label: $L('Vivid') }
-];
-
 export const getAutoLoginOptions = () => [
 	{ value: 'disabled', label: $L('Disabled') },
 	{ value: 'lastUser', label: $L('Last User') },
@@ -641,36 +633,22 @@ export const getAccentColorOptions = () => [
 	{ value: '#ffffff', label: $L('White') },
 	{ value: '#000000', label: $L('Black') },
 	{ value: '#808080', label: $L('Gray') },
-	{ value: '#003366', label: $L('Dark Blue') },
-	{ value: '#6a0dad', label: $L('Purple') },
-	{ value: '#008080', label: $L('Teal') },
-	{ value: '#000080', label: $L('Navy') },
 	{ value: '#36454f', label: $L('Charcoal') },
 	{ value: '#8b4513', label: $L('Brown') },
 	{ value: '#8b0000', label: $L('Dark Red') },
 	{ value: '#006400', label: $L('Dark Green') },
-	{ value: '#708090', label: $L('Slate') },
-	{ value: '#4b0082', label: $L('Indigo') },
-	{ value: '#00a4dc', label: $L('Moonfin Cyan') },
-	{ value: '#ff2e92', label: $L('Neon Magenta') }
+	{ value: '#708090', label: $L('Slate') }
 ];
 
 // The color the navigation and media bar surfaces tint themselves with.
 export const getOverlayColorOptions = () => [
 	{ value: 'gray', label: $L('Gray') },
 	{ value: 'black', label: $L('Black') },
-	{ value: 'dark_blue', label: $L('Dark Blue') },
-	{ value: 'purple', label: $L('Purple') },
-	{ value: 'teal', label: $L('Teal') },
-	{ value: 'navy', label: $L('Navy') },
 	{ value: 'charcoal', label: $L('Charcoal') },
 	{ value: 'brown', label: $L('Brown') },
 	{ value: 'dark_red', label: $L('Dark Red') },
 	{ value: 'dark_green', label: $L('Dark Green') },
-	{ value: 'slate', label: $L('Slate') },
-	{ value: 'indigo', label: $L('Indigo') },
-	{ value: 'moonfinCyan', label: $L('Moonfin Cyan') },
-	{ value: 'neonPulseMagenta', label: $L('Neon Magenta') }
+	{ value: 'slate', label: $L('Slate') }
 ];
 
 export const getAgeRatingOptions = () => [

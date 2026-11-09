@@ -12,7 +12,7 @@ import css from './LiveTV.module.less';
 const SpottableDiv = Spottable('div');
 
 // The accent color a program without a genre borrows.
-const ACCENT = {color: '#00a4dc', rgb: '0, 164, 220'};
+const ACCENT = {color: '#b8adde', rgb: '184, 173, 222'};
 
 // Every horizontal padding a cell's text sits inside: the cell gap, the text inset, and the
 // right hand inset.
@@ -45,7 +45,7 @@ export const ProgramCell = memo(({
 	const program = cell.program;
 	const isGap = cell.kind === 'gap';
 	const loading = cell.kind === 'loading';
-	const background = focused ? '#1c2c3c' : isLive ? `rgba(${tint.rgb}, 0.14)` : 'rgba(26, 26, 26, 0.5)';
+	const background = focused ? '#26242c' : isLive ? `rgba(${tint.rgb}, 0.14)` : 'rgba(26, 24, 31, 0.5)';
 
 	const innerWidth = width - CELL_TEXT_INSET;
 	const showMarker = startsBeforeWindow && !isGap;

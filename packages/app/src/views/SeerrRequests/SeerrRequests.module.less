@@ -33,32 +33,32 @@
 	-webkit-box-align: center;
 	-webkit-align-items: center;
 	align-items: center;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.06);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.06);
 	border: 2px solid transparent;
 	border-radius: 999px;
 	padding: 0.5rem 1.4rem;
 	font-size: 1.1rem;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.65));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.65));
 	cursor: pointer;
 
 	&:focus {
-		border-color: var(--theme-focus-border-color, #ffffff);
-		color: var(--theme-text-primary, #ffffff);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		color: var(--theme-text-primary, #eae8ee);
 		outline: none;
 	}
 }
 
 .tabPillSelected {
-	background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.18);
-	border-color: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.6);
-	color: var(--theme-text-primary, #ffffff);
+	background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.18);
+	border-color: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.6);
+	color: var(--theme-text-primary, #eae8ee);
 }
 
 .tabCount {
 	display: inline-block;
 	margin-left: 0.5rem;
-	background: var(--theme-accent, #00a4dc);
-	color: var(--theme-on-accent, #ffffff);
+	background: var(--theme-accent, #b8adde);
+	color: var(--theme-on-accent, #0f0d13);
 	border-radius: 999px;
 	font-size: 0.75rem;
 	font-weight: 700;
@@ -91,26 +91,26 @@
 	border-radius: 999px;
 	padding: 0.3rem 0.9rem;
 	font-size: 0.9rem;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.65));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.65));
 	cursor: pointer;
 
 	&:focus {
-		border-color: var(--theme-focus-border-color, #ffffff);
-		color: var(--theme-text-primary, #ffffff);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		color: var(--theme-text-primary, #eae8ee);
 		outline: none;
 	}
 }
 
 .chipSelected {
-	background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.16);
-	border-color: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.6);
-	color: var(--theme-text-primary, #ffffff);
+	background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.16);
+	border-color: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.6);
+	color: var(--theme-text-primary, #eae8ee);
 }
 
 .chipCount {
 	display: inline-block;
 	margin-left: 0.4rem;
-	color: var(--theme-accent, #00a4dc);
+	color: var(--theme-accent, #b8adde);
 	font-weight: 700;
 }
 
@@ -135,7 +135,7 @@
 	height: 7rem;
 	overflow: hidden;
 	padding: 1rem;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.05);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.05);
 	border-radius: 8px;
 	// The focus ring and the lift it comes with are drawn outside the row, so the top
 	// of the slot stays free for them. The first row has no room above it otherwise
@@ -149,9 +149,9 @@
 	}
 
 	&:focus {
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
-		outline: 4px solid var(--theme-focus-border-color, #fff);
-		transform: scale(1.02);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
+		outline: 4px solid var(--theme-focus-border-color, #f1eff5);
+		transform: scale(1.06);
 	}
 }
 
@@ -227,25 +227,25 @@
 	cursor: pointer;
 
 	&:focus {
-		border-color: var(--theme-focus-border-color, #ffffff);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 		outline: none;
-		transform: scale(1.05);
+		transform: scale(1.06);
 	}
 }
 
 .approveBtn {
-	background: rgba(34, 197, 94, 0.16);
-	color: var(--theme-status-available, #22c55e);
+	background: rgba(120, 201, 149, 0.16);
+	color: var(--theme-status-available, #78c995);
 }
 
 .declineBtn {
-	background: rgba(239, 68, 68, 0.14);
-	color: var(--theme-recording-active, #ef4444);
+	background: rgba(238, 117, 124, 0.14);
+	color: var(--theme-recording-active, #ee757c);
 }
 
 .retryBtn {
-	background: rgba(234, 179, 8, 0.16);
-	color: var(--theme-status-pending, #eab308);
+	background: rgba(237, 187, 100, 0.16);
+	color: var(--theme-status-pending, #edbb64);
 }
 
 .iconBtn {
@@ -269,8 +269,8 @@
 }
 
 .cancelBtnPlain {
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
-	color: var(--theme-text-primary, #ffffff);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
+	color: var(--theme-text-primary, #eae8ee);
 }
 
 .message,
@@ -303,11 +303,11 @@
 
 	&:focus {
 		outline: none;
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
-		transform: scale(1.02);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
+		transform: scale(1.06);
 
 		.tilePoster {
-			box-shadow: 0 0 0 4px var(--theme-focus-border-color, #ffffff);
+			box-shadow: 0 0 0 4px var(--theme-focus-border-color, #f1eff5);
 		}
 	}
 }
@@ -320,7 +320,7 @@
 	padding-top: 150%;
 	border-radius: 8px;
 	overflow: hidden;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.06);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.06);
 	flex-shrink: 0;
 	transition: box-shadow 0.15s ease;
 }
@@ -354,11 +354,11 @@
 	height: 7px;
 }
 
-.stripe_pending { background: var(--theme-status-pending, #eab308); }
-.stripe_requested { background: var(--theme-status-requested, #8b8dfa); }
-.stripe_available { background: var(--theme-status-available, #22c55e); }
-.stripe_error { background: var(--theme-recording-active, #ef4444); }
-.stripe_approved { background: var(--theme-accent, #00a4dc); }
+.stripe_pending { background: var(--theme-status-pending, #edbb64); }
+.stripe_requested { background: var(--theme-status-requested, #b8adde); }
+.stripe_available { background: var(--theme-status-available, #78c995); }
+.stripe_error { background: var(--theme-recording-active, #ee757c); }
+.stripe_approved { background: var(--theme-accent, #b8adde); }
 
 .tileCaption {
 	display: -webkit-box;
@@ -378,7 +378,7 @@
 	width: 100%;
 	font-size: 20px;
 	font-weight: 600;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -412,7 +412,7 @@
 // cut out of a sentence.
 .tileBy,
 .tileRequester {
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.6);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.6);
 }
 
 .tileBy {
@@ -420,7 +420,7 @@
 }
 
 .tileDate {
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.4);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.4);
 	margin-top: 2px;
 }
 

@@ -2,7 +2,7 @@
 // a 1.45x scale, so every value there is multiplied by that to land in the real
 // 1920x1080 pixels this stylesheet is written in.
 
-@accent: var(--theme-accent, #00a4dc);
+@accent: var(--theme-accent, #dcb875);
 
 .overlay {
 	position: fixed;
@@ -20,8 +20,8 @@
 	border-radius: 41px;
 	padding: 15px 23px 15px 29px;
 	border: 2px solid transparent;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 1);
-	background: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.88);
+	color: rgba(var(--theme-on-surface-rgb, 219, 217, 213), 1);
+	background: rgba(var(--theme-surface-rgb, 16, 15, 14), 0.88);
 	backdrop-filter: blur(35px) saturate(1.4);
 	-webkit-backdrop-filter: blur(35px) saturate(1.4);
 	box-shadow: 0 6px 29px rgba(0, 0, 0, 0.45);
@@ -31,7 +31,7 @@
 	:global(.perf-low) &,
 	:global(.perf-mid) &,
 	:global(.vega) & {
-		background: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.97);
+		background: rgba(var(--theme-surface-rgb, 16, 15, 14), 0.97);
 		backdrop-filter: none;
 		-webkit-backdrop-filter: none;
 	}
@@ -60,7 +60,7 @@
 	margin-left: 12px;
 	font-size: 20px;
 	font-weight: 600;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.5);
+	color: rgba(var(--theme-on-surface-rgb, 219, 217, 213), 0.5);
 	font-variant-numeric: tabular-nums;
 	white-space: nowrap;
 }
@@ -81,7 +81,7 @@
 }
 
 .ringTrack {
-	stroke: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.16);
+	stroke: rgba(var(--theme-on-surface-rgb, 219, 217, 213), 0.16);
 }
 
 .ringValue {

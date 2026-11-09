@@ -22,7 +22,7 @@ import {uiLocale} from '../../../utils/uiLocale';
 import settingsCss from '../Settings.module.less';
 import css from './Achievements.module.less';
 
-const ACCENT = '#00a4dc';
+const ACCENT = '#b8adde';
 
 // The plugin has no category name for the overall board, but a tab still needs an id of its own.
 const OVERALL_BOARD = 'score';

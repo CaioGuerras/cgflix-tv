@@ -64,11 +64,10 @@ export const usePreviewPalette = () => {
 	const {settings, activeTheme} = useSettings();
 	return useMemo(() => {
 		const colors = activeTheme.colors;
-		const overlayHex = resolveOverlayColor(settings.mediaBarOverlayColor) || '#6B7280';
+		const overlayHex = resolveOverlayColor(settings.mediaBarOverlayColor) || '#6E6B75';
 		const overlayOpacity = Math.min(100, Math.max(0, Number(settings.mediaBarOverlayOpacity != null ? settings.mediaBarOverlayOpacity : 50))) / 100;
-		const navbarHex = resolveOverlayColor(settings.navbarColor) || '#6B7280';
+		const navbarHex = resolveOverlayColor(settings.navbarColor) || '#6E6B75';
 		const navbarOpacity = Math.min(100, Math.max(0, Number(settings.navbarOpacity != null ? settings.navbarOpacity : 50))) / 100;
-		const navCycle = activeTheme.navColorCycle || [];
 		return {
 			background: toCssColor(colors.background),
 			surface: toCssColor(colors.surface),
@@ -82,7 +81,6 @@ export const usePreviewPalette = () => {
 			surfaceA: (a) => withAlpha(colors.surface, a),
 			overlayA: (a) => withAlpha(overlayHex, a * overlayOpacity),
 			navbarSurface: withAlpha(navbarHex, navbarOpacity),
-			navColorForSlot: (slot) => (navCycle.length > 0 ? toCssColor(navCycle[slot % navCycle.length]) : null),
 			cardRadius: radiusToCss(activeTheme.borders.cardRadius),
 			cardRadiusRing: grownRadius(activeTheme.borders.cardRadius, 3.5),
 			chipBorder: `${activeTheme.borders.chipBorder.width}px solid ${toCssColor(activeTheme.borders.chipBorder.color)}`,
@@ -228,7 +226,7 @@ const CommunityRating = ({item, t}) => {
 	if (item.communityRating == null) return null;
 	return (
 		<div style={{display: 'flex', alignItems: 'center'}}>
-			<MIcon name='star' size={16} color='#FFC107' />
+			<MIcon name='star' size={16} color='#edbb64' />
 			<div style={{marginLeft: 4, fontSize: 14, fontWeight: 700, color: t.onSurface}}>
 				{item.communityRating.toFixed(1)}
 			</div>
@@ -629,9 +627,9 @@ const BookshelfBar = ({items, t}) => {
 	return (
 		<div style={{position: 'relative', width: '100%', height: '100%'}}>
 			<div style={{...ABS_FILL, display: 'flex'}}>
-				<div style={{flex: '1 1 auto', background: 'linear-gradient(to right, #130905, #23150D)'}} />
-				<div style={{width: centerWidth, backgroundColor: '#1C100A', borderLeft: '8px solid #382314', borderRight: '8px solid #382314'}} />
-				<div style={{flex: '1 1 auto', background: 'linear-gradient(to right, #23150D, #130905)'}} />
+				<div style={{flex: '1 1 auto', background: 'linear-gradient(to right, #0f0d13, #1a181f)'}} />
+				<div style={{width: centerWidth, backgroundColor: '#1a181f', borderLeft: '8px solid #3e3b44', borderRight: '8px solid #3e3b44'}} />
+				<div style={{flex: '1 1 auto', background: 'linear-gradient(to right, #1a181f, #0f0d13)'}} />
 			</div>
 			<div style={{...ABS_FILL, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 12}}>
 				{leftSpines}
@@ -662,7 +660,7 @@ const BookshelfBar = ({items, t}) => {
 					right: 0,
 					bottom: 0,
 					height: 12,
-					background: 'linear-gradient(to bottom, #5A3D28, #26180E)',
+					background: 'linear-gradient(to bottom, #3e3b44, #26242c)',
 					borderTop: '1.5px solid rgba(255, 255, 255, 0.08)',
 					boxShadow: '0px -2px 5px rgba(0, 0, 0, 0.65)'
 				}}
@@ -857,7 +855,7 @@ const AyaBar = ({items, t}) => {
 
 const NAV_ICONS = ['home', 'search', 'shuffle', 'favorite', 'video_library', 'settings'];
 
-const navIconColor = (t, slot) => t.navColorForSlot(slot) || t.onSurfaceA(0.6);
+const navIconColor = (t) => t.onSurfaceA(0.6);
 
 const NavAvatar = ({name}) => {
 	const initial = name ? name.charAt(0).toUpperCase() : '?';
@@ -901,9 +899,9 @@ const TopNavbarPreview = ({items, t, userName}) => {
 					<NavAvatar name={userName} />
 				</div>
 				<div style={{backgroundColor: t.navbarSurface, borderRadius: 36, display: 'flex'}}>
-					{NAV_ICONS.map((name, i) => (
+					{NAV_ICONS.map((name) => (
 						<div key={name} style={{width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-							<MIcon name={name} size={24} color={navIconColor(t, i)} />
+							<MIcon name={name} size={24} color={navIconColor(t)} />
 						</div>
 					))}
 				</div>
@@ -921,9 +919,9 @@ const TopNavbarPreview = ({items, t, userName}) => {
 const LeftNavbarPreview = ({items, t}) => (
 	<div style={{width: '100%', height: '100%', display: 'flex', overflow: 'hidden'}}>
 		<div style={{width: 72, flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-			{NAV_ICONS.map((name, i) => (
+			{NAV_ICONS.map((name) => (
 				<div key={name} style={{height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-					<MIcon name={name} size={24} color={navIconColor(t, i)} />
+					<MIcon name={name} size={24} color={navIconColor(t)} />
 				</div>
 			))}
 		</div>

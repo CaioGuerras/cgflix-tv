@@ -3,19 +3,19 @@ import {useEffect, useRef} from 'react';
 import css from './LoadingAnimation.module.less';
 
 const SWEEP = Math.PI * 1.35;
-const PURPLE = [170, 92, 195];
-const CYAN = [0, 164, 220];
+const TAIL = [55, 48, 76];
+const HEAD = [184, 173, 222];
 
-// The arc fades in from nothing to purple over its first stretch, then turns cyan toward the
-// head. Past the head, the round end caps included, it stays cyan.
+// The arc fades in from nothing to the dim lilac of Shikkoku over its first stretch, then turns to
+// the accent toward the head. Past the head, the round end caps included, it stays on the accent.
 const arcColor = (t) => {
-	if (t > 1) return [CYAN[0], CYAN[1], CYAN[2], 1];
-	if (t < 0.45) return [PURPLE[0], PURPLE[1], PURPLE[2], t / 0.45];
+	if (t > 1) return [HEAD[0], HEAD[1], HEAD[2], 1];
+	if (t < 0.45) return [TAIL[0], TAIL[1], TAIL[2], t / 0.45];
 	const mix = (t - 0.45) / 0.55;
 	return [
-		PURPLE[0] + ((CYAN[0] - PURPLE[0]) * mix),
-		PURPLE[1] + ((CYAN[1] - PURPLE[1]) * mix),
-		PURPLE[2] + ((CYAN[2] - PURPLE[2]) * mix),
+		TAIL[0] + ((HEAD[0] - TAIL[0]) * mix),
+		TAIL[1] + ((HEAD[1] - TAIL[1]) * mix),
+		TAIL[2] + ((HEAD[2] - TAIL[2]) * mix),
 		1
 	];
 };

@@ -10,8 +10,8 @@
     "largeIcon": "icon-130.png",
     "bgImage": "splash.png",
     "splashBackground": "splash.png",
-    "bgColor": "#07060a",
-    "iconColor": "#07060a",
+    "bgColor": "#0f0d13",
+    "iconColor": "#0f0d13",
     "disableBackHistoryAPI": true,
     "enablePigScreenSaver": false,
     "requiredPermissions": [

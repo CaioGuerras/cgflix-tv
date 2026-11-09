@@ -30,20 +30,20 @@
 	font-size: 18px;
 	font-weight: 600;
 	line-height: 1.35;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.38);
+	color: rgba(var(--theme-on-surface-rgb, 219, 217, 213), 0.38);
 	transition: color 0.22s ease-out, transform 0.22s ease-out;
 }
 
 .lineActive {
 	transform: scale(1.333);
 	font-weight: 800;
-	color: var(--theme-accent, #00a4dc);
-	text-shadow: 0 0 18px rgba(var(--theme-accent-rgb, 0, 164, 220), 0.55);
+	color: var(--theme-accent, #dcb875);
+	text-shadow: 0 0 18px rgba(var(--theme-accent-rgb, 220, 184, 117), 0.55);
 }
 
 // Without timings there is no line to highlight, so keep them all readable
 .lineUnsynced {
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.8);
+	color: rgba(var(--theme-on-surface-rgb, 219, 217, 213), 0.8);
 	font-size: 16px;
 	font-weight: 500;
 }
@@ -56,14 +56,14 @@
 	border: 2px solid transparent;
 	font-size: 18px;
 	font-weight: 500;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.7);
+	color: rgba(var(--theme-on-surface-rgb, 219, 217, 213), 0.7);
 	cursor: pointer;
 
 	&:focus {
 		outline: none;
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.22);
-		border-color: var(--theme-accent, #00a4dc);
-		color: var(--theme-on-surface, #ffffff);
+		background: rgba(var(--theme-accent-rgb, 220, 184, 117), 0.22);
+		border-color: var(--theme-accent, #dcb875);
+		color: var(--theme-on-surface, #dbd9d5);
 		font-weight: 700;
 	}
 }
@@ -74,5 +74,5 @@
 	justify-content: center;
 	height: 100%;
 	font-size: 16px;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.5);
+	color: rgba(var(--theme-on-surface-rgb, 219, 217, 213), 0.5);
 }

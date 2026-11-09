@@ -49,10 +49,10 @@ const KEY_GREEN = 404;
 const KEY_YELLOW = 405;
 
 const colorForLevel = (level) => {
-	if (level === 'E') return 'var(--theme-recording-active, #ff6b6b)';
-	if (level === 'W') return 'var(--theme-status-pending, #ffd166)';
-	if (level === 'I') return 'var(--theme-accent, #7fc8ff)';
-	return 'var(--theme-text-secondary, #d0d0d0)';
+	if (level === 'E') return 'var(--theme-recording-active, #ee757c)';
+	if (level === 'W') return 'var(--theme-status-pending, #edbb64)';
+	if (level === 'I') return 'var(--theme-accent, #b8adde)';
+	return 'var(--theme-text-secondary, #aba7b2)';
 };
 
 const DebugOverlay = () => {
@@ -99,7 +99,7 @@ const DebugOverlay = () => {
 				width: '50%',
 				height: '100%',
 				background: 'rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.85)',
-				color: 'var(--theme-text-secondary, #d0d0d0)',
+				color: 'var(--theme-text-secondary, #aba7b2)',
 				font: '14px/1.3 monospace',
 				zIndex: 2147483647,
 				pointerEvents: 'none',
@@ -107,7 +107,7 @@ const DebugOverlay = () => {
 				boxSizing: 'border-box'
 			}}
 		>
-			<div style={{color: 'var(--theme-accent, #7fc8ff)', marginBottom: 4}}>
+			<div style={{color: 'var(--theme-accent, #b8adde)', marginBottom: 4}}>
 				DEBUG OVERLAY — RED toggle · GREEN clear · YELLOW save · {buffer.length}/{MAX_LINES}
 			</div>
 			<pre

@@ -3,45 +3,28 @@
 // through the server profile. Earlier builds saved a hex instead, so those
 // values map back onto the key they were picked from.
 
+// Only neutral and warm tones remain. The Heisuca identity has no blue, teal
+// or purple surfaces, so the old keys for those fall back to gray.
 const OVERLAY_COLORS = {
-	gray: '#6B7280',
+	gray: '#6E6B75',
 	black: '#000000',
-	dark_blue: '#1A2332',
-	purple: '#4A148C',
-	teal: '#00695C',
-	navy: '#0D1B2A',
-	charcoal: '#36454F',
+	charcoal: '#3A3840',
 	brown: '#3E2723',
 	dark_red: '#8B0000',
 	dark_green: '#0B4F0F',
-	slate: '#475569',
-	indigo: '#1E3A8A',
-	moonfinCyan: '#00A4DC',
-	neonPulseMagenta: '#FF2E92'
+	slate: '#4A4850'
 };
 
 const ALIASES = {
 	grey: 'gray',
-	darkblue: 'dark_blue',
 	darkred: 'dark_red',
 	darkgreen: 'dark_green',
-	moonfincyan: 'moonfinCyan',
-	moonfin_cyan: 'moonfinCyan',
-	neonpulsemagenta: 'neonPulseMagenta',
-	neon_pulse_magenta: 'neonPulseMagenta',
 	'#000000': 'black',
-	'#003366': 'dark_blue',
-	'#6a0dad': 'purple',
-	'#008080': 'teal',
-	'#000080': 'navy',
 	'#36454f': 'charcoal',
 	'#8b4513': 'brown',
 	'#8b0000': 'dark_red',
 	'#006400': 'dark_green',
-	'#708090': 'slate',
-	'#4b0082': 'indigo',
-	'#00a4dc': 'moonfinCyan',
-	'#ff2e92': 'neonPulseMagenta'
+	'#708090': 'slate'
 };
 
 const owns = (map, key) => Object.prototype.hasOwnProperty.call(map, key);

@@ -35,7 +35,6 @@ import {MIN_QUERY_LENGTH, buildSettingsIndex, matchSettings, resultSpotlightId} 
 import {PLUGIN_SECTION_RENDER_STEP} from './homeSectionsModel';
 import useSeerrAccount from './useSeerrAccount';
 import useProfileSync from './useProfileSync';
-import useThemeStore from './useThemeStore';
 import useHomeRowsEditor from './useHomeRowsEditor';
 import useButtonLayoutEditor from './useButtonLayoutEditor';
 import useLibraryVisibility from './useLibraryVisibility';
@@ -47,7 +46,7 @@ import renderDescriptorRow from './settingsDescriptorRow';
 import {NavRow} from './settingsRows';
 import {CategoriesView, CategoryView, OptionsDialog, SubcategoryView} from './BrowseViews';
 import {SettingsEnterContext, SettingsTitleContext} from './SettingsView';
-import {ThemesView, ThemeStoreView} from './ThemeViews';
+import {ThemesView} from './ThemeViews';
 import AchievementsScreens, {ACHIEVEMENT_VIEWS} from './achievements/AchievementsScreens';
 import FriendsScreens, {FRIENDS_VIEWS} from './friends/FriendsScreens';
 import {isConfirmSpendOpen} from './achievements/ConfirmSpendDialog';
@@ -111,7 +110,7 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 	const { api, serverUrl, accessToken, hasMultipleServers, logoutAll, activeServerInfo, user, serverType } = useAuth();
 	const {
 		settings, updateSetting, updateSettings, resetSettings, restoreSyncedDefaults, applyServerProfile, selectSyncProfile,
-		availableThemes, activeThemeId, selectThemeById, saveStoreTheme, deleteStoreTheme
+		availableThemes, activeThemeId, selectThemeById
 	} = useSettings();
 	const { capabilities } = useDeviceInfo();
 	const seerr = useSeerr();
@@ -245,8 +244,6 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 			} else if (cv.view === 'themes') {
 				const selectedId = availableThemes.find((t) => t.id === activeThemeId)?.id;
 				Spotlight.focus(selectedId ? `theme-card-${selectedId}` : 'themes-view');
-			} else if (cv.view === 'themeStore') {
-				Spotlight.focus('theme-store-view');
 			} else if (FIRST_ROW_VIEWS[cv.view]) {
 				const first = document.querySelector(`[data-settings-page] .${css.listContent} .spottable`);
 				Spotlight.focus(first || FIRST_ROW_VIEWS[cv.view]);
@@ -705,17 +702,9 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 		pushView({view, returnFocusTo, params});
 	}, [pushView]);
 
-	const {
-		themeStoreCatalog, themeStoreLoading, themeStoreError, themeStoreBusyId,
-		openThemes, openThemeStore, handleStoreThemeClick
-	} = useThemeStore({
-		currentViewName: currentView.view,
-		pushView,
-		availableThemes,
-		selectThemeById,
-		saveStoreTheme,
-		deleteStoreTheme
-	});
+	const openThemes = useCallback(() => {
+		pushView({view: 'themes', returnFocusTo: 'setting-themeSelection'});
+	}, [pushView]);
 
 	const {
 		tempHomeRows, tempPluginSections, pluginSectionRenderLimit, setPluginSectionRenderLimit,
@@ -1009,7 +998,6 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 		actions: {
 			tapVersion,
 			openThemes,
-			openThemeStore,
 			openHomeRows,
 			openDetailButtons,
 			openOsdButtons,
@@ -1049,7 +1037,7 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 		}
 	}), [
 		settings, capabilities, seerr, achievements, seerrLabel, isSeerr, serverUrl, ratingsResetArmed, resetRatingsSettings, toggleExperimentalTruehd, updateSetting, refreshPlugin,
-		serverVersion, availableThemes, activeThemeId, openThemes, openThemeStore, openHomeRows,
+		serverVersion, availableThemes, activeThemeId, openThemes, openHomeRows,
 		openDetailButtons, openOsdButtons, openDetailMetadata, openDetailSections, openDiagnostics,
 		openPinCode, openKidsMode, openLibraries, openLibraryOrder, openParentalControls, openSubtitleDownloadLanguages, openQrLink, openRatingSources, openRowImageTypes, openExcludedGenres, openMediaBarLibraries,
 		openMediaBarCollections, openScreensaverLibraries, openScreensaverCollections, openScreensaverGenres,
@@ -1336,16 +1324,6 @@ const Settings = ({ onBack, onLibrariesChanged, onRunSetupWizard, onSelectItem, 
 					availableThemes={availableThemes}
 					activeThemeId={activeThemeId}
 					onSelectTheme={selectThemeById}
-				/>
-			)}
-			{viewName === 'themeStore' && (
-				<ThemeStoreView
-					catalog={themeStoreCatalog}
-					loading={themeStoreLoading}
-					error={themeStoreError}
-					busyId={themeStoreBusyId}
-					availableThemes={availableThemes}
-					onStoreThemeClick={handleStoreThemeClick}
 				/>
 			)}
 			{viewName === 'homeRows' && (

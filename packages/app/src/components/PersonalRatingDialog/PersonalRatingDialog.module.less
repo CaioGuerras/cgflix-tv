@@ -11,7 +11,7 @@
 	border-radius: 16px;
 	border: 2px solid transparent;
 	background: rgba(255, 255, 255, 0.1);
-	color: #fff;
+	color: #eae8ee;
 	cursor: pointer;
 	outline: none !important;
 	display: flex;
@@ -33,7 +33,7 @@
 // The rating already saved on the server, so it reads as chosen before focus
 // lands anywhere.
 .thumbSelected {
-	background: rgba(0, 164, 220, 0.28);
+	background: rgba(184, 173, 222, 0.28);
 	border-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -50,7 +50,7 @@
 	svg {
 		width: 56px;
 		height: 56px;
-		fill: #ffc107;
+		fill: #edbb64;
 	}
 }
 
@@ -59,7 +59,7 @@
 	text-align: center;
 	font-size: 36px;
 	font-weight: 600;
-	color: #fff;
+	color: #eae8ee;
 	font-variant-numeric: tabular-nums;
 }
 
@@ -71,7 +71,7 @@
 	border-radius: 50%;
 	border: 2px solid transparent;
 	background: transparent;
-	color: #fff;
+	color: #eae8ee;
 	cursor: pointer;
 	outline: none !important;
 	display: flex;
@@ -89,8 +89,8 @@
 .step:focus,
 .thumb:focus,
 .stars:focus {
-	background: rgba(0, 164, 220, 0.35);
-	border-color: #fff;
+	background: rgba(184, 173, 222, 0.35);
+	border-color: var(--theme-focus-border-color, #f1eff5);
 }
 
 .stepDisabled {

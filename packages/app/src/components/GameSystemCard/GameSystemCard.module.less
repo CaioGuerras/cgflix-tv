@@ -1,4 +1,4 @@
-@accent: var(--theme-accent, #00a4dc);
+@accent: var(--theme-accent, #b8adde);
 
 .card {
 	position: relative;
@@ -7,14 +7,14 @@
 	box-sizing: border-box;
 	border-radius: 12px;
 	overflow: hidden;
-	border: 1px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
+	border: 1px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
 	cursor: pointer;
 	transition: transform 0.15s ease;
 
 	&:focus {
 		outline: none;
-		transform: scale(1.05);
-		box-shadow: 0 0 0 4px var(--theme-focus-border-color, #ffffff);
+		transform: scale(1.06);
+		box-shadow: 0 0 0 4px var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -82,7 +82,7 @@
 .icon {
 	width: 41px;
 	height: 41px;
-	fill: #ffffff;
+	fill: #eae8ee;
 }
 
 .text {
@@ -96,7 +96,7 @@
 	font-size: 26px;
 	font-weight: 700;
 	line-height: 1.2;
-	color: #ffffff;
+	color: #eae8ee;
 	text-shadow: 0 0 5px #000000;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -118,14 +118,4 @@
 	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
 	fill: rgba(255, 255, 255, 0.72);
-}
-
-:global(html[data-theme-id='neon_pulse']) {
-	.card:focus {
-		box-shadow: 0 0 0 4px @accent, 0 0 14px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.4);
-	}
-
-	.name {
-		color: @accent;
-	}
 }

@@ -1,4 +1,4 @@
-@accent: #00a4dc;
+@accent: #b8adde;
 
 .overlay {
 	position: fixed;
@@ -21,7 +21,7 @@
 
 	:global(.perf-low) &,
 	:global(.perf-mid) & {
-		background: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.97);
+		background: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.97);
 	}
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	border-radius: 24px;
@@ -38,7 +38,7 @@
 .title {
 	font-size: 30px;
 	font-weight: 600;
-	color: #fff;
+	color: #eae8ee;
 	margin: 0 0 12px;
 }
 
@@ -68,7 +68,7 @@
 	border: 2px solid transparent;
 	min-width: 140px;
 	background: rgba(255, 255, 255, 0.1);
-	color: #fff;
+	color: #eae8ee;
 
 	& ~ & {
 		margin-left: 16px;
@@ -83,17 +83,17 @@
 	}
 
 	&:focus {
-		background: var(--accent-color, @accent);
-		border-color: #fff;
-		color: #fff;
+		background: var(--theme-button-focused, #eae8ee);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		color: var(--theme-on-accent, #0f0d13);
 		box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
 	}
 }
 
 .confirmBtn {
 	&:focus {
-		background: var(--theme-recording-active, #c62828);
-		border-color: var(--theme-recording-active, #c62828);
+		background: var(--theme-recording-active, #ee757c);
+		border-color: var(--theme-recording-active, #ee757c);
 	}
 }
 

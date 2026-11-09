@@ -7,15 +7,15 @@
 	align-items: center;
 	border-radius: 16px;
 	overflow: hidden;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.07);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.07);
 	border: 2px solid transparent;
 	cursor: pointer;
 
 	&:focus {
 		outline: none;
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
-		border-color: var(--theme-accent, #00a4dc);
-		box-shadow: 0 0 18px 1px rgba(var(--theme-accent-rgb, 0, 164, 220), 0.47);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
+		border-color: var(--theme-accent, #b8adde);
+		box-shadow: 0 0 0 3px var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -25,7 +25,7 @@
 	height: 220px;
 	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
 }
 
 .artImg {
@@ -44,7 +44,7 @@
 	align-items: center;
 	-webkit-justify-content: center;
 	justify-content: center;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.38);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.38);
 }
 
 .info {
@@ -58,14 +58,14 @@
 	font-size: 11px;
 	font-weight: 700;
 	letter-spacing: 1.2px;
-	color: var(--theme-accent, #00a4dc);
+	color: var(--theme-accent, #b8adde);
 }
 
 .name {
 	margin-top: 6px;
 	font-size: 24px;
 	font-weight: 800;
-	color: var(--theme-on-surface, #ffffff);
+	color: var(--theme-on-surface, #eae8ee);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -74,7 +74,7 @@
 .subtitle {
 	margin-top: 4px;
 	font-size: 15px;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.7);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.7);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -94,10 +94,10 @@
 	align-items: center;
 	-webkit-justify-content: center;
 	justify-content: center;
-	background: var(--theme-accent, #00a4dc);
-	color: var(--theme-on-accent, #ffffff);
+	background: var(--theme-button-focused, #eae8ee);
+	color: var(--theme-on-accent, #0f0d13);
 }
 
 .hero:focus .play {
-	box-shadow: 0 0 14px 1px rgba(var(--theme-accent-rgb, 0, 164, 220), 0.6);
+	box-shadow: 0 0 0 3px var(--theme-focus-border-color, #f1eff5);
 }

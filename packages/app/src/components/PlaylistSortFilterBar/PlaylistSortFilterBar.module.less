@@ -23,25 +23,25 @@
 
 	&:focus,
 	&:global(.spottable-focus) {
-		background: var(--theme-accent, #00a4dc);
-		border-color: var(--theme-accent, #00a4dc);
-		color: #ffffff;
-		transform: scale(1.04);
+		background: var(--theme-button-focused, #eae8ee);
+		border-color: var(--theme-accent, #b8adde);
+		color: var(--theme-on-accent, #0f0d13);
+		transform: scale(1.06);
 	}
 }
 
 .pillActive {
-	background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.22);
-	border-color: var(--theme-accent, #00a4dc);
-	color: #ffffff;
+	background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.22);
+	border-color: var(--theme-accent, #b8adde);
+	color: #eae8ee;
 }
 
 .badge {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	background: var(--theme-accent, #00a4dc);
-	color: #ffffff;
+	background: var(--theme-accent, #b8adde);
+	color: var(--theme-on-accent, #0f0d13);
 	font-size: 13px;
 	font-weight: 700;
 	padding: 2px 8px;
@@ -51,8 +51,8 @@
 
 .pill:focus .badge,
 .pill:global(.spottable-focus) .badge {
-	background: #ffffff;
-	color: var(--theme-accent, #00a4dc);
+	background: var(--theme-button-focused, #eae8ee);
+	color: var(--theme-on-button-focused, #0f0d13);
 }
 
 .arrow {
@@ -92,7 +92,7 @@
 }
 
 .modalTitle {
-	color: #ffffff;
+	color: #eae8ee;
 	font-size: 26px;
 	font-weight: 700;
 	margin: 0 0 16px;
@@ -143,7 +143,7 @@
 	border-radius: 24px;
 	font-size: 16px;
 	font-weight: 600;
-	color: #ffffff;
+	color: #eae8ee;
 	background: rgba(255, 255, 255, 0.1);
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	cursor: pointer;
@@ -152,9 +152,9 @@
 
 	&:focus,
 	&:global(.spottable-focus) {
-		background: var(--theme-accent, #00a4dc);
-		border-color: var(--theme-accent, #00a4dc);
-		transform: scale(1.05);
+		background: var(--theme-button-focused, #eae8ee);
+		border-color: var(--theme-accent, #b8adde);
+		transform: scale(1.06);
 	}
 }
 

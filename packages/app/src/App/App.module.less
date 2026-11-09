@@ -1,55 +1,20 @@
-// The same faces the other clients bundle, so a theme looks like itself here too.
+// Heisuca: Inter is the face of the interface, in both themes. Sora is not bundled; the written
+// HEISUCA logotype is an image, not text.
 @font-face {
-	font-family: 'NeonPulseDisplay';
-	src: url('../../resources/fonts/Orbitron-Regular.ttf') format('truetype');
-	font-weight: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'NeonPulseDisplay';
-	src: url('../../resources/fonts/Orbitron-Bold.ttf') format('truetype');
-	font-weight: bold;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'NeonPulseBody';
-	src: url('../../resources/fonts/Rajdhani-Regular.ttf') format('truetype');
-	font-weight: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'NeonPulseBody';
-	src: url('../../resources/fonts/Rajdhani-Bold.ttf') format('truetype');
-	font-weight: bold;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'EightBitHero';
-	src: url('../../resources/fonts/PressStart2P-Regular.ttf') format('truetype');
-	font-weight: normal;
-	font-display: swap;
-}
-
-// CGFLIX: the site's face, for the cgflix theme.
-@font-face {
-	font-family: 'CGFLIXInter';
+	font-family: 'HeisucaInter';
 	src: url('../../resources/fonts/Inter-Regular.ttf') format('truetype');
 	font-weight: 400;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'CGFLIXInter';
+	font-family: 'HeisucaInter';
 	src: url('../../resources/fonts/Inter-Bold.ttf') format('truetype');
 	font-weight: 700;
 	font-display: swap;
 }
 
-// The interface is set in Roboto. A weight between the three faces takes the nearest one.
+// Roboto stays as the fallback face. A weight between the three faces takes the nearest one.
 @font-face {
 	font-family: 'Roboto';
 	src: url('../../resources/fonts/Roboto-Regular.woff') format('woff');
@@ -87,7 +52,7 @@
 :global(input),
 :global(select),
 :global(textarea) {
-	font-family: 'Roboto', 'Sandstone', sans-serif;
+	font-family: 'HeisucaInter', 'Roboto', 'Sandstone', sans-serif;
 }
 
 :global(html),
@@ -99,15 +64,15 @@
 	overflow: hidden;
 	-webkit-text-size-adjust: 100%;
 	text-size-adjust: 100%;
-	background: var(--theme-background, #000b25);
-	color: var(--theme-on-background, #fff);
-	font-family: 'Roboto', 'Sandstone', sans-serif;
+	background: var(--theme-background, #0f0d13);
+	color: var(--theme-on-background, #eae8ee);
+	font-family: 'HeisucaInter', 'Roboto', 'Sandstone', sans-serif;
 }
 
 .app {
 	height: 100%;
-	background: var(--theme-background, #000b25);
-	color: var(--theme-on-background, #fff);
+	background: var(--theme-background, #0f0d13);
+	color: var(--theme-on-background, #eae8ee);
 }
 
 // Override Enact neutral skin (minifier converts rgba to 'initial'; fixed post-build for legacy)
@@ -122,7 +87,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: linear-gradient(135deg, var(--theme-background, #1a1a3a) 0%, var(--theme-surface, #2a2a5e) 50%, var(--theme-surface-variant, #26316e) 100%);
+	background: linear-gradient(135deg, var(--theme-background, #0f0d13) 0%, var(--theme-surface, #1a181f) 50%, var(--theme-surface-variant, #26242c) 100%);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -134,7 +99,7 @@
 	justify-content: center;
 	height: 100%;
 	width: 100%;
-	background: var(--theme-background, #000b25);
+	background: var(--theme-background, #0f0d13);
 }
 
 .connectionBanner {
@@ -144,7 +109,7 @@
 	right: 0;
 	padding: 12px;
 	background: rgba(200, 50, 50, 0.9);
-	color: #fff;
+	color: #eae8ee;
 	text-align: center;
 	font-size: 24px;
 	z-index: 99999;
@@ -157,7 +122,7 @@
 	margin-left: 16px;
 	padding: 6px 20px;
 	background: rgba(255, 255, 255, 0.2);
-	color: #fff;
+	color: #eae8ee;
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	border-radius: 4px;
 	font-size: 20px;
@@ -177,7 +142,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: radial-gradient(circle at top, rgba(56, 74, 110, 0.45), rgba(2, 8, 20, 0.95));
+	background: radial-gradient(circle at top, rgba(26, 24, 31, 0.45), rgba(15, 13, 19, 0.95));
 	z-index: 100000;
 	padding: 32px;
 }
@@ -186,7 +151,7 @@
 	// 92vw only wins below 696px wide, which no TV is.
 	width: 640px;
 	width: min(640px, 92vw);
-	background: rgba(7, 14, 30, 0.9);
+	background: rgba(26, 24, 31, 0.9);
 	border: 1px solid rgba(255, 255, 255, 0.16);
 	border-radius: 20px;
 	padding: 32px;
@@ -197,7 +162,7 @@
 	margin: 0;
 	font-size: 2rem;
 	font-weight: 700;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .pinSubtitle {
@@ -215,7 +180,7 @@
 	border-radius: 24px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background: rgba(255, 255, 255, 0.08);
-	color: #fff;
+	color: #eae8ee;
 	box-sizing: border-box;
 }
 
@@ -236,13 +201,14 @@
 	padding: 0.85rem 1.5rem;
 	font-size: 1.1rem;
 	font-weight: 700;
-	color: #fff;
-	background: rgba(43, 106, 229, 0.9);
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	color: var(--theme-on-button-focused, #0f0d13);
+	background: var(--theme-button-focused, #eae8ee);
+	border: 1px solid var(--theme-border-color, #3e3b44);
 	border-radius: 12px;
 
 	&:focus,
 	&:hover {
-		background: rgba(71, 131, 255, 0.95);
+		background: var(--theme-button-focused, #eae8ee);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }

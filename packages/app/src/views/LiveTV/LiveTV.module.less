@@ -3,8 +3,8 @@
 
 // Every size is the other clients' canvas point value times 1.45, the scale a 1080p panel paints
 // that canvas at, so the guide lands at the same painted size in this 1920 wide design space.
-@guide-divider: rgba(142, 200, 240, 0.33);
-@guide-accent: #00a4dc;
+@guide-divider: rgba(171, 167, 178, 0.33);
+@guide-accent: #b8adde;
 @row-height: 87px;
 @channel-column-width: 296px;
 @channel-logo-width: 91px;
@@ -71,18 +71,18 @@
 	transition: background 0.15s ease, border-color 0.15s ease;
 
 	&:focus {
-		border-color: @guide-accent;
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
 .chipSelected {
 	border-color: transparent;
 	background: @guide-accent;
-	color: #10242e;
+	color: #0f0d13;
 	font-weight: 600;
 
 	&:focus {
-		border-color: rgba(255, 255, 255, 0.9);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -147,18 +147,18 @@
 	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size: 23px;
+	font-size: 24px;
 	font-weight: 600;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .heroBadge {
 	flex-shrink: 0;
 	margin-left: 12px;
 	padding: 3px 9px;
-	border: 1.5px solid rgba(0, 164, 220, 0.5);
+	border: 1.5px solid rgba(184, 173, 222, 0.5);
 	border-radius: 6px;
-	background: rgba(0, 164, 220, 0.18);
+	background: rgba(184, 173, 222, 0.18);
 	color: @guide-accent;
 	font-size: 14.5px;
 	font-weight: 700;
@@ -182,7 +182,7 @@
 	text-overflow: ellipsis;
 	font-size: 35px;
 	font-weight: 600;
-	color: #fff;
+	color: #eae8ee;
 	.descender-room();
 }
 
@@ -197,7 +197,7 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	font-size: 32px;
-	color: #fff;
+	color: #eae8ee;
 	.descender-room();
 }
 
@@ -212,7 +212,7 @@
 
 .heroSynopsis {
 	margin-top: 6px;
-	font-size: 23px;
+	font-size: 24px;
 	line-height: 1.2;
 	color: rgba(255, 255, 255, 0.72);
 }
@@ -245,8 +245,8 @@
 	}
 
 	&:focus {
-		background: @guide-accent;
-		color: #fff;
+		background: #eae8ee;
+		color: #0f0d13;
 	}
 }
 
@@ -349,8 +349,8 @@
 }
 
 .channelCellFocused {
-	border-color: rgba(0, 164, 220, 0.7);
-	background: rgba(0, 164, 220, 0.16);
+	border-color: rgba(184, 173, 222, 0.7);
+	background: rgba(184, 173, 222, 0.16);
 
 	.channelName {
 		font-weight: 600;
@@ -397,7 +397,7 @@
 	width: 15px;
 	height: 15px;
 	margin-right: 6px;
-	fill: #f44336;
+	fill: #ee757c;
 }
 
 .channelNumberChip {
@@ -411,7 +411,7 @@
 
 .channelNumberChipFocused {
 	background: @guide-accent;
-	color: #062430;
+	color: #0f0d13;
 }
 
 .channelName {
@@ -422,7 +422,7 @@
 	text-align: right;
 	font-size: 17.5px;
 	font-weight: 500;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .columnDivider {
@@ -455,7 +455,7 @@
 }
 
 .programCellFocused {
-	box-shadow: inset 0 0 0 3px @guide-accent;
+	box-shadow: inset 0 0 0 3px var(--theme-focus-border-color, #f1eff5);
 }
 
 .programCellPast {
@@ -499,7 +499,7 @@
 	line-height: 1.17;
 	font-size: 26px;
 	font-weight: 400;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .cellTitleWrap {
@@ -558,7 +558,7 @@
 	bottom: 0;
 	left: 16px;
 	height: 6px;
-	background: #404040;
+	background: #3e3b44;
 }
 
 .cellProgressFill {
@@ -573,7 +573,7 @@
 	padding: 18px 36px;
 	border-radius: 18px;
 	background: rgba(0, 0, 0, 0.85);
-	color: #fff;
+	color: #eae8ee;
 	font-size: 54px;
 	font-weight: 700;
 	z-index: 40;
@@ -588,7 +588,7 @@
 	padding: 14px 28px;
 	border-radius: 12px;
 	background: rgba(30, 30, 40, 0.9);
-	color: #fff;
+	color: #eae8ee;
 	font-size: 20px;
 	z-index: 60;
 	pointer-events: none;
@@ -616,7 +616,7 @@
 
 .radioSelected {
 	border-color: @guide-accent;
-	box-shadow: inset 0 0 0 5px #1a1a1a;
+	box-shadow: inset 0 0 0 5px #1a181f;
 	background: @guide-accent;
 }
 
@@ -637,7 +637,7 @@
 	width: 960px;
 	max-width: 80%;
 	max-height: 80%;
-	background: #1a1a1a;
+	background: #1a181f;
 	border-radius: 42px;
 	padding: 36px;
 	display: flex;
@@ -650,7 +650,7 @@
 	flex-shrink: 0;
 	margin-bottom: 24px;
 	font-size: 36px;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .dialogBody {
@@ -708,14 +708,14 @@
 	transition: background 0.15s ease;
 
 	&:focus {
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.25);
+		background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.25);
 	}
 
 	&.danger {
 		color: #e0685c;
 
 		&:focus {
-			background: rgba(224, 104, 92, 0.25);
+			background: rgba(238, 117, 124, 0.25);
 		}
 	}
 }
@@ -727,12 +727,12 @@
 	padding: 18px 24px;
 	border-radius: 12px;
 	font-size: 24px;
-	color: #fff;
+	color: #eae8ee;
 	cursor: pointer;
 	outline: none;
 
 	&:focus {
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.25);
+		background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.25);
 	}
 
 	&.selectedOption {

@@ -40,12 +40,12 @@
 	border: 1px solid rgba(255, 255, 255, 0.16);
 	// A variable so performance mode, which strips the blur at runtime, can put the
 	// opaque value back.
-	--glass-tint: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.82);
+	--glass-tint: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.82);
 	background-color: var(--glass-tint);
 	background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 35%);
 
 	@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-		--glass-tint: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.55);
+		--glass-tint: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.55);
 		-webkit-backdrop-filter: blur(14px) saturate(1.2);
 		backdrop-filter: blur(14px) saturate(1.2);
 	}
@@ -85,8 +85,8 @@
 
 	&:focus {
 		outline: none;
-		background: var(--theme-on-surface, #ffffff);
-		border-color: var(--theme-focus-border-color, #ffffff);
+		background: var(--theme-on-surface, #eae8ee);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -94,7 +94,7 @@
 	width: 29px;
 	height: 29px;
 	fill: rgba(255, 255, 255, 0.5);
-	fill: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.5);
+	fill: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.5);
 }
 
 // The search box in a library header. The glyph is positioned by the wrapper
@@ -110,23 +110,23 @@
 	padding: 0 20px 0 58px;
 	border: 3px solid transparent;
 	border-radius: 35px;
-	background: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.72);
-	color: var(--theme-on-surface, #ffffff);
+	background: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.72);
+	color: var(--theme-on-surface, #eae8ee);
 	font-size: 25px;
 	cursor: pointer;
 
 	&:focus,
 	&[data-focused] {
 		outline: none;
-		border-color: var(--theme-focus-border-color, #ffffff);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 
 	input::-webkit-input-placeholder {
-		color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.62);
+		color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.62);
 	}
 
 	input::placeholder {
-		color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.62);
+		color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.62);
 	}
 }
 
@@ -137,14 +137,14 @@
 	margin-top: -14px;
 	width: 28px;
 	height: 28px;
-	fill: var(--theme-on-surface, #ffffff);
+	fill: var(--theme-on-surface, #eae8ee);
 	z-index: 1;
 }
 
 .theme-chip() {
 	border-radius: var(--theme-chip-radius, 8px);
 	border: var(--theme-chip-border, 1px solid transparent);
-	background: var(--theme-chip-background, rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1));
+	background: var(--theme-chip-background, rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1));
 }
 
 // Both badge mixins name their colours twice: a plain value an engine without custom properties
@@ -155,11 +155,11 @@
 	right: 8px;
 	width: @size;
 	height: @size;
-	background: rgba(0, 164, 220, 0.9);
-	background: var(--theme-badge-watched, rgba(0, 164, 220, 0.9));
+	background: rgba(184, 173, 222, 0.9);
+	background: var(--theme-badge-watched, rgba(120, 201, 149, 0.9));
 	border-radius: 50%;
-	border: 1.5px solid #ffffff;
-	border-color: var(--theme-on-badge, #ffffff);
+	border: 1.5px solid var(--theme-focus-border-color, #f1eff5);
+	border-color: var(--theme-on-badge, #0f0d13);
 	box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.6);
 	display: flex;
 	align-items: center;
@@ -170,10 +170,10 @@
 	svg {
 		width: @icon-size;
 		height: @icon-size;
-		fill: #ffffff;
-		fill: var(--theme-on-badge, #ffffff);
-		stroke: #ffffff;
-		stroke: var(--theme-on-badge, #ffffff);
+		fill: #eae8ee;
+		fill: var(--theme-on-badge, #0f0d13);
+		stroke: #eae8ee;
+		stroke: var(--theme-on-badge, #0f0d13);
 		stroke-width: 0.6px;
 		stroke-linecap: round;
 		stroke-linejoin: round;
@@ -186,11 +186,11 @@
 	left: 8px;
 	width: @size;
 	height: @size;
-	background: #f44336;
-	background: var(--theme-recording-active, #f44336);
+	background: #ee757c;
+	background: var(--theme-recording-active, #ee757c);
 	border-radius: 50%;
-	border: 1.5px solid #ffffff;
-	border-color: var(--theme-on-badge, #ffffff);
+	border: 1.5px solid var(--theme-focus-border-color, #f1eff5);
+	border-color: var(--theme-on-badge, #0f0d13);
 	box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.6);
 	display: flex;
 	align-items: center;
@@ -201,8 +201,8 @@
 	svg {
 		width: @icon-size;
 		height: @icon-size;
-		fill: #ffffff;
-		fill: var(--theme-on-badge, #ffffff);
+		fill: #eae8ee;
+		fill: var(--theme-on-badge, #0f0d13);
 	}
 }
 
@@ -254,7 +254,7 @@
 	right: 0;
 	bottom: 0;
 	z-index: 4;
-	border: 4px solid var(--theme-focus-border-color, #ffffff);
+	border: 4px solid var(--theme-focus-border-color, #f1eff5);
 	border-radius: var(--theme-card-radius, 20px);
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 	box-sizing: border-box;

@@ -11,6 +11,10 @@ const SIMPLE = {
 	general: {
 		general: ['language', 'uiLanguage', 'clock', 'showClock', 'clockDisplay', 'timeOffsetHours']
 	},
+	// The theme is a choice of the brand (Shikkoku or Sumi), so it stays in reach.
+	appearance: {
+		appearance: ['theme', 'themeSelection']
+	},
 	playback: {
 		subtitles: ['subtitlesGeneral', 'subtitleMode', 'subtitleCustomization'],
 		subtitleCustomization: null

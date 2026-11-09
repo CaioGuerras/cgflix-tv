@@ -20,8 +20,7 @@
 	font-size: 28px;
 	font-weight: 600;
 	margin: 0 0 20px 0;
-	color: var(--theme-text-primary, #fff);
-	text-shadow: var(--theme-text-glow);
+	color: var(--theme-text-primary, #eae8ee);
 }
 
 .scroller {
@@ -63,7 +62,7 @@
 	overflow: hidden;
 	cursor: pointer;
 	outline: none;
-	background: var(--theme-surface, #1a1a1a);
+	background: var(--theme-surface, #1a181f);
 	border: 3px solid transparent;
 	// A border colour cant be handed to the compositor, so animating it repaints the
 	// rounded corners and the artwork under them every frame. The tile grows on a
@@ -73,8 +72,8 @@
 	transition: transform 0.15s ease;
 
 	&:focus {
-		border-color: var(--theme-focus-border-color, #fff);
-		transform: scale(1.05) translateZ(0);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		transform: scale(1.06) translateZ(0);
 	}
 }
 
@@ -124,6 +123,6 @@
 .label {
 	font-size: 24px;
 	font-weight: 700;
-	color: #fff;
+	color: #eae8ee;
 	text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
 }

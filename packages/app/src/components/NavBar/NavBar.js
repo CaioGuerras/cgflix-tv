@@ -9,7 +9,7 @@ import {FavoritesIcon, FriendsIcon, GenresIcon, HomeIcon, LiveTvIcon, MessagesIc
 import useClock from '../../hooks/useClock';
 import {librariesForNav} from '../../utils/liveTvLibrary';
 import {isKidsMode} from '../../utils/kidsMode';
-import {shadowToCss, toCssColor, toCssColorWithAlpha} from '../../theme/themeSpec';
+import {toCssColor, toCssColorWithAlpha} from '../../theme/themeSpec';
 import {resolveOverlayColor} from '../../theme/overlayColors';
 import {CONTENT_FOCUS_TARGETS, focusFirstContentTarget} from '../../utils/navFocusTargets';
 import {pointerHover} from '../../utils/focusScroll';
@@ -66,11 +66,8 @@ const NavBar = ({
 	const showFriends = !kidsMode && socialAvailable && settings.showFriendsButton === true;
 
 	const navPillStyle = useMemo(() => {
-		// The pill wears the overlay color at the chosen opacity, and only a theme
-		// asking for a transparent nav surface clears it entirely.
-		const navbarColor = activeTheme.transparentNavbarSurface
-			? 'transparent'
-			: toCssColorWithAlpha(resolveOverlayColor(settings.navbarColor), (settings.navbarOpacity ?? 50) / 100);
+		// The pill wears the overlay color at the chosen opacity.
+		const navbarColor = toCssColorWithAlpha(resolveOverlayColor(settings.navbarColor), (settings.navbarOpacity ?? 50) / 100);
 		return {
 			background: navbarColor,
 			backdropFilter: 'none',
@@ -78,8 +75,7 @@ const NavBar = ({
 			borderBottom: activeTheme.borders.navBorder
 				? `${activeTheme.borders.navBorder.width}px solid ${toCssColor(activeTheme.borders.navBorder.color)}`
 				: 'none',
-			color: toCssColor(activeTheme.colors.onSurface),
-			textShadow: activeTheme.textGlow.length ? activeTheme.textGlow.map(shadowToCss).join(', ') : 'none'
+			color: toCssColor(activeTheme.colors.onSurface)
 		};
 	}, [activeTheme, settings.navbarColor, settings.navbarOpacity]);
 

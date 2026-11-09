@@ -1,12 +1,11 @@
 import {createContext, useContext, useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import {getFromStorage, saveToStorage} from '../services/storage';
-import {getMoonfinSettings, getMoonfinThemes, saveMoonfinProfile, moonfinPing} from '../services/seerrApi';
+import {getMoonfinSettings, saveMoonfinProfile, moonfinPing} from '../services/seerrApi';
 import {mergeServerPluginSections, pluginSectionsFromServer} from '../views/Settings/homeSectionsModel';
-import {parseThemeSpec} from '../theme/themeSpec';
 import {normalizeOverlayColorKey} from '../theme/overlayColors';
 import {noteAnsweredSettings, SETUP_QUESTION_KEYS} from '../utils/setupWizardGate';
-import {getAvailableThemeList, getAvailableThemes, isBuiltInThemeId, registerStoreTheme, removeStoreTheme, replaceCustomThemes, resolveThemeById} from '../theme/themeRegistry';
-import {applyOledMode} from '../utils/oledMode';
+import {DEFAULT_THEME_ID, getAvailableThemeList, isBuiltInThemeId, migrateSavedTheme, resolveThemeById, withKidsAccent} from '../theme/themeRegistry';
+import {isKidsMode} from '../utils/kidsMode';
 import {normalizeRatingSources, ratingSourcesToServer} from '../utils/ratingSources';
 import {SEASONAL_DENSITIES, normalizeSeasonalTheme} from '../utils/seasonalEffects';
 import {normalizeSeasonalHiddenHolidays, normalizeSeasonalRowCountry} from '../utils/seasonalRow';
@@ -266,7 +265,7 @@ export const SYNCABLE_KEYS = [
 	'navbarPosition', 'featuredBarStyle', 'featuredContentType', 'featuredItemCount',
 	'featuredTrailerPreview', 'featuredTrailerMuted', 'mediaBarTrailerCaptions', 'unifiedLibraryMode', 'seasonalTheme', 'seasonalDensity',
 	'seasonalRowEnabled', 'seasonalRowCountry', 'seasonalRowHiddenHolidays',
-	'visualTheme', 'customThemeId',
+	'visualTheme',
 	'showRatingLabels',
 	'showRatingBadges',
 	'themeMusicEnabled', 'themeMusicVolume', 'themeMusicOnHomeRows',
@@ -314,7 +313,7 @@ export const SYNCABLE_KEYS = [
 	'screensaverLibraryIds', 'screensaverCollectionIds', 'screensaverExcludedGenres',
 	'loadingAnimationImage', 'loadingAnimationSize', 'loadingAnimationPosition', 'loadingAnimationSpeed',
 	'showLoadingAnimationText',
-	'navbarAlwaysExpanded', 'oledMode', 'themeMusicLoop',
+	'navbarAlwaysExpanded', 'themeMusicLoop',
 	// Settings this app has no screen for. They ride along so a value set on another client
 	// survives the profile the TV writes back.
 	'showCastButton',
@@ -546,17 +545,6 @@ export const __pushQueue = {
 	drop: dropQueuedPush
 };
 
-const extractThemeObjects = (payload) => {
-	if (Array.isArray(payload)) return payload;
-	if (payload && typeof payload === 'object') {
-		if (Array.isArray(payload.themes)) return payload.themes;
-		if (Array.isArray(payload.items)) return payload.items;
-		const values = Object.values(payload).filter((entry) => entry && typeof entry === 'object');
-		if (values.length > 0) return values;
-	}
-	return [];
-};
-
 const SettingsContext = createContext(null);
 const EXPERIMENTAL_TRUEHD_KEY = 'moonfin.experimentalTruehd';
 // Tracks which servers have already gone through the first plugin-detection sync, so
@@ -600,11 +588,7 @@ export function SettingsProvider({children}) {
 	// wizard waits on this so the answers it collects dont get overwritten by a
 	// profile that lands a moment later.
 	const [initialSyncSettled, setInitialSyncSettled] = useState(false);
-	const [themeCatalogVersion, setThemeCatalogVersion] = useState(0);
 	const serverCredsRef = useRef(null);
-	// Set once a sync has replaced the custom themes with a fresh set from the
-	// server, so the boot hydration below never puts a stale cache over it.
-	const serverThemesLoadedRef = useRef(false);
 	// Lets the login-sync path read the current plugin flag without depending on the
 	// whole settings object, which would rebuild its callback on every change.
 	const settingsRef = useRef(settings);
@@ -677,12 +661,20 @@ export function SettingsProvider({children}) {
 					stored.customHomeRows = [];
 					migrated = true;
 				}
-				if (!stored.visualTheme) {
-					stored.visualTheme = 'cgflix';
+				// Two themes remain, Shikkoku and Sumi. Whatever was saved before maps onto
+				// one of them: the black themes and the vivid OLED mode become Sumi, and
+				// everything else, custom and Theme Store ids included, becomes Shikkoku.
+				const savedTheme = migrateSavedTheme(stored.visualTheme, stored.oledMode);
+				if (savedTheme !== stored.visualTheme) {
+					stored.visualTheme = savedTheme;
 					migrated = true;
 				}
-				if (typeof stored.customThemeId !== 'string') {
-					stored.customThemeId = '';
+				if ('customThemeId' in stored) {
+					delete stored.customThemeId;
+					migrated = true;
+				}
+				if ('oledMode' in stored) {
+					delete stored.oledMode;
 					migrated = true;
 				}
 				if ('stillWatchingPrompt' in stored) {
@@ -742,6 +734,11 @@ export function SettingsProvider({children}) {
 					} else if (stored.screensaverMode === 'library') {
 						stored.screensaverBackdrop = 'library';
 					}
+					migrated = true;
+				}
+				if (stored.screensaverBackdrop === 'neonPulse' || stored.screensaverBackdrop === 'aurora') {
+					// Those two colour washes left with the old themes; the calm wash replaces them.
+					stored.screensaverBackdrop = 'calm';
 					migrated = true;
 				}
 				if ('screensaverClockMode' in stored && !('screensaverMovement' in stored)) {
@@ -807,42 +804,6 @@ export function SettingsProvider({children}) {
 		});
 	}, []);
 
-	// Restore Theme Store themes saved on this device. Kept in a separate
-	// registry bucket so server theme sync never clears them.
-	useEffect(() => {
-		getFromStorage('storeThemes').then((stored) => {
-			if (!stored || typeof stored !== 'object') return;
-			let registered = false;
-			for (const raw of Object.values(stored)) {
-				try {
-					registerStoreTheme(parseThemeSpec(raw));
-					registered = true;
-				} catch (e) { void e; /* skip malformed */ }
-			}
-			if (registered) setThemeCatalogVersion((value) => value + 1);
-		});
-	}, []);
-
-	// Restore plugin-synced custom themes cached from the last successful sync.
-	// Without this a selected custom theme falls back to Moonfin on every boot
-	// until the server answers, and never comes back while it is unreachable.
-	useEffect(() => {
-		getFromStorage('customThemes').then((stored) => {
-			if (!stored || typeof stored !== 'object') return;
-			// A sync that finished before this resolved already holds a fresher set.
-			if (serverThemesLoadedRef.current) return;
-			const specs = [];
-			for (const raw of Object.values(stored)) {
-				try {
-					specs.push(parseThemeSpec(raw));
-				} catch (e) { void e; /* skip malformed */ }
-			}
-			if (specs.length === 0) return;
-			replaceCustomThemes(specs);
-			setThemeCatalogVersion((value) => value + 1);
-		});
-	}, []);
-
 	useEffect(() => {
 		if (!loaded) return;
 
@@ -857,17 +818,14 @@ export function SettingsProvider({children}) {
 		}
 	}, [loaded, settings.experimentalTruehd]);
 
-	const availableThemes = useMemo(() => getAvailableThemeList(), [themeCatalogVersion]); // eslint-disable-line react-hooks/exhaustive-deps
-	const activeThemeId = useMemo(() => {
-		const customId = settings.customThemeId;
-		if (customId && getAvailableThemes()[customId]) {
-			return customId;
-		}
-		return isBuiltInThemeId(settings.visualTheme) ? settings.visualTheme : 'cgflix';
-	}, [settings.customThemeId, settings.visualTheme, themeCatalogVersion]); // eslint-disable-line react-hooks/exhaustive-deps
+	const availableThemes = useMemo(() => getAvailableThemeList(), []);
+	const activeThemeId = isBuiltInThemeId(settings.visualTheme) ? settings.visualTheme : DEFAULT_THEME_ID;
+	// Kids Mode keeps Shikkoku and swaps the accent for the night version of the strawberry pink.
+	// It is applied on read, so leaving the mode gives back the viewer's own accent untouched.
+	const kidsActive = isKidsMode(settings);
 	const activeTheme = useMemo(
-		() => applyOledMode(resolveThemeById(activeThemeId), settings.oledMode),
-		[activeThemeId, settings.oledMode, themeCatalogVersion] // eslint-disable-line react-hooks/exhaustive-deps
+		() => (kidsActive ? withKidsAccent(resolveThemeById(activeThemeId)) : resolveThemeById(activeThemeId)),
+		[activeThemeId, kidsActive]
 	);
 
 	const updateSetting = useCallback((key, value) => {
@@ -897,12 +855,10 @@ export function SettingsProvider({children}) {
 
 	const selectThemeById = useCallback((themeId) => {
 		setSettings((prev) => {
-			if (!getAvailableThemes()[themeId]) return prev;
-			const updated = isBuiltInThemeId(themeId)
-				? {...prev, visualTheme: themeId, customThemeId: ''}
-				: {...prev, visualTheme: prev.visualTheme || 'cgflix', customThemeId: themeId};
+			if (!isBuiltInThemeId(themeId) || themeId === prev.visualTheme) return prev;
+			const updated = {...prev, visualTheme: themeId};
 			saveToStorage('settings', updated);
-			queueProfilePush(updated, serverCredsRef, ['visualTheme', 'customThemeId']);
+			queueProfilePush(updated, serverCredsRef, ['visualTheme']);
 			return updated;
 		});
 	}, []);
@@ -962,32 +918,6 @@ export function SettingsProvider({children}) {
 		});
 	}, []);
 
-	// Validate + register + persist a theme saved from the Theme Store. Stores
-	// the raw theme JSON so it round-trips through parseThemeSpec on reload.
-	const saveStoreTheme = useCallback(async (rawTheme) => {
-		const spec = parseThemeSpec(rawTheme); // throws on invalid
-		registerStoreTheme(spec);
-		setThemeCatalogVersion((value) => value + 1);
-		const existing = (await getFromStorage('storeThemes')) || {};
-		existing[spec.id] = rawTheme;
-		await saveToStorage('storeThemes', existing);
-		return spec;
-	}, []);
-
-	const deleteStoreTheme = useCallback(async (id) => {
-		removeStoreTheme(id);
-		setThemeCatalogVersion((value) => value + 1);
-		const existing = (await getFromStorage('storeThemes')) || {};
-		delete existing[id];
-		await saveToStorage('storeThemes', existing);
-		setSettings((prev) => {
-			if (prev.customThemeId !== id) return prev;
-			const updated = {...prev, customThemeId: ''};
-			saveToStorage('settings', updated);
-			return updated;
-		});
-	}, []);
-
 	const syncFromServer = useCallback(async (serverUrl, token) => {
 		try {
 			serverCredsRef.current = {serverUrl, token};
@@ -1000,48 +930,8 @@ export function SettingsProvider({children}) {
 				if (ping?.defaultSettings) adminDefaults = ping.defaultSettings;
 			} catch (e) { /* non-critical */ }
 
-			let themesPayload = null;
-			try {
-				themesPayload = await getMoonfinThemes(serverUrl, token);
-			} catch (e) {
-				console.warn('[Settings] Theme sync failed:', e.message);
-			}
-
-			// Null means the fetch failed or the endpoint is missing, and only a
-			// real answer may replace the cached set.
-			const themesSynced = themesPayload != null;
-			if (themesSynced) {
-				const specs = [];
-				const raws = {};
-				for (const entry of extractThemeObjects(themesPayload)) {
-					if (!entry || typeof entry !== 'object') continue;
-					try {
-						const spec = parseThemeSpec(entry);
-						specs.push(spec);
-						raws[spec.id] = entry;
-					} catch (e) {
-						console.warn('[Settings] Ignoring malformed theme entry:', e.message);
-					}
-				}
-				replaceCustomThemes(specs);
-				serverThemesLoadedRef.current = true;
-				saveToStorage('customThemes', raws);
-				setThemeCatalogVersion((value) => value + 1);
-			}
-
 			const serverData = await getMoonfinSettings(serverUrl, token);
 			if (!serverData) {
-				setSettings((prev) => {
-					// Only a synced list can say the selected theme is gone. A missing
-					// one may just not have loaded yet, and the fallback while it is
-					// unresolved is Moonfin anyway.
-					if (!prev.customThemeId || !themesSynced || getAvailableThemes()[prev.customThemeId]) {
-						return prev;
-					}
-					const updated = {...prev, customThemeId: ''};
-					saveToStorage('settings', updated);
-					return updated;
-				});
 				// A viewer who has never synced has no envelope of their own, and they are
 				// exactly who the admin defaults are there to seed.
 				if (!adminDefaults) return pluginAnswered ? 'empty' : 'unavailable';
@@ -1084,18 +974,12 @@ export function SettingsProvider({children}) {
 				const homeRowsStyle = normalizeHomeRowsStyle(nextValues.homeRowsStyle);
 				const detailScreenStyle = normalizeDetailScreenStyle(nextValues.detailScreenStyle);
 
-				let customThemeId = nextValues.customThemeId;
-				if (customThemeId && themesSynced && !getAvailableThemes()[customThemeId]) {
-					customThemeId = '';
-				}
+				// A profile written by an older build or by another Moonfin client names a theme
+				// this app no longer has. That value never replaces this device's own, so a
+				// stale profile cannot undo a Sumi choice made here.
 				let visualTheme = nextValues.visualTheme;
-				// CGFLIX: other Moonfin clients don't know the cgflix theme and store
-				// 'moonfin' in its place, so that value never replaces this device's own.
-				if (visualTheme === 'moonfin') {
-					visualTheme = prev.visualTheme;
-				}
 				if (!isBuiltInThemeId(visualTheme)) {
-					visualTheme = 'cgflix';
+					visualTheme = isBuiltInThemeId(prev.visualTheme) ? prev.visualTheme : DEFAULT_THEME_ID;
 				}
 
 				// Unchanged values kept their previous reference, so comparing identity is
@@ -1104,7 +988,6 @@ export function SettingsProvider({children}) {
 					pluginSections !== prev.pluginSections ||
 					homeRowsStyle !== prev.homeRowsStyle ||
 					detailScreenStyle !== prev.detailScreenStyle ||
-					customThemeId !== prev.customThemeId ||
 					visualTheme !== prev.visualTheme ||
 					SYNCABLE_KEYS.some((key) => nextValues[key] !== prev[key]);
 
@@ -1116,7 +999,6 @@ export function SettingsProvider({children}) {
 						pluginSections,
 						homeRowsStyle,
 						detailScreenStyle,
-						customThemeId,
 						visualTheme
 					};
 					saveToStorage('settings', updated);
@@ -1196,9 +1078,7 @@ export function SettingsProvider({children}) {
 			applyServerProfile,
 			selectSyncProfile,
 			syncFromServer,
-			syncOnLogin,
-			saveStoreTheme,
-			deleteStoreTheme
+			syncOnLogin
 		}}>
 			{children}
 		</SettingsContext.Provider>

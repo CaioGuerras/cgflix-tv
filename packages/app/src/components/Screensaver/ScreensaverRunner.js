@@ -1,8 +1,8 @@
 import {useEffect, useRef} from 'react';
 
-const LEAD_COLOR = '#00A4DC';
-const TRAIL_COLOR = '#AA5CC3';
-const HEAD_COLOR = '#ffffff';
+const LEAD_COLOR = '#b8adde';
+const TRAIL_COLOR = '#756c9a';
+const HEAD_COLOR = '#f1eff5';
 const STRIDE_DURATION = 620;
 const FRAME_DELAY = 16;
 

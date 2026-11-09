@@ -30,45 +30,20 @@ const REQUIRED_COLOR_KEYS = [
 	'recordingScheduled'
 ];
 
+// Fallbacks for a theme that names no status colors of its own: the Shikkoku
+// tokens (sucesso, acento, aviso, erro).
 const DEFAULT_SEMANTIC = Object.freeze({
-	statusAvailable: '#FF22C55E',
-	statusRequested: '#FF9333EA',
-	statusPending: '#FFEAB308',
-	statusDownloading: '#FF6366F1',
-	statusError: '#FFEF4444',
-	mediaTypeBadgeMovie: '#FF3B82F6',
-	mediaTypeBadgeShow: '#FF8B5CF6'
+	statusAvailable: '#FF78C995',
+	statusRequested: '#FFB8ADDE',
+	statusPending: '#FFEDBB64',
+	statusDownloading: '#FFB8ADDE',
+	statusError: '#FFEE757C',
+	mediaTypeBadgeMovie: '#FFB8ADDE',
+	mediaTypeBadgeShow: '#FFABA7B2'
 });
 
 // What a theme falls back to when it carries no error color of its own.
-export const DEFAULT_ERROR_COLOR = '#FFCF6679';
-
-const DEFAULT_BOOK_COLORS = Object.freeze({
-	background: '#FF0F182A',
-	accent: '#FF32B9E8',
-	mutedText: '#FF9EDBFF',
-	primaryText: '#FFDCEFFF',
-	sectionTitle: '#FFFFE6C3',
-	divider: '#223E5F82',
-	placeholder: '#FF2C77B7',
-	shadow: '#24000000',
-	gradientTop: '#FF18263D',
-	gradientBottom: '#FF0B1424',
-	inactiveChip: '#556388A8'
-});
-
-const DEFAULT_BOOK_PLACEHOLDER_PALETTE = Object.freeze([
-	'#FF1A5C9A',
-	'#FF2E7D32',
-	'#FF6A1B9A',
-	'#FF00695C',
-	'#FFC62828',
-	'#FF4527A0',
-	'#FF558B2F',
-	'#FF283593',
-	'#FF4E342E',
-	'#FF00838F'
-]);
+export const DEFAULT_ERROR_COLOR = '#FFEE757C';
 
 const normalizeHexColor = (value, fieldName) => {
 	if (typeof value !== 'string') {
@@ -222,15 +197,6 @@ export const parseThemeSpec = (json) => {
 		displayName,
 		description: typeof json.description === 'string' && json.description.trim() ? json.description.trim() : '',
 		fontFamily: typeof json.fontFamily === 'string' && json.fontFamily.trim() ? json.fontFamily.trim() : null,
-		textGlow: parseShadowList(json.textGlow, 'textGlow'),
-		navColorCycle: Array.isArray(json.navColorCycle)
-			? json.navColorCycle.map((color, index) => normalizeHexColor(color, `navColorCycle[${index}]`))
-			: [],
-		transparentNavbarSurface: !!json.transparentNavbarSurface,
-		// The stair-step bevel chrome the other clients paint from this has no
-		// equivalent here, the tokens carry the look on their own.
-		isPixel: !!json.isPixel,
-		isGlass: !!json.isGlass,
 		colors,
 		borders: {
 			cardBorder: parseBorderSide(bordersSource.cardBorder, 'borders.cardBorder'),
@@ -242,15 +208,7 @@ export const parseThemeSpec = (json) => {
 			focusGlow: parseShadowList(bordersSource.focusGlow, 'borders.focusGlow'),
 			navBorder: parseBorderSide(bordersSource.navBorder, 'borders.navBorder', true)
 		},
-		semantic: parseColorGroup(json.semantic, 'semantic', DEFAULT_SEMANTIC),
-		book: {
-			...parseColorGroup(json.book, 'book', DEFAULT_BOOK_COLORS),
-			placeholderPalette: Array.isArray(json.book?.placeholderPalette)
-				? json.book.placeholderPalette.map((color, index) => normalizeHexColor(color, `book.placeholderPalette[${index}]`))
-				: typeof json.book?.placeholderPalette === 'string'
-					? [normalizeHexColor(json.book.placeholderPalette, 'book.placeholderPalette')]
-					: DEFAULT_BOOK_PLACEHOLDER_PALETTE.slice()
-		}
+		semantic: parseColorGroup(json.semantic, 'semantic', DEFAULT_SEMANTIC)
 	};
 };
 
@@ -347,19 +305,6 @@ export const shadowToCss = (shadow) => {
 	return `${offsetX}px ${offsetY}px ${blur}px ${spread}px ${toCssColor(shadow.color)}`;
 };
 
-// The nav slots read up to 16 of these. A theme without a cycle keeps the
-// first two pinned to onSurface so the slots always resolve.
-const buildNavColorVars = (theme) => {
-	const cycle = theme.navColorCycle.length > 0
-		? theme.navColorCycle
-		: [theme.colors.onSurface, theme.colors.onSurface];
-	const vars = {};
-	cycle.slice(0, 16).forEach((color, index) => {
-		vars[`--theme-nav-color-${index + 1}`] = toCssColor(color);
-	});
-	return vars;
-};
-
 export const buildThemeCssVars = (theme) => ({
 	'--accent-color': toCssColor(theme.borders.focusBorder.color),
 	'--theme-background': toCssColor(theme.colors.background),
@@ -398,11 +343,7 @@ export const buildThemeCssVars = (theme) => ({
 		? `${theme.borders.navBorder.width}px solid ${toCssColor(theme.borders.navBorder.color)}`
 		: 'none',
 	'--theme-focus-glow': theme.borders.focusGlow.length ? theme.borders.focusGlow.map(shadowToCss).join(', ') : 'none',
-	'--theme-text-glow': theme.textGlow.length ? theme.textGlow.map(shadowToCss).join(', ') : 'none',
 	'--theme-font-family': theme.fontFamily || 'inherit',
-	'--theme-navbar-color-rgb': theme.transparentNavbarSurface ? 'transparent' : toCssColor(theme.colors.surface),
-	'--theme-navbar-opacity': theme.transparentNavbarSurface ? 0 : 1,
-	...buildNavColorVars(theme),
 	'--theme-error': toCssColor(theme.colors.error || DEFAULT_ERROR_COLOR),
 	'--theme-status-error': toCssColor(theme.semantic.statusError),
 	'--theme-status-available': toCssColor(theme.semantic.statusAvailable),

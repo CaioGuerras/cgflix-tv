@@ -28,8 +28,14 @@ describe('CGFLIX simple settings', () => {
 		expect(defaultSettings[ADVANCED_KEY]).toBe(false);
 	});
 
-	test('the simple mode keeps only General, Playback and About', () => {
-		expect(visible(ctxWith(false)).map((category) => category.id)).toEqual(['general', 'playback', 'about']);
+	test('the simple mode keeps only General, Appearance, Playback and About', () => {
+		expect(visible(ctxWith(false)).map((category) => category.id)).toEqual(['general', 'appearance', 'playback', 'about']);
+	});
+
+	test('appearance only offers the theme choice', () => {
+		const appearance = visible(ctxWith(false)).find((category) => category.id === 'appearance');
+		expect(appearance.subs.map((sub) => sub.id)).toEqual(['appearance']);
+		expect(appearance.subs[0].rows).toEqual(['theme', 'themeSelection']);
 	});
 
 	test('nothing about accounts, the plugin or Seerr is left in the simple mode', () => {

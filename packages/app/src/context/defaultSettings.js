@@ -68,8 +68,7 @@ export const defaultSettings = {
 	// the film, which is slow on older sets.
 	cinemaModeEnabled: false,
 	theme: 'dark',
-	visualTheme: 'cgflix',
-	customThemeId: '',
+	visualTheme: 'shikkoku',
 	homeRows: DEFAULT_HOME_ROWS,
 	pluginSections: [],
 	displayFavoritesRows: false,
@@ -197,7 +196,6 @@ export const defaultSettings = {
 	updateNotificationsEnabled: true,
 	navbarPosition: 'left',
 	navbarAlwaysExpanded: false,
-	oledMode: 'subtle',
 	screensaverEnabled: true,
 	screensaverTimeout: 90,
 	screensaverDimmingLevel: 50,

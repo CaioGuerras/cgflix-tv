@@ -141,11 +141,11 @@ export const artworkSource = (program) => {
 // ---------------------------------------------------------------------------
 
 const GENRES = [
-	{flag: 'IsMovie', label: 'Movie', color: '#6c4bd8', rgb: '108, 75, 216'},
-	{flag: 'IsSports', label: 'Sports', color: '#2e8b57', rgb: '46, 139, 87'},
-	{flag: 'IsNews', label: 'News', color: '#c08a2e', rgb: '192, 138, 46'},
-	{flag: 'IsKids', label: 'Kids', color: '#c0497a', rgb: '192, 73, 122'},
-	{flag: 'IsSeries', label: 'Series', color: '#2e7d8a', rgb: '46, 125, 138'}
+	{flag: 'IsMovie', label: 'Movie', color: '#b8adde', rgb: '184, 173, 222'},
+	{flag: 'IsSports', label: 'Sports', color: '#78c995', rgb: '120, 201, 149'},
+	{flag: 'IsNews', label: 'News', color: '#edbb64', rgb: '237, 187, 100'},
+	{flag: 'IsKids', label: 'Kids', color: '#ee939b', rgb: '238, 147, 155'},
+	{flag: 'IsSeries', label: 'Series', color: '#7fc4ec', rgb: '127, 196, 236'}
 ];
 
 // A program with no genre takes the accent, which the screen supplies.

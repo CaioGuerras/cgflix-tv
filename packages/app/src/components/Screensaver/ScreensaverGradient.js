@@ -2,9 +2,7 @@ import css from './Screensaver.module.less';
 
 const PALETTE_CLASS = {
 	moonfin: css.gradientMoonfin,
-	calm: css.gradientCalm,
-	neonPulse: css.gradientNeonPulse,
-	aurora: css.gradientAurora
+	calm: css.gradientCalm
 };
 
 export const isGradientBackdrop = (backdrop) => Boolean(PALETTE_CLASS[backdrop]);
@@ -15,9 +13,7 @@ const ScreensaverGradient = ({backdrop}) => {
 
 	return (
 		<div className={css.gradient + ' ' + palette}>
-			<div className={css.gradientOrbit}>
-				{backdrop === 'neonPulse' ? <div className={css.gradientFlash} /> : null}
-			</div>
+			<div className={css.gradientOrbit} />
 			<div className={css.gradientAccent}>
 				<div className={css.gradientAccentInner} />
 			</div>

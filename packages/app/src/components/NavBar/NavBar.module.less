@@ -1,4 +1,4 @@
-@accent: var(--accent-color, #00a4dc);
+@accent: var(--accent-color, #b8adde);
 
 .topNav {
 	position: fixed;
@@ -58,16 +58,6 @@
 	&::-webkit-scrollbar {
 		display: none;
 	}
-
-	// The glass theme frosts the pill over whatever scrolls behind it. The color
-	// arrives inline, so the frosted fill has to outrank it, and engines without
-	// backdrop-filter simply keep the translucent fill.
-	:global(html[data-theme-id='glass']) & {
-		background: rgba(255, 255, 255, 0.08) !important;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		backdrop-filter: blur(24px) saturate(1.4);
-		-webkit-backdrop-filter: blur(24px) saturate(1.4);
-	}
 }
 
 .navRight {
@@ -87,7 +77,7 @@
 	padding: 14px 24px;
 	background: transparent;
 	border: none;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	font-size: 22px;
 	font-weight: 500;
 	cursor: pointer;
@@ -112,8 +102,8 @@
 
 	&:hover,
 	&:focus {
-		color: var(--theme-background, #000000);
-		background: var(--theme-on-surface, #ffffff);
+		color: var(--theme-background, #0f0d13);
+		background: var(--theme-on-surface, #eae8ee);
 	}
 }
 
@@ -140,14 +130,14 @@
 }
 
 .active {
-	color: var(--theme-text-primary, #ffffff);
-	background: rgba(var(--theme-navbar-color-rgb, var(--theme-accent-rgb, 0, 164, 220)), 0.28);
+	color: var(--theme-text-primary, #eae8ee);
+	background: rgba(var(--theme-navbar-color-rgb, var(--theme-accent-rgb, 184, 173, 222)), 0.28);
 }
 
 .clock {
 	font-size: 28px;
 	font-weight: 500;
-	color: var(--theme-text-primary, rgba(255, 255, 255, 0.9));
+	color: var(--theme-text-primary, rgba(234, 232, 238, 0.9));
 	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -162,13 +152,13 @@
 	width: 64px;
 	height: 64px;
 	border-radius: 50%;
-	background: linear-gradient(135deg, @accent, var(--theme-accent-secondary, #0077b6));
+	background: @accent;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 30px;
 	font-weight: 600;
-	color: var(--theme-on-accent, #fff);
+	color: var(--theme-on-accent, #0f0d13);
 }
 
 .expandableBtn {
@@ -245,7 +235,7 @@
 		flex-wrap: wrap;
 		justify-content: center;
 		border-radius: 24px;
-		background: rgba(var(--theme-surface-rgb, 26, 26, 26), 0.97);
+		background: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.97);
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 	}
 }
@@ -255,17 +245,4 @@
 	min-height: 58px;
 	font-size: 20px;
 	margin-left: 4px;
-}
-
-// The pill colors themselves come from the theme's nav color cycle, so this
-// block only carries the chrome the cycle can't express.
-:global(html[data-theme-id='neon_pulse']) {
-	.navPill {
-		box-shadow: 0 0 6px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.35);
-	}
-
-	.clock {
-		color: var(--theme-on-surface, #00e5ff);
-		text-shadow: 0 0 8px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.35);
-	}
 }

@@ -1,4 +1,4 @@
-@accent: var(--theme-accent, #00a4dc);
+@accent: var(--theme-accent, #b8adde);
 
 @import '../../styles/mixins.less';
 
@@ -9,9 +9,9 @@
 	right: 0;
 	bottom: 0;
 	overflow: hidden;
-	background: var(--theme-background, #101010);
-	background: -webkit-linear-gradient(315deg, var(--theme-background, #101010) 0%, var(--theme-surface, #1a1a1a) 100%);
-	background: linear-gradient(135deg, var(--theme-background, #101010) 0%, var(--theme-surface, #1a1a1a) 100%);
+	background: var(--theme-background, #0f0d13);
+	background: -webkit-linear-gradient(315deg, var(--theme-background, #0f0d13) 0%, var(--theme-surface, #1a181f) 100%);
+	background: linear-gradient(135deg, var(--theme-background, #0f0d13) 0%, var(--theme-surface, #1a181f) 100%);
 }
 
 .content {
@@ -70,7 +70,7 @@
 .libraryTitle {
 	font-size: 38px;
 	font-weight: 300;
-	color: var(--theme-text-primary, white);
+	color: var(--theme-text-primary, #eae8ee);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -81,7 +81,7 @@
 .itemCount {
 	font-size: 17px;
 	color: rgba(255, 255, 255, 0.4);
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.4);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.4);
 	margin-left: 17px;
 	font-weight: 400;
 	white-space: nowrap;
@@ -107,7 +107,7 @@
 	background: none;
 	border: 2px solid transparent;
 	border-radius: 6px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	font-size: 26px;
 	font-weight: 600;
 	padding: 2px 8px;
@@ -116,22 +116,22 @@
 
 	&:focus {
 		outline: none;
-		color: var(--theme-text-primary, white);
+		color: var(--theme-text-primary, #eae8ee);
 		border-color: @accent;
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
 	}
 }
 
 .breadcrumbSep {
 	font-size: 28px;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.3));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.3));
 	margin: 0 4px;
 }
 
 .breadcrumbCurrent {
 	font-size: 32px;
 	font-weight: 700;
-	color: var(--theme-text-primary, white);
+	color: var(--theme-text-primary, #eae8ee);
 	padding: 2px 8px;
 }
 
@@ -156,7 +156,7 @@
 	font-size: 19px;
 	font-weight: 700;
 	line-height: 1.2;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	text-shadow: 0 0 4px rgba(0, 0, 0, 0.54);
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -167,7 +167,7 @@
 	font-size: 17px;
 	line-height: 1.2;
 	color: rgba(255, 255, 255, 0.6);
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.6);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.6);
 	text-shadow: 0 0 4px rgba(0, 0, 0, 0.54);
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -187,7 +187,7 @@
 .focusedName {
 	font-size: 29px;
 	font-weight: 600;
-	color: var(--theme-text-primary, white);
+	color: var(--theme-text-primary, #eae8ee);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -208,7 +208,7 @@
 	font-size: 20px;
 	font-weight: 500;
 	color: rgba(255, 255, 255, 0.7);
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.7);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.7);
 }
 
 .metaPill {
@@ -216,19 +216,19 @@
 	border-radius: 6px;
 	font-size: 16px;
 	font-weight: 900;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .metaPillLive {
-	background: #22c55e;
+	background: #78c995;
 }
 
 .metaPillEnded {
-	background: #ef4444;
+	background: #ee757c;
 }
 
 .metaPillRating {
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
 }
 
 /* ── Toolbar ─────────────────────────────────────────────── */
@@ -253,7 +253,7 @@
 }
 
 .toolbarBtn:focus .toolbarIcon {
-	fill: var(--theme-background, #101010);
+	fill: var(--theme-background, #0f0d13);
 }
 
 /* ── Letter Navigation ───────────────────────────────────── */
@@ -278,7 +278,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	color: rgba(255, 255, 255, 0.85);
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.85);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.85);
 	font-size: 22px;
 	font-weight: 500;
 	cursor: pointer;
@@ -318,7 +318,7 @@
 	padding: 8px;
 	border-radius: 24px;
 	background: rgba(30, 30, 40, 0.72);
-	background: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.72);
+	background: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.72);
 }
 
 .barSearch {
@@ -338,8 +338,8 @@
 }
 
 .barButton:focus .toolbarIcon {
-	fill: #101010;
-	fill: var(--theme-background, #101010);
+	fill: #0f0d13;
+	fill: var(--theme-background, #0f0d13);
 }
 
 /* Bare until focused, then filled the way the toolbar buttons are. The icons and the
@@ -355,19 +355,19 @@
 	border: 3px solid transparent;
 	border-radius: 16px;
 	background: none;
-	color: #ffffff;
-	color: var(--theme-on-surface, #ffffff);
+	color: #eae8ee;
+	color: var(--theme-on-surface, #eae8ee);
 	white-space: nowrap;
 	cursor: pointer;
 
 	&:focus {
 		outline: none;
-		background: #ffffff;
-		background: var(--theme-on-surface, #ffffff);
-		border-color: #ffffff;
-		border-color: var(--theme-focus-border-color, #ffffff);
-		color: #101010;
-		color: var(--theme-background, #101010);
+		background: #eae8ee;
+		background: var(--theme-on-surface, #eae8ee);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		color: #0f0d13;
+		color: var(--theme-background, #0f0d13);
 	}
 }
 
@@ -428,9 +428,9 @@
 	padding: 36px 30px 24px;
 	overflow: hidden;
 	background: rgba(22, 22, 22, 0.88);
-	background: rgba(var(--theme-surface-rgb, 22, 22, 22), 0.88);
+	background: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.88);
 	border-right: 1px solid rgba(255, 255, 255, 0.06);
-	border-right: 1px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.06);
+	border-right: 1px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.06);
 }
 
 .contentDocked {
@@ -487,7 +487,7 @@
 	margin-top: 20px;
 	padding-top: 24px;
 	border-top: 1px solid rgba(255, 255, 255, 0.08);
-	border-top: 1px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
+	border-top: 1px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
 }
 
 /* Seven letters to a row, from a fixed width rather than a grid the older engines lack. */
@@ -580,11 +580,11 @@
 		z-index: 10;
 
 		.itemCardInner {
-			transform: scale(1.05);
+			transform: scale(1.06);
 		}
 
 		.poster {
-			border-color: var(--theme-focus-border-color, #ffffff);
+			border-color: var(--theme-focus-border-color, #f1eff5);
 		}
 	}
 }
@@ -612,7 +612,7 @@
 	border: 3px solid transparent;
 	border-radius: 8px;
 	transition: border-color 0.2s ease;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.05);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.05);
 
 	:global(.perf-low) &,
 	:global(.perf-mid) & {
@@ -635,7 +635,7 @@
 	height: 270px;
 	border: 3px solid transparent;
 	border-radius: 8px;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.05);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.05);
 	display: -webkit-flex;
 	display: flex;
 	-webkit-align-items: center;
@@ -647,7 +647,7 @@
 .placeholderIcon {
 	width: 60px;
 	height: 60px;
-	fill: var(--theme-text-muted, rgba(255, 255, 255, 0.3));
+	fill: var(--theme-text-muted, rgba(234, 232, 238, 0.3));
 }
 
 /* ── Status Bar ──────────────────────────────────────────── */
@@ -663,12 +663,12 @@
 	-webkit-flex: 1;
 	flex: 1;
 	font-size: 14px;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.35));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.35));
 }
 
 .statusCount {
 	font-size: 14px;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.35));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.35));
 }
 
 /* ── Loading / Empty states ──────────────────────────────── */
@@ -716,7 +716,7 @@
 	justify-content: center;
 	height: 100%;
 	font-size: 24px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.5));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.5));
 }
 
 /* ── Sort & Filter Slide-Out Panel ───────────────────────── */
@@ -739,7 +739,7 @@
 	width: 445px;
 	height: 100%;
 	box-sizing: border-box;
-	background: rgba(var(--theme-surface-rgb, 20, 20, 40), 0.92);
+	background: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.92);
 	backdrop-filter: blur(16px) saturate(1.3);
 	-webkit-backdrop-filter: blur(16px) saturate(1.3);
 	padding: 40px 32px;
@@ -753,7 +753,7 @@
 	}
 
 	animation: slideIn 0.25s ease-out;
-	border-left: 1px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
+	border-left: 1px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
 }
 
 @keyframes slideIn {
@@ -768,12 +768,12 @@
 .sortPanelTitle {
 	font-size: 32px;
 	font-weight: 700;
-	color: var(--theme-text-primary, white);
+	color: var(--theme-text-primary, #eae8ee);
 	margin: 0 0 32px 0;
 }
 
 .filterSection {
-	border-top: 1px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1);
+	border-top: 1px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1);
 	padding-top: 24px;
 
 	/* The panel title already sits above the first group, so it needs no line of its own. */
@@ -801,7 +801,7 @@
 
 	&:focus {
 		outline: none;
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1);
 		border-color: @accent;
 	}
 }
@@ -813,7 +813,7 @@
 .sectionHeaderLabel {
 	font-size: 15px;
 	font-weight: 600;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.45));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.45));
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	margin-left: 10px;
@@ -821,7 +821,7 @@
 
 	.sectionHeader:focus &,
 	.sectionHeaderOpen & {
-		color: var(--theme-text-primary, white);
+		color: var(--theme-text-primary, #eae8ee);
 	}
 }
 
@@ -843,7 +843,7 @@
 	height: 18px;
 	-webkit-flex-shrink: 0;
 	flex-shrink: 0;
-	fill: var(--theme-text-muted, rgba(255, 255, 255, 0.45));
+	fill: var(--theme-text-muted, rgba(234, 232, 238, 0.45));
 	-webkit-transition: -webkit-transform 0.15s ease;
 	transition: transform 0.15s ease;
 }
@@ -863,7 +863,7 @@
 	width: 100%;
 	.theme-chip();
 	padding: 14px 16px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.8));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.8));
 	font-size: 18px;
 	cursor: pointer;
 	transition: all 0.15s ease;
@@ -874,13 +874,13 @@
 
 	&:focus {
 		outline: none;
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1);
 		border-color: @accent;
-		color: var(--theme-text-primary, white);
+		color: var(--theme-text-primary, #eae8ee);
 	}
 
 	&.sortOptionActive {
-		color: var(--theme-text-primary, white);
+		color: var(--theme-text-primary, #eae8ee);
 	}
 }
 
@@ -908,7 +908,7 @@
 .facetNoResults {
 	padding: 12px 16px;
 	font-size: 15px;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.45));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.45));
 }
 
 /* Radio circle */
@@ -923,7 +923,7 @@
 	height: 22px;
 	min-width: 22px;
 	border-radius: 50%;
-	border: 2px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.35);
+	border: 2px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.35);
 	transition: border-color 0.15s ease;
 
 	.sortOptionActive & {
@@ -951,7 +951,7 @@
 	height: 22px;
 	min-width: 22px;
 	border-radius: 4px;
-	border: 2px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.35);
+	border: 2px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.35);
 	transition: all 0.15s ease;
 	background: none;
 
@@ -964,14 +964,14 @@
 .checkIcon {
 	width: 16px;
 	height: 16px;
-	fill: var(--theme-on-accent, white);
+	fill: var(--theme-on-accent, #0f0d13);
 }
 
 /* ── Settings Panel Rows ─────────────────────────────────── */
 .settingsHeader {
 	font-size: 14px;
 	font-weight: 600;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.4));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.4));
 	text-transform: uppercase;
 	letter-spacing: 1.5px;
 	margin-bottom: 4px;
@@ -1005,93 +1005,13 @@
 .settingLabel {
 	font-size: 19px;
 	font-weight: 600;
-	color: var(--theme-text-primary, white);
+	color: var(--theme-text-primary, #eae8ee);
 }
 
 .settingValue {
 	font-size: 16px;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.55));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.55));
 	margin-top: 4px;
-}
-
-:global(html[data-theme-id='neon_pulse']) {
-	.libraryTitle,
-	.focusedName,
-	.sortPanelTitle,
-	.modalTitle,
-	.musicLibraryTitle,
-	.musicSectionTitle,
-	.settingLabel {
-		color: var(--theme-accent, #ff2e92);
-		text-shadow: var(--theme-text-glow, 0 0 8px rgba(255, 46, 146, 0.35));
-		font-family: 'NeonPulseDisplay', sans-serif;
-		font-weight: bold;
-		letter-spacing: 0.4px;
-	}
-
-	.itemCount,
-	.focusedMeta,
-	.metaItem,
-	.statusText,
-	.statusCount,
-	.sectionHeaderLabel,
-	.settingsHeader,
-	.settingValue,
-	.cardSubtitle,
-	.musicViewLabel,
-	.pillValue {
-		color: var(--theme-on-surface, #00e5ff);
-	}
-
-	.toolbarIcon,
-	.pillIcon {
-		fill: var(--theme-on-surface, #00e5ff);
-	}
-
-	.barButton:focus .toolbarIcon {
-		fill: var(--theme-on-surface, #00e5ff);
-	}
-
-	.itemCard:focus .poster,
-	.itemCard:focus .posterPlaceholder,
-	.itemCard.focused .poster,
-	.itemCard.focused .posterPlaceholder {
-		border-color: var(--theme-accent, #ff2e92);
-		box-shadow: 0 0 12px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.35);
-	}
-
-	.toolbarBtn:focus,
-	.barButton:focus,
-	.barPill:focus,
-	.dockRow:focus,
-	.musicHomeBtn:focus,
-	.musicViewBtn:focus,
-	.letterButton:focus,
-	.sortOption:focus,
-	.settingRow:focus,
-	.breadcrumbItem:focus {
-		border-color: var(--theme-accent, #ff2e92);
-		background: rgba(var(--theme-accent-rgb, 255, 46, 146), 0.15);
-	}
-
-	.letterButton.active {
-		background: var(--theme-accent, #ff2e92);
-		color: var(--theme-on-accent, #fff);
-		box-shadow: 0 0 8px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.35);
-	}
-
-	.sortOption.sortOptionActive {
-		background: rgba(var(--theme-accent-rgb, 255, 46, 146), 0.12);
-	}
-
-	.radioFill {
-		background: var(--theme-accent, #ff2e92);
-	}
-
-	.barPill:focus,
-	.dockRow:focus {
-		color: var(--theme-on-surface, #00e5ff);
-	}
 }
 
 // Gap fallbacks, see styles/mixins.less. These sit last so a child that

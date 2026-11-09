@@ -16,7 +16,7 @@ jest.mock('react/jsx-dev-runtime', () => {
 });
 
 jest.mock('../../context/SettingsContext', () => ({
-	useSettings: () => ({settings: require('../../context/defaultSettings').defaultSettings, activeTheme: require('../../theme/themeRegistry').resolveThemeById('moonfin')})
+	useSettings: () => ({settings: require('../../context/defaultSettings').defaultSettings, activeTheme: require('../../theme/themeRegistry').resolveThemeById('shikkoku')})
 }));
 
 let mockOnXbox = false;

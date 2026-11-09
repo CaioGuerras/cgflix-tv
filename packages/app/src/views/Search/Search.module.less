@@ -10,7 +10,7 @@
 	bottom: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
-	background: var(--theme-background, #0a0a0a);
+	background: var(--theme-background, #0f0d13);
 	padding-top: 80px;
 }
 
@@ -46,9 +46,9 @@
 }
 
 .searchInputFocused {
-	border-color: var(--theme-focus-border-color, #ffffff);
+	border-color: var(--theme-focus-border-color, #f1eff5);
 	background: var(--theme-input-focused, rgba(255, 255, 255, 0.15));
-	box-shadow: var(--theme-focus-glow, 0 0 20px rgba(0, 164, 220, 0.3));
+	box-shadow: var(--theme-focus-glow, none);
 }
 
 .searchIcon {
@@ -56,7 +56,7 @@
 	height: 24px;
 	margin-right: 12px;
 	opacity: 0.6;
-	color: var(--theme-on-surface, #ffffff);
+	color: var(--theme-on-surface, #eae8ee);
 	fill: currentColor;
 }
 
@@ -65,12 +65,12 @@
 	background: transparent;
 	border: none;
 	outline: none;
-	color: var(--theme-on-surface, #ffffff);
+	color: var(--theme-on-surface, #eae8ee);
 	font-size: 1rem;
 	font-weight: 400;
 
 	input::placeholder {
-		color: var(--theme-text-muted, rgba(255, 255, 255, 0.5));
+		color: var(--theme-text-muted, rgba(234, 232, 238, 0.5));
 	}
 
 	&:focus {
@@ -81,7 +81,7 @@
 .clearBtn {
 	background: transparent;
 	border: none;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	font-size: 24px;
 	cursor: pointer;
 	padding: 0 8px;
@@ -90,7 +90,7 @@
 
 	&:hover,
 	&:focus {
-		color: var(--theme-text-primary, #ffffff);
+		color: var(--theme-text-primary, #eae8ee);
 		outline: none;
 	}
 }
@@ -106,14 +106,14 @@
 	background: transparent;
 	border: 3px solid transparent;
 	border-radius: 50%;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	cursor: pointer;
 	padding: 0;
 
 	&:focus {
 		outline: none;
-		color: var(--theme-text-primary, #ffffff);
-		border-color: var(--theme-focus-border-color, #ffffff);
+		color: var(--theme-text-primary, #eae8ee);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 		background: var(--theme-input-focused, rgba(255, 255, 255, 0.15));
 	}
 }
@@ -146,12 +146,12 @@
 		font-size: 28px;
 		font-weight: 600;
 		margin: 0 0 10px 0;
-		color: var(--theme-text-primary, rgba(255, 255, 255, 0.9));
+		color: var(--theme-text-primary, rgba(234, 232, 238, 0.9));
 	}
 
 	p {
 		font-size: 18px;
-		color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+		color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 		margin: 0;
 	}
 }
@@ -172,7 +172,7 @@
 	font-size: 24px;
 	font-weight: 600;
 	margin: 0;
-	color: var(--theme-text-primary, rgba(255, 255, 255, 0.9));
+	color: var(--theme-text-primary, rgba(234, 232, 238, 0.9));
 }
 
 .recentClear {
@@ -181,14 +181,14 @@
 	background: transparent;
 	border: 2px solid transparent;
 	border-radius: 6px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	cursor: pointer;
 
 	&:hover,
 	&:focus {
-		background: var(--theme-accent, #00a4dc);
-		border-color: var(--theme-accent, #00a4dc);
-		color: var(--theme-text-primary, rgba(255, 255, 255, 0.9));
+		background: var(--theme-button-focused, #eae8ee);
+		border-color: var(--theme-accent, #b8adde);
+		color: var(--theme-on-button-focused, #0f0d13);
 		outline: none;
 	}
 }
@@ -205,17 +205,17 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1);
-	border: 2px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1);
+	border: 2px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
 	border-radius: 24px;
-	color: var(--theme-text-primary, rgba(255, 255, 255, 0.9));
+	color: var(--theme-text-primary, rgba(234, 232, 238, 0.9));
 	cursor: pointer;
 	transition: all 0.2s;
 
 	&:hover,
 	&:focus {
-		background: var(--theme-accent, #00a4dc);
-		border-color: var(--theme-accent, #00a4dc);
+		background: var(--theme-button-focused, #eae8ee);
+		border-color: var(--theme-accent, #b8adde);
 		outline: none;
 	}
 }
@@ -227,7 +227,7 @@
 
 	p {
 		font-size: 18px;
-		color: var(--theme-text-secondary, rgba(255, 255, 255, 0.7));
+		color: var(--theme-text-secondary, rgba(234, 232, 238, 0.7));
 		margin-top: 20px;
 	}
 }
@@ -250,13 +250,13 @@
 	font-size: 22px;
 	font-weight: 600;
 	margin: 0 0 12px 0;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 }
 
 .rowCount {
 	font-size: 16px;
 	font-weight: 400;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.5));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.5));
 }
 
 .rowScroller {
@@ -301,11 +301,11 @@
 
 	&:focus {
 		outline: none;
-		transform: scale(1.08);
+		transform: scale(1.06);
 		z-index: 10;
 
 		.cardImg {
-			border-color: var(--theme-focus-border-color, #ffffff);
+			border-color: var(--theme-focus-border-color, #f1eff5);
 		}
 	}
 }
@@ -325,7 +325,7 @@
 .cardImg {
 	position: relative;
 	width: 100%;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
 	border: 3px solid transparent;
 	border-radius: 8px;
 	overflow: hidden;
@@ -364,7 +364,7 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-size: 40px;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.2);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.2);
 }
 
 .windowPlaceholder {
@@ -392,7 +392,7 @@
 	font-size: 15px;
 	font-weight: 600;
 	margin: 8px 0 2px 0;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -400,7 +400,7 @@
 
 .cardSubtitle {
 	font-size: 13px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -415,7 +415,7 @@
 	background: rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.75);
 	border-radius: 4px;
 	font-size: 12px;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	font-weight: 500;
 	max-width: 120px;
 	overflow: hidden;

@@ -57,7 +57,7 @@
 }
 
 .subtitleText {
-	color: #fff;
+	color: #dbd9d5;
 	font-size: 36px;
 	font-weight: 500;
 	padding: 8px 16px;
@@ -126,7 +126,7 @@
 	font-size: 27px;
 	font-weight: 600;
 	line-height: 1.2;
-	color: #fff;
+	color: #dbd9d5;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -142,10 +142,10 @@
 	flex-shrink: 0;
 	padding: 6px 15px;
 	border-radius: 6px;
-	background: var(--accent-color, #00a4dc);
+	background: var(--accent-color, #dcb875);
 	font-size: 24px;
 	font-weight: 700;
-	color: #fff;
+	color: #000000;
 }
 
 .liveChannelInfo {
@@ -156,7 +156,7 @@
 .liveChannelName {
 	font-size: 27px;
 	font-weight: 600;
-	color: #fff;
+	color: #dbd9d5;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -203,7 +203,7 @@
 
 .liveProgressFill {
 	height: 100%;
-	background: var(--accent-color, #00a4dc);
+	background: var(--accent-color, #dcb875);
 }
 
 .liveTimeLabels {
@@ -275,7 +275,7 @@
 	transform: translateX(-50%);
 	background: rgba(0, 0, 0, 0.78);
 	border: 2px solid rgba(255, 255, 255, 0.45);
-	color: #fff;
+	color: #dbd9d5;
 	padding: 8px 15px;
 	border-radius: 12px;
 	font-size: 18px;
@@ -304,7 +304,7 @@
 	cursor: pointer;
 	transition: all 0.2s ease;
 	outline: none;
-	color: #fff;
+	color: #dbd9d5;
 	font-size: 30px;
 
 	svg {
@@ -322,7 +322,7 @@
 .controlBtn:hover,
 .controlBtn:focus {
 	background: rgba(255, 255, 255, 0.22);
-	border-color: #fff;
+	border-color: var(--theme-focus-border-color, #e0deda);
 }
 
 .controlBtn:hover img,
@@ -349,7 +349,7 @@
 
 /* Active state for toggle buttons (shuffle, repeat, sleep, zoom) */
 .controlBtnActive {
-	color: var(--accent-color, #00a4dc);
+	color: var(--accent-color, #dcb875);
 }
 
 /* Live TV buttons are always-visible chips, matching moonfin-core's live player */
@@ -367,8 +367,8 @@
 
 .liveBtn:hover,
 .liveBtn:focus {
-	background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.3);
-	border-color: var(--accent-color, #00a4dc);
+	background: rgba(var(--theme-accent-rgb, 220, 184, 117), 0.3);
+	border-color: var(--accent-color, #dcb875);
 }
 
 /* Progress Container */
@@ -413,7 +413,7 @@
 .progressBar {
 	position: relative;
 	height: 6px;
-	background: #404040;
+	background: #343330;
 	border-radius: 3px;
 	overflow: visible;
 	margin-bottom: 8px;
@@ -435,7 +435,7 @@
 
 .progressFill {
 	height: 100%;
-	background: var(--accent-color, #00a4dc);
+	background: var(--accent-color, #dcb875);
 	width: 100%;
 	transform: scaleX(0);
 	-webkit-transform: scaleX(0);
@@ -452,7 +452,7 @@
 	left: 0%;
 	width: 21px;
 	height: 21px;
-	background: var(--accent-color, #00a4dc);
+	background: var(--accent-color, #dcb875);
 	border-radius: 50%;
 	transform: translate(-50%, -50%);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
@@ -462,7 +462,7 @@
 
 /* The only focus affordance on the bar is the thumb turning white, like core */
 .progressBar:focus .seekIndicator {
-	background: #ffffff;
+	background: #dbd9d5;
 }
 
 // A mark where each chapter starts, taller than the track so it reads as a mark and not a gap.
@@ -485,7 +485,7 @@
 	left: 0;
 	transform: translateX(-50%);
 	margin-bottom: 16px;
-	background: #282828;
+	background: #1d1c1a;
 	border-radius: 8px;
 	overflow: hidden;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
@@ -507,7 +507,7 @@
 .trickplayTextContainer {
 	padding: 8px 12px;
 	text-align: center;
-	background: #282828;
+	background: #1d1c1a;
 }
 
 .trickplayChapterName {
@@ -523,7 +523,7 @@
 .trickplayTime {
 	font-size: 18px;
 	font-weight: 600;
-	color: #fff;
+	color: #dbd9d5;
 }
 
 .trickplayBubble.noTrickplay {
@@ -570,34 +570,10 @@
 	to { opacity: 1; }
 }
 
-:global(html[data-theme-id='neon_pulse']) {
-	.audioModeBackground {
-		background: linear-gradient(
-			135deg,
-			var(--theme-background, #0b0420) 0%,
-			var(--theme-surface, #1e0a3f) 55%,
-			var(--theme-surface-variant, #1e0a3f) 100%
-		);
-	}
-
-	.audioTrackTitle,
-	.audioTrackArtist,
-	.audioTrackAlbum,
-	.progressBar,
-	.progressFill,
-	.progressBar:focus,
-	.subtitleText {
-		color: var(--theme-on-surface, #00e5ff);
-		text-shadow:
-			0 0 2px rgba(0, 0, 0, 0.9),
-			0 0 10px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.45);
-	}
-}
-
 .modalContent {
 	.glass-panel(16px);
 	padding: 30px 0;
-	background-color: rgba(var(--theme-surface-rgb, 24, 24, 24), 0.94);
+	background-color: rgba(var(--theme-surface-rgb, 16, 15, 14), 0.94);
 	background-image: none;
 	border-radius: 20px;
 	max-width: 660px;
@@ -629,7 +605,7 @@
 .modalTitle {
 	font-size: 30px;
 	font-weight: 700;
-	color: #fff;
+	color: #dbd9d5;
 	margin: 0 0 18px 0;
 	text-align: left;
 	padding: 0 36px 18px 36px;
@@ -660,7 +636,7 @@
 .trackName {
 	font-size: 24px;
 	font-weight: 600;
-	color: #fff;
+	color: #dbd9d5;
 }
 
 .trackInfo {
@@ -719,9 +695,9 @@
 }
 
 .lyricLineActive {
-	background: rgba(0, 164, 220, 0.25);
-	border: 1px solid rgba(0, 164, 220, 0.6);
-	transform: scale(1.02);
+	background: rgba(220, 184, 117, 0.25);
+	border: 1px solid rgba(220, 184, 117, 0.6);
+	transform: scale(1.06);
 }
 
 .lyricLinePassive {
@@ -768,21 +744,21 @@
 
 .chapterItem:hover,
 .chapterItem:focus {
-	background: rgba(0, 164, 220, 0.3);
-	border-color: var(--accent-color, #00a4dc);
-	transform: scale(1.03) translateX(8px);
-	box-shadow: 0 6px 20px rgba(0, 164, 220, 0.5);
+	background: rgba(220, 184, 117, 0.3);
+	border-color: var(--accent-color, #dcb875);
+	transform: scale(1.06) translateX(8px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
 }
 
 .chapterItem.currentChapter {
-	background: rgba(0, 164, 220, 0.25);
-	border-color: rgba(0, 164, 220, 0.6);
+	background: rgba(220, 184, 117, 0.25);
+	border-color: rgba(220, 184, 117, 0.6);
 }
 
 .chapterTime {
 	font-size: 26px;
 	font-weight: 700;
-	color: var(--accent-color, #00a4dc);
+	color: var(--accent-color, #dcb875);
 	min-width: 120px;
 	margin-right: 30px;
 }
@@ -790,7 +766,7 @@
 .chapterName {
 	font-size: 24px;
 	font-weight: 500;
-	color: #fff;
+	color: #dbd9d5;
 	flex: 1;
 }
 
@@ -822,16 +798,16 @@
 }
 
 .infoSection:focus {
-	border-color: var(--accent-color, #00a4dc);
-	background: rgba(0, 164, 220, 0.1);
+	border-color: var(--accent-color, #dcb875);
+	background: rgba(220, 184, 117, 0.1);
 }
 
 .infoHeader {
 	font-size: 26px;
 	font-weight: 700;
-	color: var(--accent-color, #00a4dc);
+	color: var(--accent-color, #dcb875);
 	margin-bottom: 15px;
-	border-bottom: 2px solid rgba(0, 164, 220, 0.3);
+	border-bottom: 2px solid rgba(220, 184, 117, 0.3);
 	padding-bottom: 10px;
 }
 
@@ -856,37 +832,37 @@
 .infoValue {
 	font-size: 20px;
 	font-weight: 700;
-	color: #fff;
+	color: #dbd9d5;
 	text-align: right;
 }
 
 .infoRow.infoHighlight {
-	background: linear-gradient(90deg, rgba(138, 43, 226, 0.15) 0%, rgba(0, 164, 220, 0.15) 100%);
+	background: linear-gradient(90deg, rgba(220, 184, 117, 0.15) 0%, rgba(220, 184, 117, 0.15) 100%);
 	border-radius: 6px;
 	padding: 15px 12px;
-	border: 1px solid rgba(138, 43, 226, 0.4);
+	border: 1px solid rgba(220, 184, 117, 0.4);
 }
 
 .infoRow.infoHighlight .infoLabel {
-	color: #b57bff;
+	color: #dcb875;
 	font-weight: 700;
 }
 
 .infoRow.infoHighlight .infoValue {
-	color: #00d4ff;
+	color: #dcb875;
 	font-weight: 800;
 }
 
 .infoRow.infoWarning {
-	background: rgba(255, 193, 7, 0.1);
+	background: rgba(227, 182, 103, 0.1);
 	border-radius: 6px;
 	padding: 15px 12px;
-	border: 1px solid rgba(255, 193, 7, 0.3);
+	border: 1px solid rgba(227, 182, 103, 0.3);
 }
 
 .infoRow.infoWarning .infoLabel,
 .infoRow.infoWarning .infoValue {
-	color: #ffc107;
+	color: #e3b667;
 }
 
 /* Next Episode Overlay */
@@ -897,7 +873,7 @@
 	align-items: center;
 	justify-content: center;
 	height: 100%;
-	color: #fff;
+	color: #dbd9d5;
 	text-align: center;
 }
 
@@ -945,7 +921,7 @@
 	border-radius: 50%;
 	background: rgba(255, 255, 255, 0.1);
 	border: 2px solid rgba(255, 255, 255, 0.2);
-	color: #fff;
+	color: #dbd9d5;
 	font-size: 32px;
 	display: flex;
 	align-items: center;
@@ -956,9 +932,9 @@
 
 .offsetBtn:hover,
 .offsetBtn:focus {
-	background: rgba(0, 164, 220, 0.3);
-	border-color: var(--accent-color, #00a4dc);
-	transform: scale(1.1);
+	background: rgba(220, 184, 117, 0.3);
+	border-color: var(--accent-color, #dcb875);
+	transform: scale(1.06);
 }
 
 .offsetBtn:not(:last-child) {
@@ -972,7 +948,7 @@
 .offsetDisplay {
 	font-size: 48px;
 	font-weight: 700;
-	color: #fff;
+	color: #dbd9d5;
 	min-width: 200px;
 	text-align: center;
 }
@@ -988,7 +964,7 @@
 	background: rgba(255, 255, 255, 0.1);
 	border-radius: 8px;
 	border: 2px solid rgba(255, 255, 255, 0.2);
-	color: #fff;
+	color: #dbd9d5;
 	font-size: 20px;
 	cursor: pointer;
 	transition: all 0.2s ease;
@@ -996,8 +972,8 @@
 
 .actionBtn:hover,
 .actionBtn:focus {
-	background: rgba(0, 164, 220, 0.3);
-	border-color: var(--accent-color, #00a4dc);
+	background: rgba(220, 184, 117, 0.3);
+	border-color: var(--accent-color, #dcb875);
 }
 
 .closeBtn {
@@ -1012,7 +988,7 @@
 
 .closeBtn:hover,
 .closeBtn:focus {
-	color: #fff;
+	color: #dbd9d5;
 	background: rgba(255, 255, 255, 0.1);
 }
 
@@ -1041,20 +1017,20 @@
 
 .settingItem:hover,
 .settingItem:focus {
-	background: rgba(0, 164, 220, 0.3);
-	border-color: var(--accent-color, #00a4dc);
-	transform: scale(1.02);
+	background: rgba(220, 184, 117, 0.3);
+	border-color: var(--accent-color, #dcb875);
+	transform: scale(1.06);
 }
 
 .settingLabel {
 	font-size: 24px;
-	color: #fff;
+	color: #dbd9d5;
 	font-weight: 500;
 }
 
 .settingValue {
 	font-size: 24px;
-	color: var(--accent-color, #00a4dc);
+	color: var(--accent-color, #dcb875);
 	font-weight: 700;
 }
 
@@ -1075,8 +1051,8 @@
 }
 
 .sliderItem:focus-within {
-	background: rgba(0, 164, 220, 0.15);
-	border-color: var(--accent-color, #00a4dc);
+	background: rgba(220, 184, 117, 0.15);
+	border-color: var(--accent-color, #dcb875);
 }
 
 .sliderLabel {
@@ -1085,19 +1061,19 @@
 	align-items: center;
 	margin-bottom: 15px;
 	font-size: 24px;
-	color: #fff;
+	color: #dbd9d5;
 	font-weight: 500;
 }
 
 .sliderValue {
-	color: var(--accent-color, #00a4dc);
+	color: var(--accent-color, #dcb875);
 	font-weight: 700;
 }
 
 .settingsSlider {
 	width: 100%;
-	--slider-active-bg-color: var(--accent-color, #00a4dc);
-	--slider-knob-bg-color: #fff;
+	--slider-active-bg-color: var(--accent-color, #dcb875);
+	--slider-knob-bg-color: #dbd9d5;
 }
 
 .pauseDescriptionOverlay {
@@ -1155,7 +1131,7 @@
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-	color: #fff;
+	color: #dbd9d5;
 	// Scales from the top so the name and role below it stay put
 	transform-origin: top center;
 	transition: transform 0.2s ease;
@@ -1168,7 +1144,7 @@
 	z-index: 10;
 
 	.castPhotoWrap {
-		border-color: #ffffff;
+		border-color: var(--theme-focus-border-color, #e0deda);
 	}
 }
 

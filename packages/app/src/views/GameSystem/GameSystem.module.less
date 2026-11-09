@@ -1,4 +1,4 @@
-@accent: var(--theme-accent, #00a4dc);
+@accent: var(--theme-accent, #b8adde);
 
 @import '../../styles/mixins.less';
 
@@ -9,7 +9,7 @@
 	right: 0;
 	bottom: 0;
 	overflow: hidden;
-	background: var(--theme-background, #101010);
+	background: var(--theme-background, #0f0d13);
 }
 
 .content {
@@ -52,7 +52,7 @@
 .systemName {
 	font-size: 38px;
 	font-weight: 300;
-	color: var(--theme-text-primary, white);
+	color: var(--theme-text-primary, #eae8ee);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -84,7 +84,7 @@
 .focusedName {
 	font-size: 29px;
 	font-weight: 600;
-	color: var(--theme-text-primary, white);
+	color: var(--theme-text-primary, #eae8ee);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -108,21 +108,21 @@
 	font-size: 20px;
 	font-weight: 500;
 	color: rgba(255, 255, 255, 0.7);
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.7);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.7);
 }
 
 .metaIcon {
 	width: 20px;
 	height: 20px;
 	margin-right: 4px;
-	fill: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.7);
+	fill: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.7);
 }
 
 .focusedOverview {
 	margin-top: 7px;
 	font-size: 19px;
 	line-height: 1.25;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.65);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.65);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
@@ -148,7 +148,7 @@
 }
 
 .toolbarBtn:focus .toolbarIcon {
-	fill: var(--theme-background, #101010);
+	fill: var(--theme-background, #0f0d13);
 }
 
 /* ── Alphabet bar ────────────────────────────────────────── */
@@ -172,7 +172,7 @@
 	padding: 0 9px;
 	box-sizing: border-box;
 	color: rgba(255, 255, 255, 0.85);
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.85);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.85);
 	font-size: 22px;
 	font-weight: 500;
 	cursor: pointer;
@@ -251,15 +251,15 @@
 		z-index: 10;
 
 		.itemCardInner {
-			transform: scale(1.05);
+			transform: scale(1.06);
 		}
 
 		.cover {
-			border-color: var(--theme-focus-border-color, #ffffff);
+			border-color: var(--theme-focus-border-color, #f1eff5);
 		}
 
 		.cardTitle {
-			color: var(--theme-text-primary, #ffffff);
+			color: var(--theme-text-primary, #eae8ee);
 		}
 	}
 }
@@ -292,7 +292,7 @@
 	max-height: 64px;
 	font-size: 19px;
 	line-height: 1.2;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.75);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.75);
 	text-shadow: 0 0 4px rgba(0, 0, 0, 0.54);
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -314,29 +314,8 @@
 
 .message {
 	font-size: 28px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.5));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.5));
 	text-align: center;
-}
-
-:global(html[data-theme-id='neon_pulse']) {
-	.systemName,
-	.focusedName {
-		color: var(--theme-accent, #ff2e92);
-		text-shadow: var(--theme-text-glow, 0 0 8px rgba(255, 46, 146, 0.35));
-	}
-
-	.metaItem,
-	.cardTitle {
-		color: var(--theme-on-surface, #00e5ff);
-	}
-
-	.toolbarIcon {
-		fill: var(--theme-on-surface, #00e5ff);
-	}
-
-	.itemCard:focus .cover {
-		border-color: var(--theme-accent, #ff2e92);
-	}
 }
 
 // Gap fallbacks, see styles/mixins.less. These sit last so a child that

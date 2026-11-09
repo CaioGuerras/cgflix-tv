@@ -16,7 +16,6 @@ import {
 	MIN_BUTTON_CONTRAST,
 	isValidHexColor,
 	radiusToCss,
-	shadowToCss,
 	toCssColor,
 	toCssColorWithAlpha,
 	toRgbTriplet
@@ -55,7 +54,7 @@ import itemMenuCss from '../components/ItemContextMenu/ItemContextMenu.module.le
 import skeletonCss from '../components/Skeleton/Skeleton.module.less';
 import playlistSortFilterCss from '../components/PlaylistSortFilterBar/PlaylistSortFilterBar.module.less';
 
-const STYLE_ELEMENT_ID = 'moonfin-theme-overrides';
+const STYLE_ELEMENT_ID = 'heisuca-theme-overrides';
 
 const hexAlpha = (hex) => Number.parseInt(hex.slice(1, 3), 16) / 255;
 
@@ -107,9 +106,9 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	const focusColor = isValidHexColor(options.focusBorderColor)
 		? toCssColor(options.focusBorderColor)
 		: toCssColor(b.focusBorder.color);
-	const focusGlow = b.focusGlow.length ? b.focusGlow.map(shadowToCss).join(', ') : null;
-	const glowOr = (fallback) => focusGlow || fallback;
-	const textGlow = theme.textGlow.length ? theme.textGlow.map(shadowToCss).join(', ') : 'none';
+	// Focus is a plain ring in the focus colour, so no rule here paints a coloured glow.
+	const noGlow = 'none';
+	const cardShadow = '0 8px 24px rgba(0, 0, 0, 0.6)';
 
 	const cardRadius = radiusToCss(b.cardRadius);
 	const chipRadius = radiusToCss(b.chipRadius);
@@ -120,13 +119,10 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 		? os(0.16)
 		: toCssColorWithAlpha(b.cardBorder.color, 0.55);
 
-	// The glow a tile falls back to when the theme carries none of its own, a 14 blur at 0.5
-	// spread in the settings units
-	const tileGlow = glowOr(`0 0 28.7px 0.83px ${accentA(0.22)}`);
 	const focusInk = inkOn(c.buttonFocused);
 	// A focused settings row fills with the theme's focused button colour, and its text turns to
 	// that colour's ink, strong for the title and softer for the lines under it
-	const tileFocus = `background: ${buttonFocused}; border-color: ${accentA(0.72)}; box-shadow: ${tileGlow};`;
+	const tileFocus = `background: ${buttonFocused}; border-color: ${focusColor}; box-shadow: ${noGlow};`;
 	const invertedStrong = `rgba(${focusInk}, 0.87)`;
 	const invertedSoft = `rgba(${focusInk}, 0.54)`;
 	// The sidebar and nav fill with onSurface, which is a colour of its own.
@@ -150,79 +146,26 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 
 	// App shell
 	rule(`body, #root, .${appCss.app}, .${appCss.panelLoader}`, `background: ${background}; color: ${onBackground};`);
-	rule(`.${appCss.loading}`, `background: linear-gradient(135deg, ${background} 0%, ${surface} 50%, ${surfaceVariant} 100%);`);
+	rule(`.${appCss.loading}`, `background: ${background};`);
 	if (theme.fontFamily) {
-		// Neon Pulse keeps its display face for titles and sets body copy in the
-		// condensed companion.
-		const isNeon = theme.id === 'neon_pulse';
-		const bodyFont = isNeon ? 'NeonPulseBody' : theme.fontFamily;
-		const spacing = isNeon ? ' letter-spacing: 0.6px;' : '';
 		// The Enact theme wrapper names a font on itself, so the family has to land
 		// there as well or nothing inside the app inherits it. Buttons and fields
 		// need naming too, since form controls take the browser's face instead of
 		// the one they sit in.
 		rule(
 			'body, #root, .sandstone-theme, button, input, select, textarea',
-			`font-family: '${bodyFont}', sans-serif;${spacing}`
+			`font-family: '${theme.fontFamily}', sans-serif;`
 		);
 	}
 
 	// Nav items rest at 60 percent of the surface text color, and the focused one
 	// fills solid with dark content on top.
 	rule(`.${sidebarCss.sidebarItem}, .${sidebarCss.libraryItem}, .${navBarCss.navBtn}`, `color: ${os(0.6)};`);
-	if (theme.navColorCycle.length) {
-		const cycle = theme.navColorCycle;
-		for (let slot = 1; slot <= 16; slot += 1) {
-			rule(`[data-nav-slot='${slot}']`, `color: ${toCssColor(cycle[(slot - 1) % cycle.length])};`);
-		}
-	}
 	rule(`.${sidebarCss.sidebarItem}:hover, .${sidebarCss.libraryItem}:hover, .${navBarCss.navBtn}:hover`, `color: ${onSurface}; background: ${os(0.14)};`);
-	rule(`.${sidebarCss.sidebarItem}:focus, .${sidebarCss.libraryItem}:focus, .${navBarCss.navBtn}:focus`, `color: ${onSurfaceInk}; background: ${onSurface}; border-color: transparent; box-shadow: ${glowOr('none')};`);
+	rule(`.${sidebarCss.sidebarItem}:focus, .${sidebarCss.libraryItem}:focus, .${navBarCss.navBtn}:focus`, `color: ${onSurfaceInk}; background: ${onSurface}; border-color: transparent; box-shadow: ${noGlow};`);
 	rule(`.${sidebarCss.active}`, `color: ${onSurface}; background: ${accentA(0.24)};`);
 	rule(`.${navBarCss.active}`, `color: ${onSurface}; background: ${accentA(0.28)};`);
 	rule(`.${navBarCss.navPill}`, `border: ${b.navBorder ? `${b.navBorder.width}px solid ${toCssColor(b.navBorder.color)}` : 'none'};`);
-
-	// Under a theme with a face of its own the settings rows stay in Roboto, and only the title,
-	// section headers, value chips and search take the theme's face. A clean screen swaps that face
-	// for its own, and Neon Pulse's title keeps its colour and glow either way.
-	if (theme.fontFamily) {
-		const isNeon = theme.id === 'neon_pulse';
-		const bodyFace = isNeon ? 'NeonPulseBody' : theme.fontFamily;
-		const notClean = `.${settingsCss.viewContainer}:not(.${settingsCss.cleanType})`;
-		rule(
-			`.${settingsCss.viewContainer}, .${settingsCss.viewContainer} button, .${settingsCss.viewContainer} input, .${settingsCss.dialogBarrier}`,
-			`font-family: 'Roboto', sans-serif; letter-spacing: normal;`
-		);
-		rule(`${notClean} .${settingsCss.appBarTitle}`, `font-family: '${theme.fontFamily}', sans-serif;`);
-		rule(
-			`${notClean} .${settingsCss.sectionTitle}, ${notClean} .${settingsCss.valueBubble}, .${settingsCss.searchInput}, .${settingsCss.searchInput} input`,
-			`font-family: '${bodyFace}', sans-serif;${isNeon ? ' letter-spacing: 0.6px;' : ''}`
-		);
-		if (isNeon) {
-			rule(`.${settingsCss.appBarTitle}`, `font-weight: 700; letter-spacing: 0.4px; color: ${accent}; text-shadow: ${textGlow};`);
-		}
-	}
-
-	// The pixel face runs far larger than a normal one, so settings text shrinks to 60 percent
-	// under a pixel theme. Sizes here are in rem so a 720p set scales them too.
-	if (theme.isPixel) {
-		const rem = (dp) => `${(dp * 1.66957 / 24).toFixed(4)}rem`;
-		const dpRem = (dp) => rem(dp * 0.6);
-		const sizes = {
-			appBarTitle: 22, sectionTitle: 12, listItemHeading: 14, listItemCaption: 12, listItemDescriptionSmall: 11,
-			valueBubble: 11, searchInput: 14, dialogTitle: 14, aboutVersion: 14, input: 14, editorHint: 12,
-			editorLead: 14, settingsButton: 14, syncSubtle: 12, syncStatusTitle: 16,
-			syncSwitchLabel: 11, syncChip: 11, syncCaption: 12, syncTransferTitle: 14, syncResetButton: 14, syncMessage: 12
-		};
-		Object.keys(sizes).forEach((name) => {
-			rule(`.${settingsCss[name]}`, `font-size: ${dpRem(sizes[name])};`);
-		});
-		rule(`.${settingsCss.searchInput} input`, `font-size: ${dpRem(14)};`);
-		// Smaller text keeps the line positions full size text has, so a two-line row moves its
-		// lines down
-		rule(`.${settingsCss.bodyTwoLine}`, `padding-top: ${rem(25)};`);
-		rule(`.${settingsCss.bodyTwoLine} .${settingsCss.listItemCaption}`, `margin-top: ${rem(10.85)};`);
-	}
 
 	// Settings
 	rule(`.${panelCss.panel}`, `background: ${background}; border-left: ${b.navBorder ? `${b.navBorder.width}px solid ${toCssColor(b.navBorder.color)}` : '0'};`);
@@ -257,8 +200,8 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	rule(`.${settingsCss.listItemPlain} .${settingsCss.listItemIconPlain}, .${settingsCss.listItemPlain}:focus .${settingsCss.listItemIconPlain}, .${settingsCss.listItemPlain} .${settingsCss.reorderHint}, .${settingsCss.listItemPlain}:focus .${settingsCss.reorderHint}, .${settingsCss.plainCheckbox}`, `color: ${onSurface};`);
 	rule(`.${settingsCss.plainCheckboxOn}`, `color: ${accent};`);
 	// Plain tiles keep the stock dark type's text colours whatever the theme
-	rule(`.${settingsCss.listItemPlain} .${settingsCss.listItemHeading}, .${settingsCss.listItemPlain}:focus .${settingsCss.listItemHeading}`, `color: #e6e0e9;`);
-	rule(`.${settingsCss.listItemPlain} .${settingsCss.listItemCaption}, .${settingsCss.listItemPlain}:focus .${settingsCss.listItemCaption}`, `color: #cac4d0;`);
+	rule(`.${settingsCss.listItemPlain} .${settingsCss.listItemHeading}, .${settingsCss.listItemPlain}:focus .${settingsCss.listItemHeading}`, `color: ${onSurface};`);
+	rule(`.${settingsCss.listItemPlain} .${settingsCss.listItemCaption}, .${settingsCss.listItemPlain}:focus .${settingsCss.listItemCaption}`, `color: ${os(0.7)};`);
 	rule(`.${settingsCss.colorCircle}`, `border: ${chipBorder};`);
 	rule(`.${settingsCss.subtitlePreview}`, `background: linear-gradient(to bottom right, ${surfaceVariant}, ${scrim(0.8)});`);
 	rule(`.${settingsCss.listItem}:focus .${settingsCss.listItemIcon}`, `background: ${accentA(0.22)}; border-color: ${accentA(0.64)}; color: ${invertedSoft};`);
@@ -293,7 +236,7 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	rule(`.${settingsCss.listItem}:focus .${achievementsCss.boardValue}, .${settingsCss.listItem}:focus .${achievementsCss.rankGutter}, .${settingsCss.listItem}:focus .${achievementsCss.reward}`, `color: ${invertedStrong};`);
 	rule(`.${settingsCss.actionButton}`, `background: ${buttonNormal}; color: ${onButtonNormal}; border-color: ${tileBorderColor};`);
 	rule(`.${settingsCss.actionButton}:focus`, `background: ${buttonFocused}; border-color: ${focusColor}; color: ${buttonInk};`);
-	rule(`.${settingsCss.dangerButton}:focus`, `background: ${recordingActive} !important; border-color: ${recordingActive} !important; color: #fff;`);
+	rule(`.${settingsCss.dangerButton}:focus`, `background: ${recordingActive} !important; border-color: ${recordingActive} !important; color: rgb(${inkOn(c.recordingActive)});`);
 	// The editors' buttons, Save filled and the rest as text, focus the way the rows do
 	rule(`.${settingsCss.settingsButton}`, `color: ${accent};`);
 	rule(`.${settingsCss.settingsButtonPrimary}`, `background: ${buttonNormal}; color: ${onButtonNormal};`);
@@ -318,17 +261,17 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	rule(`.${settingsCss.syncCard}:focus .${settingsCss.syncChip}`, `background: rgba(${focusInk}, 0.06); border-color: rgba(${focusInk}, 0.2); color: ${invertedStrong};`);
 	rule(`.${settingsCss.syncCard}:focus .${settingsCss.listItemIcon}`, `background: ${accentA(0.22)}; border-color: ${accentA(0.64)}; color: ${invertedSoft};`);
 	rule(`.${settingsCss.editorHint}, .${settingsCss.editorLead}`, `color: ${onSurface};`);
-	rule(`.${settingsCss.statusMessage}, .${settingsCss.authHint}, .${settingsCss.viewDescription}, .${settingsCss.viewCaption}, .${settingsCss.themeCardDescription}, .${settingsCss.themeStoreMessage}`, `color: ${os(0.7)};`);
+	rule(`.${settingsCss.statusMessage}, .${settingsCss.authHint}, .${settingsCss.viewDescription}, .${settingsCss.viewCaption}, .${settingsCss.themeCardDescription}`, `color: ${os(0.7)};`);
 	rule(`.${settingsCss.statusError}`, `color: ${error};`);
 	rule(`.${settingsCss.loadingMessage}, .${settingsCss.integrationSpec}`, `color: ${os(0.45)};`);
-	rule(`.${settingsCss.themeCardCheck}, .${settingsCss.themeStoreCardAction}`, `color: ${accent};`);
+	rule(`.${settingsCss.themeCardCheck}`, `color: ${accent};`);
 	rule(`.${settingsCss.playbackTimePreview}`, `background: ${surface};`);
 	rule(`.${settingsCss.playbackTimeBar}`, `background: ${rangeTrack};`);
 	rule(`.${settingsCss.playbackTimeBarFill}`, `background: ${rangeProgress};`);
 
 	// Search input
 	rule(`.${searchCss.searchInputWrapper}`, `background: ${inputBackground}; border-color: ${inputBorder};`);
-	rule(`.${searchCss.searchInputFocused}`, `background: ${inputFocused}; border-color: ${focusColor}; box-shadow: ${glowOr('none')};`);
+	rule(`.${searchCss.searchInputFocused}`, `background: ${inputFocused}; border-color: ${focusColor}; box-shadow: ${noGlow};`);
 
 	// Detail screens, classic layout
 	rule(`.${detailsCss.posterBadgeWatched}, .${detailsCss.watchedIndicator}`, `background: ${badgeWatched}; border-color: ${onBadge};`);
@@ -365,14 +308,14 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	rule(`.${detailsCss.seasonEp}:focus`, `background: ${os(0.08)}; border-color: ${focusColor};`);
 	rule(`.${detailsCss.seasonEpCheck}`, `color: ${accent};`);
 	rule(`.${detailsCss.trackItem}`, `background: ${os(0.08)}; border-color: ${os(0.15)};`);
-	rule(`.${detailsCss.trackItem}:focus`, `background: ${accentA(0.3)}; border-color: ${focusColor}; box-shadow: ${glowOr(`0 4px 15px ${accentA(0.4)}`)};`);
-	rule(`.${trackOptionCss.trackOption}:focus`, `background: ${accentA(0.3)};`);
+	rule(`.${detailsCss.trackItem}:focus`, `background: ${os(0.14)}; border-color: ${focusColor}; box-shadow: ${noGlow};`);
+	rule(`.${trackOptionCss.trackOption}:focus`, `background: ${os(0.14)};`);
 	rule(`.${trackOptionCss.trackOption}.${trackOptionCss.selected} .${trackOptionCss.trackIndicator}`, `color: ${accent};`);
 	rule(`.${trackOptionCss.trackName}`, `color: ${onSurface};`);
 	rule(`.${trackOptionCss.trackDivider}`, `background: ${os(0.08)};`);
 	rule(`.${detailsCss.trackPlayed} svg`, `fill: ${accent};`);
 	rule(`.${detailsCss.actionBtn}`, `background: ${os(0.1)}; border-color: ${os(0.2)}; color: ${onBackground};`);
-	rule(`.${detailsCss.actionBtn}:hover, .${detailsCss.actionBtn}:focus`, `background: ${accentA(0.3)}; border-color: ${focusColor};`);
+	rule(`.${detailsCss.actionBtn}:hover, .${detailsCss.actionBtn}:focus`, `background: ${os(0.14)}; border-color: ${focusColor};`);
 	rule(`.${detailsCss.toast}`, `background: ${surfaceA(0.9)}; color: ${onBackground}; border-color: ${os(0.12)};`);
 	rule(`.${detailsCss.trailerCloseBtn}`, `background: ${os(0.15)}; color: ${onBackground};`);
 
@@ -380,7 +323,7 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	rule(`.${playlistSortFilterCss.pill}:focus, .${playlistSortFilterCss.pill}.spottable-focus`, `background: ${focusColor}; border-color: ${focusColor}; color: ${buttonInk};`);
 	rule(`.${playlistSortFilterCss.pillActive}`, `background: ${accentA(0.22)}; border-color: ${accent}; color: ${onBackground};`);
 	rule(`.${playlistSortFilterCss.badge}`, `background: ${accent}; color: ${onBadge};`);
-	rule(`.${playlistSortFilterCss.pill}:focus .${playlistSortFilterCss.badge}, .${playlistSortFilterCss.pill}.spottable-focus .${playlistSortFilterCss.badge}`, `background: #ffffff; color: ${accent};`);
+	rule(`.${playlistSortFilterCss.pill}:focus .${playlistSortFilterCss.badge}, .${playlistSortFilterCss.pill}.spottable-focus .${playlistSortFilterCss.badge}`, `background: ${onSurface}; color: ${onAccent};`);
 	rule(`.${playlistSortFilterCss.clearFiltersBtn}:focus, .${playlistSortFilterCss.clearFiltersBtn}.spottable-focus`, `background: ${focusColor}; border-color: ${focusColor};`);
 
 	// Detail screens, modern layout
@@ -433,7 +376,7 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	// Home screen chrome
 	rule(`.${browseCss.page}`, `background: ${background};`);
 	rule(`.${browseCss.ayaFrame}`, `background: ${background};`);
-	rule(`.${browseCss.ayaFocusRing}`, `border-color: ${focusColor}; box-shadow: ${glowOr(`0 0 18px 1px ${accentA(0.3)}`)};`);
+	rule(`.${browseCss.ayaFocusRing}`, `border-color: ${focusColor}; box-shadow: ${noGlow};`);
 	rule(`.${browseCss.ayaTitle}`, `color: ${onSurface}; text-shadow: 0 0 20px ${scrim(0.72)};`);
 	rule(`.${browseCss.ayaIndicator}`, `background: ${os(0.3)};`);
 	rule(`.${browseCss.ayaIndicatorActive}`, `background: ${onSurface};`);
@@ -467,8 +410,8 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	rule(`.${browseCss.galleryPillOutlined}`, `background: transparent; border-color: ${os(0.55)};`);
 	rule(`.${browseCss.galleryCreditLabel}`, `color: ${accent};`);
 	rule(`.${browseCss.galleryShimmer} span`, `background: ${os(0.1)};`);
-	rule(`.${skeletonCss.box}`, `background-color: ${theme.isGlass ? 'rgba(255, 255, 255, 0.16)' : os(0.14)};`);
-	rule(`.${browseCss.bannerCard}:focus`, `border-color: ${focusColor}; box-shadow: ${glowOr(`0 0 18px ${accentA(0.4)}`)};`);
+	rule(`.${skeletonCss.box}`, `background-color: ${os(0.14)};`);
+	rule(`.${browseCss.bannerCard}:focus`, `border-color: ${focusColor}; box-shadow: ${noGlow};`);
 	rule(`.${browseCss.bannerGradient}`, `background: linear-gradient(to right, ${scrim(0.9)}, ${scrim(0)});`);
 	rule(`.${browseCss.bannerMeta}`, `color: ${os(0.75)};`);
 	rule(`.${browseCss.bannerDot}`, `background: ${os(0.4)};`);
@@ -485,16 +428,16 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	for (const cardCss of [mediaCardCss, modernCardCss]) {
 		rule(`.${cardCss.image}, .${cardCss.placeholder}, .${cardCss.imageContainer}, .${cardCss.genreOverlay}`, `border-radius: ${cardRadius};`);
 		rule(`.${cardCss.image}, .${cardCss.placeholder}`, `border: ${b.cardBorder.width}px solid ${toCssColor(b.cardBorder.color)};`);
-		rule(`.${cardCss.card}:focus .${cardCss.image}`, `border-color: ${focusColor}; border-width: 4px; box-shadow: ${glowOr('0 8px 24px rgba(0, 0, 0, 0.6)')};`);
+		rule(`.${cardCss.card}:focus .${cardCss.image}`, `border-color: ${focusColor}; border-width: ${b.focusBorder.width}px; box-shadow: ${cardShadow};`);
 		rule(`.${cardCss.previewFrame}`, `border-radius: ${cardRadius};`);
-		rule(`.${cardCss.previewRing}`, `border-color: ${focusColor}; border-radius: ${cardRadius}; box-shadow: ${glowOr('0 8px 24px rgba(0, 0, 0, 0.6)')};`);
+		rule(`.${cardCss.previewRing}`, `border-color: ${focusColor}; border-radius: ${cardRadius}; box-shadow: ${cardShadow};`);
 		// The Fire TV WebView only shows a video it can put on its own hardware plane and a
 		// rounded clip keeps it off one, so the stylesheet squares the frame, the ring and the
 		// container around them while a preview is up, which this sheet would otherwise round back
 		rules.push(`${prefix}.vega .${cardCss.previewFrame}, ${prefix}.vega .${cardCss.previewRing}, ${prefix}.vega .${cardCss.imageContainer}.${cardCss.previewHost} { border-radius: 0; }`);
-		rule(`.${cardCss.placeholder}`, `background: linear-gradient(135deg, ${accentA(0.25)} 0%, ${accentA(0.05)} 50%, transparent 100%), ${surfaceVariant};`);
+		rule(`.${cardCss.placeholder}`, `background: ${surfaceVariant};`);
 		rule(`.${cardCss.placeholderTitle}`, `color: ${onSurface};`);
-		rule(`.${cardCss.title}`, `color: ${theme.id === 'neon_pulse' ? accent : onSurface};`);
+		rule(`.${cardCss.title}`, `color: ${onSurface};`);
 		rule(`.${cardCss.progressBar}`, `background: ${scrim(0.54)};`);
 		rule(`.${cardCss.progress}`, `background: ${accent};`);
 		rule(`.${cardCss.watchedBadge}`, `background: ${badgeWatched}; border-color: ${onBadge};`);
@@ -511,17 +454,17 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 		rule(`.${cardCss.seerrMissing} svg`, `fill: ${onBadge};`);
 	}
 	rule(`.${mediaCardCss.seriesName}`, `color: ${onSurface};`);
-	rule(`.${mediaCardCss.episodeInfo}, .${modernCardCss.secondaryTitle}`, `color: ${theme.id === 'neon_pulse' ? onSurface : os(0.6)};`);
+	rule(`.${mediaCardCss.episodeInfo}, .${modernCardCss.secondaryTitle}`, `color: ${os(0.6)};`);
 	rule(`.${modernCardCss.placeholderIcon}`, `color: ${os(0.45)};`);
-	rule(`.${modernCardCss.overview}`, `color: ${theme.id === 'neon_pulse' ? onSurface : os(0.7)};`);
+	rule(`.${modernCardCss.overview}`, `color: ${os(0.7)};`);
 	rule(`.${modernCardCss.platformWebos} .${modernCardCss.image}`, `border-radius: ${bumpRadius(b.cardRadius, 2)};`);
 	rule(`.${modernCardCss.platformWebos} .${modernCardCss.previewFrame}, .${modernCardCss.platformWebos} .${modernCardCss.previewRing}`, `border-radius: ${bumpRadius(b.cardRadius, 2)};`);
 
 	// Row shells
-	rule(`.${mediaRowCss.title}, .${modernRowCss.title}`, `color: ${onSurface}; text-shadow: ${textGlow};`);
+	rule(`.${mediaRowCss.title}, .${modernRowCss.title}`, `color: ${onSurface};`);
 	rule(`.${mediaRowCss.subtitle}, .${modernRowCss.subtitle}`, `color: ${os(0.5)};`);
 	rule(`.${mediaRowCss.seeAll}`, `background: ${os(0.08)}; color: ${os(0.7)};`);
-	rule(`.${mediaRowCss.seeAll}:focus`, `border-color: ${accent}; background: ${accentA(0.22)}; color: ${onSurface}; box-shadow: 0 0 14px 1px ${accentA(0.45)};`);
+	rule(`.${mediaRowCss.seeAll}:focus`, `border-color: ${focusColor}; background: ${os(0.14)}; color: ${onSurface}; box-shadow: ${noGlow};`);
 	rule(`.${mediaRowCss.seeAllChevron}`, `color: ${accent};`);
 
 	// Ratings
@@ -529,26 +472,6 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	rule(`.${ratingsCss.ratingItemPlain}`, `background: transparent;`);
 	rule(`.${ratingsCss.ratingValue}, .${ratingsCss.ratingName}, .${ratingsCss.ratingNameCompact}`, `color: ${onSurface};`);
 	rule(`.${ratingsCss.ratingValueCompact}`, `color: ${onBackground};`);
-
-	// Pixel themes square off every fixed radius.
-	if (theme.isPixel) {
-		rule([
-			`.${sidebarCss.sidebarItem}`, `.${sidebarCss.libraryItem}`, `.${sidebarCss.userBtn}`,
-			`.${navBarCss.navPill}`, `.${navBarCss.navBtn}`,
-			`.${settingsCss.listItem}`, `.${settingsCss.listItemIcon}`, `.${settingsCss.valueBubble}`, `.${settingsCss.dialog}`, `.${panelCss.panel}`, `.${settingsCss.pageAlone}`,
-			`.${settingsCss.themeCard}`, `.${settingsCss.themeCardStripe}`, `.${settingsCss.input}`,
-			`.${settingsCss.actionButton}`, `.${settingsCss.settingsButtonPrimary}`, `.${settingsCss.playbackTimePreview}`, `.${searchCss.searchInputWrapper}`,
-			`.${settingsCss.syncCard}`, `.${settingsCss.syncTransferCard}`, `.${settingsCss.syncChip}`,
-			`.${detailsCss.poster}`, `.${detailsCss.btnAction}`, `.${detailsCss.nextUpCard}`,
-			`.${detailsCss.episodeCard}`, `.${detailsCss.chapterCard}`, `.${detailsCss.extraCard}`,
-			`.${detailsCss.seasonPosterWrapper}`, `.${detailsCss.episodeNumber}`, `.${detailsCss.badge}`,
-			`.${detailsCss.trackItem}`, `.${detailsCss.actionBtn}`, `.${detailsCss.toast}`, `.${detailsCss.seasonEp}`,
-			`.${modernDetailCss.actionBtn}`, `.${modernDetailCss.upNextCard}`,
-			`.${tabBarCss.tabBar}`, `.${tabBarCss.tab}`, `.${overviewCss.spottable}`,
-			`.${browseCss.featuredInfoBox}`, `.${browseCss.bannerCard}`, `.${browseCss.galleryActiveRight}`,
-			`.${browseCss.galleryPill}`, `.${browseCss.makdDots}`, `.${browseCss.featuredIndicators}`
-		].join(', '), 'border-radius: 0;');
-	}
 
 	return rules.join('\n');
 };

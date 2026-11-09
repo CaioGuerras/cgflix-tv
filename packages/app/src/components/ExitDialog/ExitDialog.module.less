@@ -1,4 +1,4 @@
-@accent: var(--theme-accent, #00a4dc);
+@accent: var(--theme-accent, #b8adde);
 
 .overlay {
 	position: fixed;
@@ -15,15 +15,15 @@
 }
 
 .dialog {
-	background: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.85);
+	background: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.85);
 	backdrop-filter: blur(16px) saturate(1.4);
 	-webkit-backdrop-filter: blur(16px) saturate(1.4);
 
 	:global(.perf-low) &,
 	:global(.perf-mid) & {
-		background: rgba(var(--theme-surface-rgb, 30, 30, 40), 0.97);
+		background: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.97);
 	}
-	border: 1px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.12);
+	border: 1px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.12);
 	border-radius: 24px;
 	padding: 40px 48px;
 	min-width: 420px;
@@ -31,20 +31,20 @@
 	text-align: center;
 	box-shadow:
 		0 8px 32px rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.4),
-		inset 0 1px 0 rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
+		inset 0 1px 0 rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
 	animation: scaleIn 0.2s ease;
 }
 
 .title {
 	font-size: 30px;
 	font-weight: 600;
-	color: var(--theme-text-primary, #fff);
+	color: var(--theme-text-primary, #eae8ee);
 	margin: 0 0 12px;
 }
 
 .message {
 	font-size: 20px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	margin: 0 0 36px;
 }
 
@@ -63,8 +63,8 @@
 	outline: none !important;
 	border: 2px solid transparent;
 	min-width: 140px;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1);
-	color: var(--theme-text-primary, #fff);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1);
+	color: var(--theme-text-primary, #eae8ee);
 
 	& ~ & {
 		margin-left: 16px;
@@ -75,20 +75,20 @@
 	}
 
 	&:hover {
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.18);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.18);
 	}
 
 	&:focus {
-		background: var(--accent-color, #00a4dc);
-		border-color: var(--theme-focus-border-color, #fff);
-		color: var(--theme-on-accent, #fff);
-		box-shadow: 0 0 0 1px rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
+		background: var(--accent-color, #b8adde);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		color: var(--theme-on-accent, #0f0d13);
+		box-shadow: 0 0 0 1px rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
 	}
 }
 
 .exitBtn {
 	&:focus {
-		background: var(--theme-button-focused, #00b4ec);
+		background: var(--theme-button-focused, #eae8ee);
 	}
 }
 

@@ -7,7 +7,7 @@
 	right: 0;
 	bottom: 0;
 	z-index: 99999;
-	background: var(--theme-background, #000000);
+	background: var(--theme-background, #0f0d13);
 	cursor: none;
 	opacity: 0;
 	pointer-events: none;
@@ -116,7 +116,7 @@
 	font-size: 42px;
 	font-weight: 700;
 	line-height: 1.2;
-	color: #fff;
+	color: #eae8ee;
 	text-shadow: 0 2px 6px rgba(var(--theme-scrim-rgb, 0, 0, 0), 0.7);
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -148,16 +148,6 @@
 	animation: screensaverOrbit 18s linear infinite;
 }
 
-.gradientFlash {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	opacity: 0;
-	animation: screensaverNeonFlash 4.5s linear infinite;
-}
-
 .gradientAccent {
 	position: absolute;
 	top: 0;
@@ -176,44 +166,21 @@
 	animation: screensaverAccentBreath 18s linear infinite;
 }
 
+// Both washes stay neutral: Shikkoku and Sumi surfaces only, no hue.
 .gradientMoonfin .gradientOrbit {
-	background-image: linear-gradient(to left, #1a0526, #6b2087, #aa5cc3, #9c62c5, #7672cb, #3a8cd4, #00c6ff, #091426);
+	background-image: linear-gradient(to left, #0f0d13, #1a181f, #26242c, #1a181f, #0f0d13, #1a181f, #26242c, #0f0d13);
 }
 
 .gradientMoonfin .gradientAccentInner {
-	background-image: radial-gradient(circle closest-side, rgba(0, 198, 255, 0.58) 0%, rgba(0, 198, 255, 0.1) 65%, rgba(0, 198, 255, 0) 100%);
+	background-image: radial-gradient(circle closest-side, rgba(234, 232, 238, 0.1) 0%, rgba(234, 232, 238, 0.04) 65%, rgba(234, 232, 238, 0) 100%);
 }
 
 .gradientCalm .gradientOrbit {
-	background-image: linear-gradient(to left, #071b0f, #134223, #1f6b38, #2e8b57, #48b369, #68d388, #287a43, #0b2414);
+	background-image: linear-gradient(to left, #000000, #100f0e, #1d1c1a, #100f0e, #000000, #100f0e, #1d1c1a, #000000);
 }
 
 .gradientCalm .gradientAccentInner {
-	background-image: radial-gradient(circle closest-side, rgba(104, 211, 136, 0.58) 0%, rgba(104, 211, 136, 0.1) 65%, rgba(104, 211, 136, 0) 100%);
-}
-
-.gradientAurora .gradientOrbit {
-	background-image: linear-gradient(to left, #02111c, #04483e, #00b894, #00cec9, #6c5ce7, #1a0e3d);
-}
-
-.gradientAurora .gradientAccentInner {
-	background-image: radial-gradient(circle closest-side, rgba(0, 206, 201, 0.58) 0%, rgba(0, 206, 201, 0.1) 65%, rgba(0, 206, 201, 0) 100%);
-}
-
-.gradientNeonPulse .gradientOrbit {
-	background-image: linear-gradient(to left, #080412, #2b004e, #c41264, #9000d0, #00b4d8, #0b2742, #05030d);
-}
-
-// The lit end of the same palette, faded in over the dim one so the whole wash
-// brightens on the beat rather than only the accent.
-.gradientNeonPulse .gradientFlash {
-	background-image: linear-gradient(to left, #080412, #2b004e, #ff78bd, #d466ff, #7affff, #0b2742, #05030d);
-}
-
-.gradientNeonPulse .gradientAccentInner {
-	background-image: radial-gradient(circle closest-side, rgba(255, 94, 171, 0.66) 0%, rgba(255, 94, 171, 0.24) 65%, rgba(255, 94, 171, 0) 100%);
-	animation-name: screensaverNeonAccent;
-	animation-duration: 4.5s;
+	background-image: radial-gradient(circle closest-side, rgba(219, 217, 213, 0.08) 0%, rgba(219, 217, 213, 0.03) 65%, rgba(219, 217, 213, 0) 100%);
 }
 
 @keyframes screensaverOrbit {
@@ -258,28 +225,4 @@
 	75% { opacity: 0.621; }
 	87.5% { opacity: 0.676; }
 	100% { opacity: 0.81; }
-}
-
-@keyframes screensaverNeonAccent {
-	0% { opacity: 0.712; }
-	12.5% { opacity: 0.916; }
-	25% { opacity: 1; }
-	37.5% { opacity: 0.916; }
-	50% { opacity: 0.712; }
-	62.5% { opacity: 0.509; }
-	75% { opacity: 0.424; }
-	87.5% { opacity: 0.509; }
-	100% { opacity: 0.712; }
-}
-
-@keyframes screensaverNeonFlash {
-	0% { opacity: 0.5; }
-	12.5% { opacity: 0.854; }
-	25% { opacity: 1; }
-	37.5% { opacity: 0.854; }
-	50% { opacity: 0.5; }
-	62.5% { opacity: 0.146; }
-	75% { opacity: 0; }
-	87.5% { opacity: 0.146; }
-	100% { opacity: 0.5; }
 }

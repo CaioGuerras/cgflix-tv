@@ -22,7 +22,7 @@
 // The border is painted over the artwork rather than around it. Drawn around, it would make the
 // focused card wider than its neighbours and knock the rail's scrolling out of step.
 .card:focus .artwork:after {
-	border: 3px solid #fff;
+	border: 3px solid var(--theme-focus-border-color, #f1eff5);
 	border-radius: 14px;
 	bottom: 0;
 	content: '';
@@ -38,7 +38,7 @@
 	background: rgba(0, 0, 0, 0.78);
 	border-radius: 14px;
 	bottom: 8px;
-	color: #fff;
+	color: #eae8ee;
 	font-size: 17px;
 	font-weight: 700;
 	left: 8px;
@@ -53,7 +53,7 @@
 // The rail sits straight on the artwork with no scrim under it, so the title carries its own
 // separation.
 .title {
-	color: #fff;
+	color: #eae8ee;
 	display: -webkit-box;
 	font-size: 18px;
 	font-weight: 700;

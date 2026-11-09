@@ -6,9 +6,9 @@
 	bottom: 0;
 	background: linear-gradient(
 		135deg,
-		var(--theme-background, #0a0a1e) 0%,
-		var(--theme-surface, #1a1a3a) 50%,
-		var(--theme-surface-variant, #0f1b3d) 100%
+		var(--theme-background, #0f0d13) 0%,
+		var(--theme-surface, #1a181f) 50%,
+		var(--theme-surface-variant, #26242c) 100%
 	);
 	z-index: 999999;
 	display: flex;
@@ -21,12 +21,12 @@
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-	color: var(--theme-text-primary, #fff);
+	color: var(--theme-text-primary, #eae8ee);
 	padding: 40px;
 }
 
 .icon {
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.4));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.4));
 	margin-bottom: 32px;
 }
 
@@ -38,23 +38,23 @@
 
 .message {
 	font-size: 28px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	margin: 0 0 48px;
 }
 
 .retryButton {
 	padding: 16px 48px;
 	background: var(--theme-button-normal, rgba(255, 255, 255, 0.1));
-	color: var(--theme-on-button-normal, #fff);
-	border: 2px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.3);
+	color: var(--theme-on-button-normal, #eae8ee);
+	border: 2px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.3);
 	border-radius: 8px;
 	font-size: 28px;
 	cursor: pointer;
 	outline: none;
 
 	&:hover, &:focus {
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.4);
-		border-color: var(--theme-focus-border-color, var(--theme-accent, #00a4dc));
-		color: var(--theme-on-button-focused, var(--theme-on-button-normal, #fff));
+		background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.4);
+		border-color: var(--theme-focus-border-color, var(--theme-accent, #b8adde));
+		color: var(--theme-on-button-focused, var(--theme-on-button-normal, #eae8ee));
 	}
 }

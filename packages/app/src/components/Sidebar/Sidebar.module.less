@@ -1,6 +1,6 @@
 @import '../../styles/variables.less';
 
-@accent: var(--accent-color, #00a4dc);
+@accent: var(--accent-color, #b8adde);
 
 // CGFLIX: a floating panel in the top left corner, in the manner of the Apple TV
 // app, rather than a full height rail. It stays painted while collapsed so the
@@ -88,13 +88,13 @@
 	min-width: 50px;
 	border-radius: 50%;
 	// CGFLIX: the brand purple, not the theme's secondary accent, which reads as cyan.
-	background: linear-gradient(135deg, #a855f7, #7e22ce);
+	background: linear-gradient(135deg, #b8adde, #b8adde);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 24px;
 	font-weight: 600;
-	color: var(--theme-on-accent, #fff);
+	color: var(--theme-on-accent, #0f0d13);
 	line-height: 1;
 	margin-right: 14px;
 }
@@ -138,7 +138,7 @@
 	margin: 3px 0;
 	background: transparent;
 	border: 2px solid transparent;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.6));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.6));
 	cursor: pointer;
 	transition: all 0.15s ease;
 	outline: none !important;
@@ -157,21 +157,21 @@
 	}
 
 	&:hover {
-		color: var(--theme-text-primary, #ffffff);
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1);
+		color: var(--theme-text-primary, #eae8ee);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1);
 	}
 
 	&:focus {
-		color: var(--theme-text-primary, #ffffff);
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.14);
-		border-color: var(--theme-focus-border-color, #ffffff);
-		box-shadow: var(--theme-focus-glow, 0 0 0 1px rgba(255, 255, 255, 0.15));
+		color: var(--theme-text-primary, #eae8ee);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.14);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		box-shadow: var(--theme-focus-glow, none);
 	}
 }
 
 .active {
-	color: var(--theme-text-primary, #ffffff);
-	background: rgba(var(--theme-navbar-color-rgb, var(--theme-accent-rgb, 0, 164, 220)), 0.24);
+	color: var(--theme-text-primary, #eae8ee);
+	background: rgba(var(--theme-navbar-color-rgb, var(--theme-accent-rgb, 184, 173, 222)), 0.24);
 }
 
 .sidebarIcon {
@@ -248,7 +248,7 @@
 	padding: 10px 14px 10px 64px;
 	background: transparent;
 	border: 2px solid transparent;
-	color: var(--theme-text-muted, rgba(255, 255, 255, 0.5));
+	color: var(--theme-text-muted, rgba(234, 232, 238, 0.5));
 	cursor: pointer;
 	transition: all 0.15s ease;
 	outline: none !important;
@@ -270,14 +270,14 @@
 	}
 
 	&:hover {
-		color: var(--theme-text-primary, #ffffff);
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1);
+		color: var(--theme-text-primary, #eae8ee);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1);
 	}
 
 	&:focus {
-		color: var(--theme-text-primary, #ffffff);
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.14);
-		border-color: var(--theme-focus-border-color, #ffffff);
+		color: var(--theme-text-primary, #eae8ee);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.14);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -311,19 +311,4 @@
 
 .sidebar.expanded .clock {
 	opacity: 1;
-}
-
-// The item colors themselves come from the theme's nav color cycle, so this
-// block only carries the chrome the cycle can't express.
-:global(html[data-theme-id='neon_pulse']) {
-	.sidebar.expanded {
-		border-right: 1.2px solid var(--theme-accent, #ff2e92);
-		box-shadow: 2px 0 12px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.4),
-			1px 0 10px rgba(var(--theme-on-surface-rgb, 0, 229, 255), 0.33);
-	}
-
-	.clock {
-		color: var(--theme-on-surface, #00e5ff);
-		text-shadow: 0 0 8px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.35);
-	}
 }

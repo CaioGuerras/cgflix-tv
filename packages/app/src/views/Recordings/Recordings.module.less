@@ -39,7 +39,7 @@
 .title {
 	font-size: 39px;
 	font-weight: 600;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .pills {
@@ -76,13 +76,13 @@
 	}
 
 	&.selected {
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.7);
-		color: #fff;
+		background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.7);
+		color: #eae8ee;
 	}
 
 	&:focus {
-		background: @accent-color;
-		color: #fff;
+		background: var(--theme-button-focused, #eae8ee);
+		color: var(--theme-on-accent, #0f0d13);
 	}
 }
 
@@ -103,7 +103,7 @@
 	margin: 0 0 12px 90px;
 	font-size: 27px;
 	font-weight: 600;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .rail {
@@ -128,7 +128,7 @@
 
 	&:focus {
 		opacity: 1;
-		transform: scale(1.08);
+		transform: scale(1.06);
 		position: relative;
 		z-index: 2;
 	}
@@ -147,7 +147,7 @@
 	justify-content: center;
 
 	.card:focus & {
-		border-color: #fff;
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -175,7 +175,7 @@
 	margin-top: 8px;
 	font-size: 20px;
 	font-weight: 500;
-	color: #fff;
+	color: #eae8ee;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -214,7 +214,7 @@
 	width: 840px;
 	max-width: 80%;
 	max-height: 80%;
-	background: #1a1a1a;
+	background: #1a181f;
 	border-radius: 42px;
 	padding: 36px;
 	display: flex;
@@ -226,14 +226,14 @@
 // Core's cancel confirmations use this slightly blue surface.
 .confirmDialog {
 	width: 700px;
-	background: #1a1a2e;
+	background: #1a181f;
 }
 
 .dialogTitle {
 	flex-shrink: 0;
 	margin-bottom: 18px;
 	font-size: 36px;
-	color: #fff;
+	color: #eae8ee;
 }
 
 .dialogBody {
@@ -287,36 +287,14 @@
 	transition: background 0.15s ease;
 
 	&:focus {
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.25);
+		background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.25);
 	}
 
 	&.danger {
-		color: #f44336;
+		color: #ee757c;
 
 		&:focus {
-			background: rgba(244, 67, 54, 0.25);
+			background: rgba(238, 117, 124, 0.25);
 		}
-	}
-}
-
-:global(html[data-theme-id='neon_pulse']) {
-	.title,
-	.dialogTitle,
-	.cardTitle {
-		color: var(--theme-accent, #ff2e92);
-		text-shadow: var(--theme-text-glow, 0 0 8px rgba(255, 46, 146, 0.35));
-		font-family: 'NeonPulseDisplay', sans-serif;
-		font-weight: bold;
-		letter-spacing: 0.4px;
-	}
-
-	.cardSubtitle,
-	.dialogSubtitle {
-		color: var(--theme-on-surface, #00e5ff);
-	}
-
-	.card:focus .cardThumb {
-		border-color: var(--theme-accent, #ff2e92);
-		box-shadow: 0 0 10px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.3);
 	}
 }

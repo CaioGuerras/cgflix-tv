@@ -40,51 +40,14 @@ export const ThemesView = ({availableThemes, activeThemeId, onSelectTheme}) => (
 						{theme.description ? (
 							<div className={css.themeCardDescription}>{theme.description}</div>
 						) : null}
-						<div
-							className={css.themeCardStripe}
-							style={{background: `linear-gradient(to right, ${bg}, ${surface}, ${accent}, ${progress})`}}
-						/>
+						<div className={css.themeCardStripe}>
+							{[bg, surface, accent, progress].map((color, index) => (
+								<div key={index} className={css.themeCardStripeBlock} style={{background: color}} />
+							))}
+						</div>
 					</SpottableDiv>
 				);
 			})}
 		</div>
-	</SettingsView>
-);
-
-export const ThemeStoreView = ({catalog, loading, error, busyId, availableThemes, onStoreThemeClick}) => (
-	<SettingsView spotlightId='theme-store-view' title={$L('Theme Store')} clean>
-		{loading ? (
-			<div className={css.themeStoreMessage}>{$L('Loading themes…')}</div>
-		) : error ? (
-			<div className={css.themeStoreMessage}>{$L("Couldn't load the Theme Store. Check your connection and try again.")}</div>
-		) : catalog.length === 0 ? (
-			<div className={css.themeStoreMessage}>{$L('No themes are available right now.')}</div>
-		) : (
-			<div className={css.themeCardList}>
-				{catalog.map((entry) => {
-					const saved = availableThemes.some((t) => t.id === entry.id);
-					const busy = busyId === entry.id;
-					return (
-						<SpottableDiv
-							key={entry.id}
-							className={css.themeCard}
-							onClick={() => onStoreThemeClick(entry)}
-							spotlightId={`store-theme-${entry.id}`}
-						>
-							<div className={css.themeCardHeader}>
-								<div className={css.themeCardName}>{entry.displayName}</div>
-								{saved && <div className={css.themeCardCheck}>✓</div>}
-							</div>
-							{entry.description ? (
-								<div className={css.themeCardDescription}>{entry.description}</div>
-							) : null}
-							<div className={css.themeStoreCardAction}>
-								{busy ? $L('Working...') : saved ? $L('Remove') : $L('Save & apply')}
-							</div>
-						</SpottableDiv>
-					);
-				})}
-			</div>
-		)}
 	</SettingsView>
 );

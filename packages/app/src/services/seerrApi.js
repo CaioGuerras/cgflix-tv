@@ -397,39 +397,6 @@ export const getMoonfinSettings = async (serverUrl, token) => {
 	}
 };
 
-export const getMoonfinThemes = async (serverUrl, token) => {
-	const sUrl = serverUrl || jellyfinServerUrl;
-	const sToken = token || jellyfinAccessToken;
-	if (!sUrl || !sToken) {
-		throw new Error('Server URL and token required');
-	}
-
-	const url = `${sUrl}/Moonfin/Themes`;
-	const result = await fetchRequest({
-		url,
-		method: 'GET',
-		headers: {
-			'Accept': 'application/json',
-			'Authorization': `MediaBrowser Token="${sToken}"`
-		},
-		timeout: 15000
-	});
-
-	if (!result.success) throw new Error(result.error || 'Network error');
-	if (result.status === 404) return null;
-	if (result.status >= 400) {
-		const error = new Error(`Moonfin themes fetch failed: ${result.status}`);
-		error.status = result.status;
-		throw error;
-	}
-
-	try {
-		return JSON.parse(result.body);
-	} catch (e) {
-		throw new Error('Invalid response from Moonfin Themes');
-	}
-};
-
 // One flattened profile: the device override merged over global and the
 // admin defaults, which is what Load and Reset apply locally.
 export const getMoonfinResolvedProfile = async (profileName, serverUrl, token) => {
@@ -1156,7 +1123,6 @@ export default {
 	moonfinPing,
 	getMoonfinConfig,
 	getMoonfinSettings,
-	getMoonfinThemes,
 	getMoonfinResolvedProfile,
 	deleteMoonfinProfile,
 	saveMoonfinProfile,

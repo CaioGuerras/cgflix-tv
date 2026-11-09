@@ -200,9 +200,9 @@ const ThemeSwatch = ({theme, selected, onSelect, t}) => {
 			<div
 				className={css.swatchBox}
 				style={{
-					background: `linear-gradient(to bottom right, ${toCssColor(spec.colors.surface)}, ${toCssColor(spec.colors.background)})`,
-					border: `${focused ? 4 : 2}px solid ${focused ? t.onSurface : t.onSurfaceA(selected ? 0.4 : 0.16)}`,
-					boxShadow: focused ? `0px 0px 36px ${t.onSurfaceA(0.3)}` : 'none'
+					background: toCssColor(spec.colors.background),
+					border: `${focused ? 3 : 2}px solid ${focused ? t.focusBorderColor : t.onSurfaceA(selected ? 0.4 : 0.16)}`,
+					boxShadow: 'none'
 				}}
 			>
 				<div className={css.swatchInner}>
@@ -356,7 +356,6 @@ const TourStep = ({t, playback}) => {
 	const bullets = [
 		$L('Seerr requests'),
 		$L('Live TV'),
-		$L('Custom themes'),
 		$L('And plenty more')
 	];
 	return (

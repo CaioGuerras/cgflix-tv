@@ -12,20 +12,19 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: var(--theme-background, #0a0a0a);
+	background: var(--theme-background, #0f0d13);
 	z-index: 100;
 	overflow: hidden;
 }
 
 /* Details sits on a dark backdrop + scrim, so its text must stay light
-   regardless of the active theme's onSurface/onBackground (a light custom theme
-   would otherwise render dark, unreadable text here). Neon Pulse keeps its own
-   accent tint via its dedicated block below, so it is excluded. */
-:global(html:not([data-theme-id='neon_pulse'])) .page {
-	--theme-text-primary: #ffffff;
-	--theme-text-secondary: rgba(255, 255, 255, 0.7);
-	--theme-text-muted: rgba(255, 255, 255, 0.5);
-	--theme-on-surface-rgb: 255, 255, 255;
+   regardless of the active theme's onSurface/onBackground. Both themes are
+   dark; the values are the Shikkoku text tokens. */
+.page {
+	--theme-text-primary: #eae8ee;
+	--theme-text-secondary: rgba(234, 232, 238, 0.7);
+	--theme-text-muted: rgba(234, 232, 238, 0.5);
+	--theme-on-surface-rgb: 234, 232, 238;
 }
 
 /* Backdrop */
@@ -46,7 +45,7 @@
 	object-position: center top;
 }
 
-// DetailBackdrop.js bakes this gradient, and the Neon Pulse one further down, into an image and sets
+// DetailBackdrop.js bakes this gradient into an image and sets
 // it inline, so its copy of the stops has to match. The gradients here only paint if that fails.
 .backdropGradient {
 	position: fixed;
@@ -69,9 +68,9 @@
 	height: 100%;
 	background: linear-gradient(
 		135deg,
-		var(--theme-background, #1a1a2e) 0%,
-		var(--theme-surface, #16213e) 50%,
-		var(--theme-surface-variant, #0f3460) 100%
+		var(--theme-background, #0f0d13) 0%,
+		var(--theme-surface, #1a181f) 50%,
+		var(--theme-surface-variant, #26242c) 100%
 	) !important;
 }
 
@@ -135,7 +134,7 @@
 	overflow: hidden;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 	position: relative;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.05);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.05);
 
 	img {
 		width: 100%;
@@ -183,16 +182,16 @@
 }
 
 .seriesName {
-	font-size: 23px;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.7));
+	font-size: 24px;
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.7));
 	font-weight: 500;
 }
 
 .episodeNumber {
 	font-size: 16px;
 	font-weight: 600;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.9);
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.9);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
 	padding: 3px 12px;
 	border-radius: 17px;
 }
@@ -216,7 +215,7 @@
 .title {
 	font-size: 46px;
 	font-weight: 700;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	margin: 0;
 	line-height: 1.25;
 	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
@@ -244,14 +243,14 @@
 	> .infoItem + .infoItem::before {
 		content: '\2022';
 		margin: 0 7px;
-		color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.5);
+		color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.5);
 		font-size: 17px;
 	}
 }
 
 .infoItem {
 	font-size: 17px;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.9);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.9);
 	display: flex;
 	align-items: center;
 	white-space: nowrap;
@@ -301,25 +300,25 @@
 }
 
 .badgeRating {
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.9);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.9);
 }
 
 .badgeContinuing {
 	background: #2e7d32;
-	color: #fff;
+	color: #eae8ee;
 	font-weight: 600;
 }
 
 .badgeEnded {
 	background: #b71c1c;
-	color: #fff;
+	color: #eae8ee;
 	font-weight: 600;
 }
 
 .badgeUpcoming {
-	background: var(--accent-color, #00a4dc);
-	color: #fff;
+	background: var(--accent-color, #b8adde);
+	color: #0f0d13;
 	font-weight: 600;
 	display: inline-flex;
 	align-items: center;
@@ -337,14 +336,14 @@
 .tagline {
 	font-size: 20px;
 	font-style: italic;
-	color: var(--theme-text-secondary, rgba(255, 255, 255, 0.7));
+	color: var(--theme-text-secondary, rgba(234, 232, 238, 0.7));
 	margin: 9px 0 12px 0;
 	line-height: 1.4;
 }
 
 .overview {
 	font-size: 20px;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.8);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.8);
 	line-height: 1.4;
 	margin: 0;
 	overflow: hidden;
@@ -407,7 +406,7 @@
 
 	.btnDetail {
 		font-size: 13px;
-		color: var(--theme-text-secondary, rgba(255, 255, 255, 0.5));
+		color: var(--theme-text-secondary, rgba(234, 232, 238, 0.5));
 		text-align: center;
 		max-width: 100px;
 		overflow: hidden;
@@ -419,7 +418,7 @@
 
 	&:focus {
 		.btnDetail {
-			color: var(--theme-text-primary, rgba(255, 255, 255, 0.9));
+			color: var(--theme-text-primary, rgba(234, 232, 238, 0.9));
 			max-width: 160px;
 			white-space: normal;
 			word-wrap: break-word;
@@ -428,22 +427,22 @@
 
 		.btnAction {
 			background: var(--theme-button-focused, rgba(255, 255, 255, 0.95));
-			transform: scale(1.1);
-			border-color: var(--theme-focus-border-color, #ffffff);
+			transform: scale(1.06);
+			border-color: var(--theme-focus-border-color, #f1eff5);
 
 			.btnIcon {
-				color: var(--theme-on-button-focused, #0a0a0a);
-				fill: var(--theme-on-button-focused, #0a0a0a);
+				color: var(--theme-on-button-focused, #0f0d13);
+				fill: var(--theme-on-button-focused, #0f0d13);
 			}
 
 			.favorited {
-				color: var(--theme-recording-active, #ff4757);
-				fill: var(--theme-recording-active, #ff4757);
+				color: var(--theme-recording-active, #ee757c);
+				fill: var(--theme-recording-active, #ee757c);
 			}
 
 			.watched {
-				color: var(--accent-color, #00a4dc);
-				fill: var(--accent-color, #00a4dc);
+				color: var(--accent-color, #b8adde);
+				fill: var(--accent-color, #b8adde);
 			}
 		}
 	}
@@ -469,7 +468,7 @@
 .btnIcon {
 	width: 39px;
 	height: 39px;
-	color: var(--theme-on-button-normal, #ffffff);
+	color: var(--theme-on-button-normal, #eae8ee);
 	fill: currentColor;
 	display: flex;
 	align-items: center;
@@ -478,19 +477,19 @@
 }
 
 .favorited {
-	color: var(--theme-recording-active, #ff4757);
-	fill: var(--theme-recording-active, #ff4757);
+	color: var(--theme-recording-active, #ee757c);
+	fill: var(--theme-recording-active, #ee757c);
 }
 
 .watched {
-	color: var(--accent-color, #00a4dc);
-	fill: var(--accent-color, #00a4dc);
+	color: var(--accent-color, #b8adde);
+	fill: var(--accent-color, #b8adde);
 }
 
 .btnLabel {
 	font-size: 16px;
 	font-weight: 600;
-	color: var(--theme-text-primary, rgba(255, 255, 255, 0.8));
+	color: var(--theme-text-primary, rgba(234, 232, 238, 0.8));
 	text-align: center;
 	max-width: 157px;
 	line-height: 1.3;
@@ -590,7 +589,7 @@
 .sectionTitle {
 	font-size: 32px;
 	font-weight: 700;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	margin: 0;
 	text-shadow: 0 0 6px rgba(0, 0, 0, 0.55);
 }
@@ -626,11 +625,11 @@
 	transition: transform 0.2s;
 
 	&:focus {
-		transform: scale(1.05);
+		transform: scale(1.06);
 		z-index: 10;
 
 		.seasonPosterWrapper {
-			border-color: var(--theme-focus-border-color, #ffffff);
+			border-color: var(--theme-focus-border-color, #f1eff5);
 			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 		}
 	}
@@ -672,7 +671,7 @@
 	right: 8px;
 	width: 28px;
 	height: 28px;
-	background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.9);
+	background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.9);
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
@@ -681,7 +680,7 @@
 	svg {
 		width: 16px;
 		height: 16px;
-		fill: var(--theme-on-accent, #ffffff);
+		fill: var(--theme-on-accent, #0f0d13);
 	}
 }
 
@@ -696,16 +695,16 @@
 	min-width: 24px;
 	height: 24px;
 	padding: 0 6px;
-	background: #00a4dc;
-	background: var(--theme-badge-watched, var(--theme-accent, #00a4dc));
+	background: #b8adde;
+	background: var(--theme-badge-watched, var(--theme-accent, #b8adde));
 	border-radius: 12px;
-	border: 1.5px solid #ffffff;
-	border-color: var(--theme-on-badge, #ffffff);
+	border: 1.5px solid var(--theme-focus-border-color, #f1eff5);
+	border-color: var(--theme-on-badge, #0f0d13);
 	box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.6);
 	font-size: 14px;
 	font-weight: 700;
-	color: #ffffff;
-	color: var(--theme-on-badge, #ffffff);
+	color: var(--theme-on-accent, #0f0d13);
+	color: var(--theme-on-badge, #0f0d13);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -714,7 +713,7 @@
 .seasonName {
 	margin-top: 10px;
 	font-size: 18px;
-	color: var(--theme-text-primary, rgba(255, 255, 255, 0.9));
+	color: var(--theme-text-primary, rgba(234, 232, 238, 0.9));
 	text-align: center;
 	max-width: 180px;
 	white-space: nowrap;
@@ -729,7 +728,7 @@
 	display: flex;
 	align-items: center;
 	height: 169px;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.06);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.06);
 	border-radius: 8px;
 	overflow: hidden;
 	cursor: pointer;
@@ -738,8 +737,8 @@
 	transition: transform 0.2s, border-color 0.2s;
 
 	&:focus {
-		transform: scale(1.01);
-		border-color: var(--theme-focus-border-color, #ffffff);
+		transform: scale(1.06);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -748,7 +747,7 @@
 	width: 300px;
 	height: 100%;
 	flex-shrink: 0;
-	background: var(--theme-surface, #111);
+	background: var(--theme-surface, #1a181f);
 	overflow: hidden;
 
 	img {
@@ -764,7 +763,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: var(--theme-surface, #1a1a1a);
+	background: var(--theme-surface, #1a181f);
 	color: rgba(255, 255, 255, 0.15);
 
 	svg {
@@ -827,21 +826,21 @@
 	transition: transform 0.2s, border-color 0.2s;
 
 	&:focus {
-		transform: scale(1.03);
-		border-color: var(--theme-focus-border-color, #ffffff);
+		transform: scale(1.06);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
 .episodeCurrent {
-	border-color: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.4);
-	background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.08);
+	border-color: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.4);
+	background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.08);
 }
 
 .episodeThumb {
 	position: relative;
 	width: 100%;
 	height: 169px;
-	background: var(--theme-surface, #111);
+	background: var(--theme-surface, #1a181f);
 	overflow: hidden;
 
 	img {
@@ -857,7 +856,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: var(--theme-surface, #1a1a1a);
+	background: var(--theme-surface, #1a181f);
 	color: rgba(255, 255, 255, 0.15);
 
 	svg {
@@ -877,7 +876,7 @@
 
 .episodeProgressBar {
 	height: 100%;
-	background: var(--accent-color, #00a4dc);
+	background: var(--accent-color, #b8adde);
 	border-radius: 0 2px 2px 0;
 }
 
@@ -932,7 +931,7 @@
 .tmdbIcon {
 	width: 14px;
 	height: 14px;
-	color: var(--theme-status-pending, #f5c518);
+	color: var(--theme-status-pending, #edbb64);
 	margin-right: 3px;
 }
 
@@ -952,8 +951,8 @@
 	transition: transform 0.2s, border-color 0.2s;
 
 	&:focus {
-		transform: scale(1.03);
-		border-color: rgba(0, 164, 220, 0.5);
+		transform: scale(1.06);
+		border-color: rgba(184, 173, 222, 0.5);
 	}
 }
 
@@ -962,7 +961,7 @@
 	position: relative;
 	width: 100%;
 	height: 158px;
-	background: var(--theme-surface, #111);
+	background: var(--theme-surface, #1a181f);
 	overflow: hidden;
 
 	img {
@@ -979,7 +978,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: var(--theme-surface, #1a1a1a);
+	background: var(--theme-surface, #1a181f);
 
 	svg {
 		width: 40px;
@@ -1060,7 +1059,7 @@
 .seasonDetailTitle {
 	font-size: 48px;
 	font-weight: 700;
-	color: var(--theme-text-primary, #fff);
+	color: var(--theme-text-primary, #eae8ee);
 	margin: 0;
 	line-height: 1.15;
 	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
@@ -1068,7 +1067,7 @@
 
 .seasonDetailCount {
 	font-size: 18px;
-	color: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.5);
+	color: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.5);
 	margin-top: 4px;
 }
 
@@ -1083,7 +1082,7 @@
 
 .seasonEp {
 	display: flex;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.04);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.04);
 	border-radius: 12px;
 	overflow: hidden;
 	cursor: pointer;
@@ -1096,8 +1095,8 @@
 	}
 
 	&:focus {
-		background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
-		border-color: var(--theme-focus-border-color, #ffffff);
+		background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -1106,7 +1105,7 @@
 	width: 340px;
 	min-height: 190px;
 	flex-shrink: 0;
-	background: var(--theme-surface, #111);
+	background: var(--theme-surface, #1a181f);
 	overflow: hidden;
 
 	img {
@@ -1122,7 +1121,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: var(--theme-surface, #1a1a1a);
+	background: var(--theme-surface, #1a181f);
 	flex: 1;
 	padding: 16px 20px 16px 0;
 	display: flex;
@@ -1159,13 +1158,13 @@
 .seasonEpCheck {
 	width: 16px;
 	height: 16px;
-	color: var(--accent-color, #00a4dc);
+	color: var(--accent-color, #b8adde);
 }
 
 .seasonEpTitle {
 	font-size: 24px;
 	font-weight: 600;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	margin-bottom: 8px;
 	white-space: nowrap;
 	overflow: hidden;
@@ -1219,11 +1218,11 @@
 	transition: transform 0.2s;
 
 	&:focus {
-		transform: scale(1.05);
+		transform: scale(1.06);
 		z-index: 10;
 
 		.castImageWrapper {
-			border-color: var(--theme-focus-border-color, #ffffff);
+			border-color: var(--theme-focus-border-color, #f1eff5);
 		}
 	}
 }
@@ -1260,7 +1259,7 @@
 .castName {
 	font-size: 17px;
 	font-weight: 600;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	text-align: center;
 	max-width: 100%;
 	overflow: hidden;
@@ -1316,7 +1315,7 @@
 	height: 220px;
 	object-fit: cover;
 	border-radius: 50%;
-	border: 3px solid var(--accent-color, #00a4dc);
+	border: 3px solid var(--accent-color, #b8adde);
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
@@ -1325,7 +1324,7 @@
 	height: 220px;
 	background: rgba(255, 255, 255, 0.08);
 	border-radius: 50%;
-	border: 3px solid var(--accent-color, #00a4dc);
+	border: 3px solid var(--accent-color, #b8adde);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1379,7 +1378,7 @@
 	display: inline-block;
 	margin-top: 4px;
 	font-size: 0.85em;
-	color: var(--accent-color, #00a4dc);
+	color: var(--accent-color, #b8adde);
 }
 
 .personTabs {
@@ -1406,68 +1405,8 @@
 }
 
 .personTabActive {
-	color: #fff;
-	background: var(--accent-color, #00a4dc);
-}
-
-:global(html[data-theme-id='neon_pulse']) {
-	.backdropGradient {
-		background: linear-gradient(
-			to bottom,
-			rgba(var(--theme-background-rgb, 11, 4, 32), 0.2) 0%,
-			rgba(var(--theme-surface-rgb, 30, 10, 63), 0.55) 40%,
-			var(--theme-scrim, rgba(11, 4, 32, 0.85)) 70%,
-			rgba(var(--theme-background-rgb, 11, 4, 32), 0.95) 100%
-		);
-	}
-
-	.title,
-	.seasonDetailTitle,
-	.seasonEpTitle,
-	.castName {
-		color: var(--theme-accent, #ff2e92);
-		text-shadow: var(--theme-text-glow, 0 0 8px rgba(255, 46, 146, 0.35));
-		font-family: 'NeonPulseDisplay', sans-serif;
-		font-weight: bold;
-		letter-spacing: 0.4px;
-	}
-
-	.seriesName,
-	.infoItem,
-	.seasonDetailSeries,
-	.seasonEpMeta,
-	.seasonEpOverview,
-	.castRole,
-	.overview,
-	.metaValue {
-		color: var(--theme-on-surface, #00e5ff);
-	}
-
-	.episodeNumber,
-	.infoBadge {
-		background: rgba(var(--theme-on-surface-rgb, 0, 229, 255), 0.15);
-		border: 1px solid rgba(var(--theme-accent-rgb, 255, 46, 146), 0.5);
-		color: var(--theme-on-surface, #00e5ff);
-	}
-
-	.poster,
-	.seasonEp,
-	.castImageWrapper,
-	.personPhoto {
-		border-color: rgba(var(--theme-accent-rgb, 255, 46, 146), 0.45);
-		box-shadow: 0 0 14px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.2);
-	}
-
-	.btnAction {
-		border: 1px solid rgba(var(--theme-accent-rgb, 255, 46, 146), 0.5);
-		box-shadow: 0 0 10px rgba(var(--theme-accent-rgb, 255, 46, 146), 0.2);
-	}
-
-	.btnLabel,
-	.btnDetail,
-	.metaLabel {
-		color: var(--theme-on-surface, #00e5ff);
-	}
+	color: #0f0d13;
+	background: var(--accent-color, #b8adde);
 }
 
 /* ============================================
@@ -1516,7 +1455,7 @@
 .trackModalPanel {
 	.glass-panel(16px);
 	padding: 30px 0;
-	background-color: rgba(var(--theme-surface-rgb, 24, 24, 24), 0.94);
+	background-color: rgba(var(--theme-surface-rgb, 26, 24, 31), 0.94);
 	background-image: none;
 	border-radius: 20px;
 	max-width: 660px;
@@ -1548,7 +1487,7 @@
 .trackModalTitle {
 	font-size: 30px;
 	font-weight: 700;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	margin: 0 0 18px 0;
 	text-align: left;
 	padding: 0 36px 18px 36px;
@@ -1565,8 +1504,8 @@
 }
 
 .trackItem {
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.08);
-	border: 2px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.08);
+	border: 2px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
 	border-radius: 10px;
 	padding: 22px 32px;
 	display: flex;
@@ -1577,17 +1516,17 @@
 	outline: none;
 
 	&:focus {
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.3);
-		border-color: var(--theme-focus-border-color, #ffffff);
-		transform: translateX(12px) scale(1.02);
-		box-shadow: var(--theme-focus-glow, 0 4px 15px rgba(0, 164, 220, 0.4));
+		background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.3);
+		border-color: var(--theme-focus-border-color, #f1eff5);
+		transform: translateX(12px) scale(1.06);
+		box-shadow: var(--theme-focus-glow, none);
 	}
 }
 
 .trackName {
 	font-size: 24px;
 	font-weight: 600;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 }
 
 .trackInfo {
@@ -1617,18 +1556,18 @@
 
 .actionBtn {
 	padding: 15px 30px;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.1);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.1);
 	border-radius: 8px;
-	border: 2px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.2);
-	color: var(--theme-text-primary, #ffffff);
+	border: 2px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.2);
+	color: var(--theme-text-primary, #eae8ee);
 	font-size: 20px;
 	cursor: pointer;
 	transition: all 0.2s ease;
 
 	&:hover,
 	&:focus {
-		background: rgba(var(--theme-accent-rgb, 0, 164, 220), 0.3);
-		border-color: var(--theme-focus-border-color, #ffffff);
+		background: rgba(var(--theme-accent-rgb, 184, 173, 222), 0.3);
+		border-color: var(--theme-focus-border-color, #f1eff5);
 	}
 }
 
@@ -1665,7 +1604,7 @@
 
 	&:focus {
 		background: rgba(255, 255, 255, 0.12);
-		box-shadow: inset 0 0 0 2px rgba(0, 164, 220, 0.6);
+		box-shadow: inset 0 0 0 3px var(--theme-focus-border-color, #f1eff5);
 	}
 
 	&:hover {
@@ -1691,7 +1630,7 @@
 	display: block;
 	font-size: 24px;
 	font-weight: 500;
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -1711,7 +1650,7 @@
 	svg {
 		width: 20px;
 		height: 20px;
-		fill: var(--accent-color, #00a4dc);
+		fill: var(--accent-color, #b8adde);
 	}
 }
 
@@ -1765,7 +1704,7 @@
 
 	&:focus {
 		background: rgba(255, 255, 255, 0.12);
-		box-shadow: inset 0 0 0 2px rgba(0, 164, 220, 0.6);
+		box-shadow: inset 0 0 0 3px var(--theme-focus-border-color, #f1eff5);
 	}
 
 	&:hover {
@@ -1820,7 +1759,7 @@
 	background: rgba(30, 30, 40, 0.9);
 	backdrop-filter: blur(16px);
 	-webkit-backdrop-filter: blur(16px);
-	color: var(--theme-text-primary, #ffffff);
+	color: var(--theme-text-primary, #eae8ee);
 	padding: 14px 28px;
 	border-radius: 12px;
 	font-size: 18px;
@@ -1828,7 +1767,7 @@
 	z-index: 10000;
 	pointer-events: none;
 	animation: toastLifecycle 3s ease forwards;
-	border: 1px solid rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.12);
+	border: 1px solid rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.12);
 }
 
 @keyframes toastLifecycle {
@@ -1872,8 +1811,8 @@
 	height: 48px;
 	border-radius: 50%;
 	border: none;
-	background: rgba(var(--theme-on-surface-rgb, 255, 255, 255), 0.15);
-	color: var(--theme-text-primary, #ffffff);
+	background: rgba(var(--theme-on-surface-rgb, 234, 232, 238), 0.15);
+	color: var(--theme-text-primary, #eae8ee);
 	cursor: pointer;
 	display: flex;
 	align-items: center;
@@ -1884,7 +1823,7 @@
 
 	&:focus {
 		background: rgba(255, 255, 255, 0.3);
-		transform: scale(1.1);
+		transform: scale(1.06);
 	}
 }
 
@@ -1916,7 +1855,7 @@
 	justify-content: center;
 	width: 100%;
 	height: 100%;
-	color: #fff;
+	color: #eae8ee;
 	font-size: 18px;
 }
 

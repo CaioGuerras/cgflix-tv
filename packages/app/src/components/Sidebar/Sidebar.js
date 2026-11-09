@@ -9,7 +9,7 @@ import {FavoritesIcon, FriendsIcon, GenresIcon, HomeIcon, LiveTvIcon, MessagesIc
 import useClock from '../../hooks/useClock';
 import {librariesForNav} from '../../utils/liveTvLibrary';
 import {isKidsMode} from '../../utils/kidsMode';
-import {shadowToCss, toCssColor, toCssColorWithAlpha} from '../../theme/themeSpec';
+import {toCssColor, toCssColorWithAlpha} from '../../theme/themeSpec';
 import {SIDEBAR_CONTENT_FOCUS_TARGETS, focusFirstContentTarget} from '../../utils/navFocusTargets';
 import {KEYS} from '../../utils/keys';
 import SidebarItem from './SidebarItem';
@@ -87,8 +87,7 @@ const Sidebar = ({
 			borderBottom: activeTheme.borders.navBorder
 				? `${activeTheme.borders.navBorder.width}px solid ${toCssColor(activeTheme.borders.navBorder.color)}`
 				: 'none',
-			color: toCssColor(activeTheme.colors.onSurface),
-			textShadow: activeTheme.textGlow.length ? activeTheme.textGlow.map(shadowToCss).join(', ') : 'none'
+			color: toCssColor(activeTheme.colors.onSurface)
 		};
 	}, [activeTheme, expanded]);
 

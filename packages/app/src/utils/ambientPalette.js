@@ -5,7 +5,7 @@
 const SAMPLE_SIZE = 32;
 const MIN_HUE_DISTANCE = 24;
 const PALETTE_SIZE = 3;
-const DEFAULT_ACCENT = '#00a4dc';
+const DEFAULT_ACCENT = '#b8adde';
 
 // The crossOrigin request is what keeps getImageData from throwing on a canvas
 // tainted by the artwork.

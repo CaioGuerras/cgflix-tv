@@ -523,7 +523,7 @@ async function main() {
 		// Only opacity and transform animate, which old Tizen engines keep smooth.
 		const bootSplash = `<div id="cgf-splash"><img src="cgf-splash.png" alt=""></div>
 <style>
-#cgf-splash{position:fixed;top:0;left:0;right:0;bottom:0;z-index:100000;display:flex;align-items:center;justify-content:center;background:#07060A;background:radial-gradient(ellipse at center,#24123a 0%,#07060A 62%);opacity:1;transition:opacity .45s ease}
+#cgf-splash{position:fixed;top:0;left:0;right:0;bottom:0;z-index:100000;display:flex;align-items:center;justify-content:center;background:#0f0d13;opacity:1;transition:opacity .45s ease}
 #cgf-splash img{width:720px;height:auto;opacity:0;-webkit-animation:cgfSplashIn .8s ease-out .1s forwards;animation:cgfSplashIn .8s ease-out .1s forwards}
 @-webkit-keyframes cgfSplashIn{from{opacity:0;-webkit-transform:scale(.92)}to{opacity:1;-webkit-transform:scale(1)}}
 @keyframes cgfSplashIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}

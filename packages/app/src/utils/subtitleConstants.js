@@ -13,7 +13,7 @@ const subtitlePalette = ({allowTransparent}) => [
 	{ value: '#ffffff', label: $L('White') },
 	{ value: '#cccccc', label: $L('Light Gray') },
 	{ value: '#808080', label: $L('Gray') },
-	{ value: '#404040', label: $L('Dark Gray') },
+	{ value: '#3e3b44', label: $L('Dark Gray') },
 	{ value: '#000000', label: $L('Black') },
 	{ value: '#ffff00', label: $L('Yellow') },
 	{ value: '#00ff00', label: $L('Green') },
