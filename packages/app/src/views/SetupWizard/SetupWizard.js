@@ -355,7 +355,6 @@ const TourStep = ({t, playback}) => {
 	const builtIns = availableThemes.filter((theme) => isBuiltInThemeId(theme.id));
 	const bullets = [
 		$L('Seerr requests'),
-		$L('SyncPlay watch parties'),
 		$L('Live TV'),
 		$L('Custom themes'),
 		$L('And plenty more')

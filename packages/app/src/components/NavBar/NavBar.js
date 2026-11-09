@@ -3,10 +3,8 @@ import {memo, useCallback, useMemo, useState} from 'react';
 import $L from '@enact/i18n/$L';
 import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDecorator';
 import {useSettings} from '../../context/SettingsContext';
-import {useSyncPlay} from '../../context/SyncPlayContext';
 import {useServerMessages} from '../../context/ServerMessagesContext';
 import {useAchievements} from '../../context/AchievementsContext';
-import SyncPlayIcon from '../icons/SyncPlayIcon';
 import {FavoritesIcon, FriendsIcon, GenresIcon, HomeIcon, LiveTvIcon, MessagesIcon, SearchIcon, SettingsIcon, ShuffleIcon} from '../icons/navIcons';
 import useClock from '../../hooks/useClock';
 import {librariesForNav} from '../../utils/liveTvLibrary';
@@ -41,12 +39,10 @@ const NavBar = ({
 	onSettings,
 	onSelectLibrary,
 	onUserMenu,
-	onSyncPlay,
 	onMessages,
 	onFriends
 }) => {
 	const {settings, activeTheme} = useSettings();
-	const {isInGroup} = useSyncPlay();
 	const {messages, unreadCount} = useServerMessages();
 	const {socialAvailable, badgeCount: friendsBadge} = useAchievements();
 	const [libraryMenuOpen, setLibraryMenuOpen] = useState(false);
@@ -61,7 +57,6 @@ const NavBar = ({
 	// would follow the account to the parent's other devices.
 	const kidsMode = isKidsMode(settings);
 	const showLiveTv = !kidsMode && settings.showLiveTvButton !== false && hasLiveTv;
-	const showSyncPlay = !kidsMode && settings.syncplayEnabled !== false && settings.showSyncPlayButton !== false;
 	const navLibraries = librariesForNav(libraries, showLiveTv, {hideLiveTv: kidsMode});
 	const showLibraries = !kidsMode && settings.showLibrariesInToolbar !== false && navLibraries.length > 0;
 	// Only with something to show, so the menu never has a button that does nothing.
@@ -91,13 +86,12 @@ const NavBar = ({
 	// Whatever sits immediately left of the libraries group, which depends on how
 	// many of the optional buttons are turned on.
 	const librariesLeftTargetId = useMemo(() => {
-		if (showSyncPlay) return 'navbar-syncplay';
 		if (showLiveTv) return 'navbar-livetv';
 		if (showFavorites) return 'navbar-favorites';
 		if (showGenres) return 'navbar-genres';
 		if (showShuffle) return 'navbar-shuffle';
 		return 'navbar-search';
-	}, [showSyncPlay, showLiveTv, showFavorites, showGenres, showShuffle]);
+	}, [showLiveTv, showFavorites, showGenres, showShuffle]);
 
 	const handlePillFocus = useCallback((e) => {
 		if (pointerHover()) return;
@@ -148,10 +142,6 @@ const NavBar = ({
 
 					{showLiveTv && (
 						<NavPillButton Icon={LiveTvIcon} slot={nextSlot()} label={$L('Live TV')} onClick={onLiveTv} spotlightId="navbar-livetv" />
-					)}
-
-					{showSyncPlay && (
-						<NavPillButton Icon={SyncPlayIcon} slot={nextSlot()} label={$L('SyncPlay')} onClick={onSyncPlay} spotlightId="navbar-syncplay" active={isInGroup} />
 					)}
 
 

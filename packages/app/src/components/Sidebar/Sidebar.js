@@ -3,10 +3,8 @@ import {memo, useCallback, useMemo} from 'react';
 import $L from '@enact/i18n/$L';
 import SpotlightContainerDecorator, {spotlightDefaultClass} from '@enact/spotlight/SpotlightContainerDecorator';
 import {useSettings} from '../../context/SettingsContext';
-import {useSyncPlay} from '../../context/SyncPlayContext';
 import {useServerMessages} from '../../context/ServerMessagesContext';
 import {useAchievements} from '../../context/AchievementsContext';
-import SyncPlayIcon from '../icons/SyncPlayIcon';
 import {FavoritesIcon, FriendsIcon, GenresIcon, HomeIcon, LiveTvIcon, MessagesIcon, SearchIcon, SettingsIcon, ShuffleIcon} from '../icons/navIcons';
 import useClock from '../../hooks/useClock';
 import {librariesForNav} from '../../utils/liveTvLibrary';
@@ -52,12 +50,10 @@ const Sidebar = ({
 	onSettings,
 	onSelectLibrary,
 	onUserMenu,
-	onSyncPlay,
 	onMessages,
 	onFriends
 }) => {
 	const {settings, activeTheme} = useSettings();
-	const {isInGroup} = useSyncPlay();
 	const {messages, unreadCount} = useServerMessages();
 	const {socialAvailable, badgeCount: friendsBadge} = useAchievements();
 	// The nav bar has always honoured this; the sidebar rendered the clock
@@ -72,7 +68,6 @@ const Sidebar = ({
 	const showFavorites = settings.showFavoritesButton !== false && supportsFavorites(null);
 	const kidsMode = isKidsMode(settings);
 	const showLiveTv = !kidsMode && settings.showLiveTvButton !== false && hasLiveTv;
-	const showSyncPlay = !kidsMode && settings.syncplayEnabled !== false && settings.showSyncPlayButton !== false;
 	const navLibraries = librariesForNav(libraries, showLiveTv, {hideLiveTv: kidsMode});
 	const showLibraries = !kidsMode && settings.showLibrariesInToolbar !== false && navLibraries.length > 0;
 	// Only with something to show, so the rail never has a row that does nothing.
@@ -151,10 +146,6 @@ const Sidebar = ({
 						<SidebarItem Icon={LiveTvIcon} slot={nextSlot()} label={$L('Live TV')} onClick={onLiveTv} />
 					)}
 
-
-					{showSyncPlay && (
-						<SidebarItem Icon={SyncPlayIcon} slot={nextSlot()} label={$L('SyncPlay')} onClick={onSyncPlay} active={isInGroup} />
-					)}
 
 					{showLibraries && (
 						<SidebarLibraries

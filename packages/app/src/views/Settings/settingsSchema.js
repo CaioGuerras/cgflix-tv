@@ -121,7 +121,6 @@ const seconds = (v) => `${v}s`;
 const percent = (v) => `${v}%`;
 const hourOffset = (v) => (v > 0 ? `+${v}h` : `${v}h`);
 const pixels = (v) => `${v}px`;
-const milliseconds = (v) => `${v} ms`;
 
 const hasHomeRow = (test) => (ctx) =>
 	(ctx.settings.homeRows || []).some((row) => row.enabled && test(row));
@@ -145,7 +144,6 @@ const whenPassthrough = (ctx) => ctx.settings.audioPassthroughMode === 'manual' 
 const whenCertificateChoice = (ctx) => ctx.isWebOS || ctx.isVega || ctx.isXbox;
 // Samsung sets decode AC3 and E-AC3 themselves, so these two toggles only do anything on webOS
 const whenWebOSPassthrough = (ctx) => whenPassthrough(ctx) && ctx.isWebOS;
-const whenSyncCorrection = (ctx) => ctx.settings.syncPlayAdvancedCorrectionEnabled !== false;
 // TrueHD only reaches a receiver while something may bitstream, in auto and manual mode alike
 const whenTruehdOptIn = (ctx) => ctx.settings.audioPassthroughMode !== 'disabled' && !ctx.settings.downmixToStereo;
 const whenSubtitlesOn = (ctx) => ctx.settings.subtitleMode !== 'none';
@@ -360,7 +358,6 @@ export const SETTINGS_SCHEMA = [
 					{kind: KIND.TOGGLE, key: 'showFavoritesButton', label: () => $L('Show Favorites Button'), desc: () => $L('Show the favorites button in the navigation bar'), icon: 'favorite'},
 					{kind: KIND.TOGGLE, key: 'showLiveTvButton', label: () => $L('Show Live TV Button'), desc: () => $L('Show the Live TV button in the navigation bar when the server has a Live TV library'), icon: 'live_tv'},
 					{kind: KIND.TOGGLE, key: 'showLibrariesInToolbar', label: () => $L('Show Libraries in Toolbar'), desc: () => $L('Show the libraries button in the navigation bar'), icon: 'video_library'},
-					{kind: KIND.TOGGLE, key: 'showSyncPlayButton', label: () => $L('SyncPlay Button'), desc: () => $L('Show the SyncPlay button on the navigation bar'), icon: 'groups'},
 					{kind: KIND.OPTION, key: 'folderViewMode', label: () => $L('Enable Folder View'), desc: () => $L('Show folder browsing option'), options: getFolderViewModeOptions, fallback: () => $L('Per Library'), icon: 'folder'},
 					{kind: KIND.TOGGLE, key: 'showSeerrButton', label: (ctx) => $L('Show {seerrLabel} Button').replace('{seerrLabel}', ctx.seerrLabel), desc: () => $L('Show the Seerr button in the navigation bar'), when: whenSeerr, icon: 'seerr'},
 					{kind: KIND.TOGGLE, key: 'showServerMessagesButton', label: () => $L('Show Messages Button'), desc: () => $L('Adds a button to the menu for messages sent by your server admin'), icon: 'info_outline_rounded'},
@@ -707,7 +704,7 @@ export const SETTINGS_SCHEMA = [
 		alwaysMenu: true,
 		when: (ctx) => !ctx.settings.kidsModeEnabled,
 		label: () => $L('Playback'),
-		description: () => $L('Player, quality, audio, subtitles, skipping, and SyncPlay'),
+		description: () => $L('Player, quality, audio, subtitles, and skipping'),
 		icon: 'play_circle',
 		subcategories: [
 			{
@@ -901,23 +898,6 @@ export const SETTINGS_SCHEMA = [
 					{kind: KIND.SLIDER, key: 'nextUpTimeout', label: () => $L('Next Up Timeout'), min: 0, max: 30, step: 1, format: (v) => (v === 0 ? $L('Instant') : `${v}s`), icon: 'timer', when: (ctx) => ctx.settings.nextUpBehavior !== 'disabled'},
 					{kind: KIND.TOGGLE, key: 'replaceSkipOutroWithNextUp', label: () => $L('Replace Skip Outro with Next Up Display'), desc: () => $L('Show the Next Up overlay instead of the Skip Outro button.'), icon: 'skip_next', when: (ctx) => ctx.settings.outroAction !== 'none'},
 					{kind: KIND.OPTION, key: 'stillWatchingBehavior', label: () => $L('Still Watching Prompt'), options: getStillWatchingBehaviorOptions, fallback: () => $L('3 episodes'), desc: () => $L('Prompt to Continue Watching after X consecutive episodes.'), icon: 'visibility'}
-				]
-			},
-			{
-				id: 'syncPlay',
-				icon: 'groups',
-				section: () => $L('Watch Together'),
-				label: () => $L('SyncPlay'),
-				description: () => $L('Synchronization logic for group sessions'),
-				rows: [
-					{kind: KIND.SECTION, id: 'syncPlayOptions', label: () => $L('SyncPlay Options')},
-					{kind: KIND.TOGGLE, key: 'syncplayEnabled', label: () => $L('SyncPlay Enabled'), desc: () => $L('Enable group watching features'), icon: 'groups'},
-					{kind: KIND.TOGGLE, key: 'syncplayAutoOpen', label: () => $L('Open SyncPlay'), desc: () => $L('Automatically open SyncPlay dialog when starting playback'), icon: 'group_work'},
-					{kind: KIND.TOGGLE, key: 'syncPlayAdvancedCorrectionEnabled', label: () => $L('Advanced Correction'), desc: () => $L('Enable fine-grained sync logic'), icon: 'tune'},
-					{kind: KIND.TOGGLE, key: 'syncPlayEnableSyncCorrection', label: () => $L('Sync Correction'), desc: () => $L('Automatically adjust playback to stay in sync'), icon: 'sync', when: whenSyncCorrection},
-					{kind: KIND.TOGGLE, key: 'syncPlayUseSkipToSync', label: () => $L('Skip to Sync'), desc: () => $L('Use seeking to sync'), icon: 'skip_next', when: whenSyncCorrection},
-					{kind: KIND.SLIDER, key: 'syncPlayMinDelaySkipToSync', label: () => $L('Minimum Skip Delay'), min: 0, max: 15000, step: 250, format: milliseconds, icon: 'timer', when: (ctx) => whenSyncCorrection(ctx) && ctx.settings.syncPlayUseSkipToSync},
-					{kind: KIND.SLIDER, key: 'syncPlayExtraTimeOffset', label: () => $L('SyncPlay Extra Offset'), min: -2000, max: 2000, step: 100, format: milliseconds, icon: 'schedule'}
 				]
 			}
 		]

@@ -116,7 +116,7 @@ describe('details buttons', () => {
 	const buttons = [
 		{id: 'watched'}, {id: 'favorite'}, {id: 'shuffle'}, {id: 'trailer'}, {id: 'playlist'},
 		{id: 'collection'}, {id: 'goToSeries'}, {id: 'subtitles'}, {id: 'audio'}, {id: 'version'},
-		{id: 'admin'}, {id: 'artwork'}, {id: 'deleteFiles'}, {id: 'watchWithGroup'},
+		{id: 'admin'}, {id: 'artwork'}, {id: 'deleteFiles'},
 		{id: 'seerrRequest'}, {id: 'seerrWatchlist'}, {id: 'seerrManage'}
 	];
 

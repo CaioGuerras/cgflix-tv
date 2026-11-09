@@ -14,7 +14,7 @@ const PlatformPlayer = lazy(() =>
 const WAITING_STYLE = {position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#000'};
 
 // Blocked ratings are refused here rather than in each player, since every way of starting
-// playback, SyncPlay and the next episode included, ends up handing this an item.
+// playback, the next episode included, ends up handing this an item.
 const strain = (queue) => (Array.isArray(queue) ? queue.filter((entry) => !isBlockedNow(entry)) : queue);
 
 const Player = ({item, videoQueue, audioPlaylist, ...rest}) => {

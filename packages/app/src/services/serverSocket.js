@@ -1,4 +1,4 @@
-// The session socket to the active server. SyncPlay and the watched state both listen on it, so
+// The session socket to the active server. the watched state and remote control listen on it, so
 // it stays open for as long as someone is signed in and reconnects whenever it drops.
 
 import {getApiKey, getDeviceId, getServerType, getServerUrl} from './jellyfinApi';
@@ -42,8 +42,8 @@ const tell = (listeners, value) => {
 	});
 };
 
-// A socket the server counts as lost is disposed, which ends the session and with it its place
-// in a SyncPlay group. Only a KeepAlive message from this side refreshes its timer, and nothing
+// A socket the server counts as lost is disposed, which ends the session and with it its
+// remote control. Only a KeepAlive message from this side refreshes its timer, and nothing
 // else sent on the socket or over HTTP counts.
 const sendKeepAlive = () => {
 	if (!ws || ws.readyState !== 1) return;

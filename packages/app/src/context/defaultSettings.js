@@ -63,11 +63,6 @@ export const defaultSettings = {
 	audioPassthroughMode: 'auto',
 	maxAudioChannels: 0,
 	downmixToStereo: false,
-	syncPlayAdvancedCorrectionEnabled: true,
-	syncPlayEnableSyncCorrection: true,
-	syncPlayUseSkipToSync: true,
-	syncPlayMinDelaySkipToSync: 2000,
-	syncPlayExtraTimeOffset: 0,
 	autoPlay: true,
 	// Off by default because every intro costs a full player teardown and reopen before
 	// the film, which is slow on older sets.
@@ -283,9 +278,6 @@ export const defaultSettings = {
 	screensaverMaxRating: 13,
 	uiScale: 1.0,
 	enablePgsRendering: true,
-	syncplayEnabled: true,
-	syncplayAutoOpen: false,
-	showSyncPlayButton: true,
 	videoStartDelay: 0,
 	liveTvSkipGuide: false,
 	liveTvChannelSortBy: 'number',

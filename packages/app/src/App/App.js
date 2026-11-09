@@ -38,7 +38,6 @@ import {AchievementsProvider, useAchievements} from '../context/AchievementsCont
 import {achievementIconPath} from '../views/Settings/achievements/achievementIcons';
 import {threadIsPhoto} from '../utils/achievementsModel';
 import {ServerMessagesProvider, useServerMessages} from '../context/ServerMessagesContext';
-import {SyncPlayProvider, useSyncPlay} from '../context/SyncPlayContext';
 import {useVersionCheck} from '../hooks/useVersionCheck';
 import UpdateNotification from '../components/UpdateNotification';
 import {ItemMenuProvider} from '../components/ItemContextMenu';
@@ -53,7 +52,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import Screensaver from '../components/Screensaver';
 import SeasonalTheme from '../components/SeasonalTheme';
 import NoConnection from '../components/NoConnection/NoConnection';
-import SyncPlayDialog from '../components/SyncPlayDialog';
 import PhotoViewer from '../components/PhotoViewer';
 import ComicViewer from '../components/ComicViewer';
 import SettingsPanel from '../components/SettingsPanel';
@@ -169,8 +167,6 @@ const AppContent = (props) => {
 	const {streamNotification, dismissStreamNotification, pluginInfo} = useSeerr();
 	const {pendingPopups, markPopupsRead} = useServerMessages();
 	const themeMusic = useThemeMusic();
-	const {openDialog: openSyncPlay, closeDialog: closeSyncPlay, isDialogOpen: syncPlayDialogOpen, playQueueUpdate: syncPlayQueueUpdate, isInGroup: isSyncPlayInGroup, setNewQueue: syncPlaySetNewQueue, getGroupPositionTicks: getSyncPlayPositionTicks} = useSyncPlay();
-	const handledSyncPlayQueueRef = useRef(null);
 
 	const [remoteMessage, setRemoteMessage] = useState(null);
 	const clearRemoteMessage = useCallback(() => setRemoteMessage(null), []);
@@ -753,15 +749,6 @@ const AppContent = (props) => {
 					return;
 				}
 
-				// The dialog closes itself on back, but its listener shares the
-				// window with this one and stopPropagation does not reach a
-				// sibling, so the same press otherwise falls through to the
-				// panel underneath and asks to exit the app.
-				if (syncPlayDialogOpen) {
-					closeSyncPlay();
-					return;
-				}
-
 				if (updateInfo) {
 					dismissUpdate();
 					return;
@@ -812,7 +799,7 @@ const AppContent = (props) => {
 
 		window.addEventListener('keydown', handleKeyDown, true);
 		return () => window.removeEventListener('keydown', handleKeyDown, true);
-	}, [panelIndex, handleBack, performAppCleanup, settings.exitConfirmation, showAccountModal, showServerMessages, showExitDialog, showSettingsPanel, showShuffleOverlay, isPinGateActive, setupWizardActive, updateInfo, dismissUpdate, syncPlayDialogOpen, closeSyncPlay]);
+	}, [panelIndex, handleBack, performAppCleanup, settings.exitConfirmation, showAccountModal, showServerMessages, showExitDialog, showSettingsPanel, showShuffleOverlay, isPinGateActive, setupWizardActive, updateInfo, dismissUpdate]);
 
 	const handleLoggedIn = useCallback(() => {
 		setPanelHistory([]);
@@ -969,47 +956,11 @@ const AppContent = (props) => {
 			setComicViewerItem(item);
 			return;
 		}
-		if (isSyncPlayInGroup) {
-			syncPlaySetNewQueue([item.Id]);
-		} else if (settings.syncplayEnabled !== false && settings.syncplayAutoOpen) {
-			openSyncPlay();
-		}
 		setPlayingItem(item);
 		setPlaybackOptions(options || null);
 		setIsResume(!!resume);
 		navigateTo(PANELS.PLAYER);
-	}, [navigateTo, isSyncPlayInGroup, openSyncPlay, settings.syncplayAutoOpen, settings.syncplayEnabled, syncPlaySetNewQueue]);
-
-	const playSyncPlayItem = useCallback((item) => {
-		if (panelIndex === PANELS.PLAYER && playingItem?.Id === item.Id) return;
-		// Opened where the group is: a set started at the beginning is only
-		// seeked there by the server afterwards, which on a transcode means
-		// starting the stream twice while everyone waits.
-		const startPositionTicks = getSyncPlayPositionTicks();
-		setPlayingItem(item);
-		setPlaybackOptions(startPositionTicks > 0 ? {startPositionTicks} : null);
-		setIsResume(false);
-		navigateTo(PANELS.PLAYER);
-	}, [panelIndex, playingItem, navigateTo, getSyncPlayPositionTicks]);
-
-	// The group queued something, so the player has to take over. Reorders and
-	// repeat/shuffle toggles arrive the same way and only count when they
-	// change what is playing.
-	useEffect(() => {
-		const update = syncPlayQueueUpdate;
-		if (!update || update === handledSyncPlayQueueRef.current) return;
-		handledSyncPlayQueueRef.current = update;
-		if (!update.startsPlayback && playingItem?.Id === update.item.Id) return;
-		playSyncPlayItem(update.item);
-	}, [syncPlayQueueUpdate, playingItem, playSyncPlayItem]);
-
-	// The SyncPlay dialog sits above every panel and holds the remote focus, so
-	// it can't stay up over a player the group is driving: a member waiting in
-	// it when the group starts, or a group created from over the player through
-	// the auto-open flow, would otherwise only see the state badge change.
-	useEffect(() => {
-		if (syncPlayDialogOpen && isSyncPlayInGroup && panelIndex === PANELS.PLAYER) closeSyncPlay();
-	}, [syncPlayDialogOpen, isSyncPlayInGroup, panelIndex, closeSyncPlay]);
+	}, [navigateTo]);
 
 	// Moving on to another item from inside the player. The next episode starts at the top, and
 	// one the viewer picked by hand from the episode browser passes `resume` so an episode they
@@ -1569,7 +1520,6 @@ const AppContent = (props) => {
 					onGenres={handleOpenGenres}
 					onFavorites={handleOpenFavorites}
 					onLiveTv={handleOpenLiveTv}
-					onSyncPlay={settings.syncplayEnabled !== false ? openSyncPlay : undefined}
 					onSettings={handleOpenSettings}
 					onSelectLibrary={handleSelectLibrary}
 					onUserMenu={handleOpenAccountModal}
@@ -1587,7 +1537,6 @@ const AppContent = (props) => {
 					onGenres={handleOpenGenres}
 					onFavorites={handleOpenFavorites}
 					onLiveTv={handleOpenLiveTv}
-					onSyncPlay={settings.syncplayEnabled !== false ? openSyncPlay : undefined}
 					onSettings={handleOpenSettings}
 					onSelectLibrary={handleSelectLibrary}
 					onUserMenu={handleOpenAccountModal}
@@ -1865,12 +1814,6 @@ const AppContent = (props) => {
 				onCancel={handleCancelExitDialog}
 				onExit={performAppCleanup}
 			/>
-			<SyncPlayDialog
-				open={syncPlayDialogOpen}
-				onClose={closeSyncPlay}
-				playingItemId={panelIndex === PANELS.PLAYER ? playingItem?.Id : null}
-				onWatch={playSyncPlayItem}
-			/>
 			<ShuffleOverlay
 				open={showShuffleOverlay}
 				onClose={handleCloseShuffleOverlay}
@@ -2018,9 +1961,7 @@ const AppBase = (props) => (
 			<SeerrProvider>
 				<AchievementsProvider>
 					<ServerMessagesProvider>
-						<SyncPlayProvider>
-							<AppContent {...props} />
-						</SyncPlayProvider>
+						<AppContent {...props} />
 					</ServerMessagesProvider>
 				</AchievementsProvider>
 			</SeerrProvider>

@@ -9,7 +9,7 @@ const SCREENS = {
 	account: ['account', 'pinCode*', 'settingsSync*'],
 	general: ['general'],
 	appearance: ['appearance', 'navigationBar*', 'homeScreen*', 'rowOptions*', 'mediaBar*', 'libraries*', 'detailsPage*', 'seasonalEffects*', 'loadingAnimation*', 'screensaver*'],
-	playback: ['player', 'playbackTime*', 'qualityDecoding', 'audio', 'subtitles', 'subtitleCustomization*', 'skippingAutoplay', 'syncPlay'],
+	playback: ['player', 'playbackTime*', 'qualityDecoding', 'audio', 'subtitles', 'subtitleCustomization*', 'skippingAutoplay'],
 	storage: ['storage'],
 	integrations: ['seerr', 'achievements'],
 	about: ['about', 'diagnostics*'],
@@ -33,7 +33,6 @@ const SECTIONS = {
 	'playback.subtitles': ['subtitlesGeneral', 'subtitleStream', 'subtitleCustomization', 'subtitleRendering'],
 	'playback.subtitleCustomization': ['hdr'],
 	'playback.skippingAutoplay': ['playbackEnhancements', 'automaticQueuing'],
-	'playback.syncPlay': ['syncPlayOptions'],
 	'storage.storage': ['storage', 'dangerZone'],
 	'about.about': ['appInfo', 'legal', 'server', 'device', 'capabilities'],
 	'about.diagnostics': ['logging', 'reports']

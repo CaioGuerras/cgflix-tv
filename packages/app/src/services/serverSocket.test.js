@@ -113,7 +113,7 @@ describe('the session socket', () => {
 		});
 
 		// The server disposes a socket 60s after the last KeepAlive it received and ends the
-		// session with it, which takes the set out of any SyncPlay group.
+		// session with it, which takes the set out of remote control.
 		test('answers ForceKeepAlive at once and then every half timeout', () => {
 			forceKeepAlive(60);
 			expect(keepAliveCount()).toBe(1);

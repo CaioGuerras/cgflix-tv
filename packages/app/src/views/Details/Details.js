@@ -8,7 +8,6 @@ import Spotlight from '@enact/spotlight';
 import {useAuth} from '../../context/AuthContext';
 import {useSettings} from '../../context/SettingsContext';
 import {useSeerr} from '../../context/SeerrContext';
-import {useSyncPlay} from '../../context/SyncPlayContext';
 import * as jellyfinApi from '../../services/jellyfinApi';
 import ModernDetailContent from './ModernDetailContent';
 import DetailSkeleton from './DetailSkeleton';
@@ -88,7 +87,6 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 	const showsSection = useMemo(() => sectionVisibility(settings.hiddenDetailSectionsTv), [settings.hiddenDetailSectionsTv]);
 	const {pluginInfo, isEnabled: seerrEnabled} = useSeerr();
 	const recommendationsSupported = pluginInfo?.recommendationsSupported === true;
-	const {isInGroup: isSyncPlayInGroup} = useSyncPlay();
 
 	const effectiveApi = useMemo(() => {
 		if (initialItem?._serverUrl && initialItem._serverAccessToken) {
@@ -377,10 +375,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 			const first = matched || tracks[0];
 			if (tracks.length > 0 && first) playListFrom(tracks, first);
 		} else {
-			// A SyncPlay group queues the pressed item for everyone, so intros stay out of it.
-			const prerolls = isSyncPlayInGroup
-				? []
-				: tagWithServerInfo(await fetchPrerolls(effectiveApi, item, settings));
+			const prerolls = tagWithServerInfo(await fetchPrerolls(effectiveApi, item, settings));
 			if (prerolls.length > 0) {
 				// The version, audio and subtitle picks belong to the movie, and the queue
 				// starts on an intro, so applying them here would target the wrong file.
@@ -389,7 +384,7 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 				onPlay?.(item, false, playbackOptions);
 			}
 		}
-	}, [item, episodes, nextUp, seasons, collectionItems, albumTracks, playlistItems, onPlay, onSelectItem, buildPlaybackOptions, effectiveApi, settings, tagWithServerInfo, isSyncPlayInGroup, playListFrom]);
+	}, [item, episodes, nextUp, seasons, collectionItems, albumTracks, playlistItems, onPlay, onSelectItem, buildPlaybackOptions, effectiveApi, settings, tagWithServerInfo, playListFrom]);
 
 	const handleResume = useCallback(() => {
 		if (!item) return;
@@ -1084,8 +1079,6 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 		return (
 			<div className={css.page} onScroll={keepPageInPlace}>
 				<DetailContent
-					inSyncPlayGroup={isSyncPlayInGroup}
-					onWatchWithGroup={handlePlay}
 					key={item.Id}
 					item={item}
 					settings={settings}
@@ -1334,8 +1327,6 @@ const Details = ({itemId: itemIdProp, initialItem, onPlay, onSelectItem, onSelec
 			isReadableBook={isReadableBook}
 			hasPlaybackPosition={hasPlaybackPosition}
 			resumeTimeText={resumeTimeText}
-			inSyncPlayGroup={isSyncPlayInGroup}
-			onWatchWithGroup={handlePlay}
 			mediaSource={mediaSource}
 			supportsMediaSourceSelection={supportsMediaSourceSelection}
 			hasMultipleVersions={hasMultipleVersions}

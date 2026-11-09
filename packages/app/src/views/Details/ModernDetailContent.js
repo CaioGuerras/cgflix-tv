@@ -84,7 +84,7 @@ const ModernDetailContent = (props) => {
 		handleChapterSelect, handleExtraSelect, playTrack, playlistMenu,
 		onSelectItem, onSelectPerson, onSelectStudio,
 		seerr, seerrNav, onSelectSeerrCard, spotlightBackRef, collectionMenu,
-		handlePlay, handleShuffle, onWatchWithGroup
+		handlePlay, handleShuffle
 	} = props;
 
 	const [sortBy, setSortBy] = useState(PLAYLIST_SORT_ORDER);
@@ -179,19 +179,6 @@ const ModernDetailContent = (props) => {
 			handlePlay?.(targetItem, tracksOverride);
 		}
 	}, [isPlaylist, displayedPlaylistTracks, handlePlay]);
-
-	const handleModernWatchWithGroup = useCallback((targetItem) => {
-		if (isPlaylist) {
-			const queue = displayedPlaylistTracks;
-			const validTarget = (targetItem && !Array.isArray(targetItem) && targetItem.Id)
-				? queue.find((t) => (targetItem.PlaylistItemId ? t.PlaylistItemId === targetItem.PlaylistItemId : t.Id === targetItem.Id))
-				: null;
-			const first = validTarget || queue[0];
-			onWatchWithGroup?.(first, queue);
-		} else {
-			onWatchWithGroup?.(targetItem);
-		}
-	}, [isPlaylist, displayedPlaylistTracks, onWatchWithGroup]);
 
 	const handleModernShuffle = useCallback((tracksOverride) => {
 		if (isPlaylist) {
@@ -880,7 +867,6 @@ const ModernDetailContent = (props) => {
 									{...props}
 									handlePlay={handleModernPlay}
 									handleShuffle={handleModernShuffle}
-									onWatchWithGroup={handleModernWatchWithGroup}
 									playlistTracks={isPlaylist ? displayedPlaylistTracks : undefined}
 									hasTech={hasTech}
 									played={played}

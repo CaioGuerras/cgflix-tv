@@ -9,7 +9,7 @@ import css from './Settings.module.less';
 const ICONS = {
 	detail: {
 		seerrRequest: 'add', seerrRequest4k: 'add', shuffle: 'shuffle_rounded', version: 'video_file',
-		audio: 'audiotrack', subtitles: 'subtitles', trailer: 'movie_outlined', watchWithGroup: 'groups_rounded',
+		audio: 'audiotrack', subtitles: 'subtitles', trailer: 'movie_outlined',
 		watched: 'check_circle_outline', favorite: 'favorite_border', personalRating: 'star_outline',
 		goToSeries: 'tv', playlist: 'playlist_add', collection: 'library_add', deleteFiles: 'delete_outline',
 		artwork: 'image', seerrWatchlist: 'bookmark_border', seerrReportIssue: 'report_problem_outlined',

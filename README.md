@@ -33,7 +33,7 @@ Moonfin is a Jellyfin and Emby client for Samsung Smart TVs (Tizen), LG Smart TV
 - **Retro games** played right on the TV from a server game library, with save states synced through the server. Needs webOS 5 or Tizen 5 and newer. See [Retro Games](https://github.com/Moonfin-Client/Plugin/wiki/Retro-Games).
 - **Live TV and DVR** with a program guide that opens on your last channel, a quick channel changer during live playback, and recording management.
 - **Advanced subtitles**, including PGS image subtitles and styled ASS/SSA through libass, plus in-app subtitle downloads.
-- **SyncPlay and remote control**, for watching together in sync with others and for driving the TV from other Jellyfin apps, including typing a search from your phone.
+- **Remote control**, for driving the TV from other Jellyfin apps, including typing a search from your phone.
 - **Themes** with four built-in looks including Glass and 8-bit Hero, a Theme Store for community themes, custom themes, and accent color customization. Loading animations and the screensaver's backdrop, clock or logo are yours to customize with a live preview, and screens show skeleton placeholders while they load.
 - **A featured media bar** with six layouts, including the rounded Aya hero.
 - **Personal ratings** as a like, stars, or a score out of ten, usable as a library filter.

@@ -18,7 +18,7 @@ const Icon = ({path}) => (
 
 // A circular icon button that expands into a labeled pill when focused. A label longer than the
 // opened pill scrolls while it has focus, and Play and Resume grow to fit theirs instead.
-export const ActionButton = ({path, label, detail, onClick, active, group, primary, spotlightId}) => {
+export const ActionButton = ({path, label, detail, onClick, active, primary, spotlightId}) => {
 	const [focused, setFocused] = useState(false);
 	const handleFocus = useCallback(() => setFocused(true), []);
 	const handleBlur = useCallback(() => setFocused(false), []);
@@ -27,7 +27,7 @@ export const ActionButton = ({path, label, detail, onClick, active, group, prima
 
 	return (
 		<SpottableDiv
-			className={`${css.actionBtn} ${primary ? css.actionPrimary : ''} ${active ? css.actionActive : ''} ${group ? css.actionGroup : ''} ${pulsing ? css.actionPulse : ''}`}
+			className={`${css.actionBtn} ${primary ? css.actionPrimary : ''} ${active ? css.actionActive : ''} ${pulsing ? css.actionPulse : ''}`}
 			onClick={onClick}
 			onFocus={handleFocus}
 			onBlur={handleBlur}
@@ -53,8 +53,8 @@ export const ActionButton = ({path, label, detail, onClick, active, group, prima
 export const detailActionCatalogue = (props) => {
 	const {
 		item, seerr,
-		isSeries, isSeason, isBoxSet, isEpisode, isBook, isPerson, isPlaylist, playlistTracks,
-		hasTrailer, inSyncPlayGroup, onWatchWithGroup,
+		isSeries, isSeason, isBoxSet, isEpisode, isPerson, isPlaylist, playlistTracks,
+		hasTrailer,
 		supportsMediaSourceSelection, hasMultipleVersions, hasMultipleAudio,
 		handleShuffle, handleTrailer, handleToggleWatched, handleToggleFavorite, handleGoToSeries,
 		personalRatingStyle, handleOpenRatingDialog,
@@ -115,9 +115,6 @@ export const detailActionCatalogue = (props) => {
 		{id: 'audio', when: hasMultipleAudio, render: () => <ActionButton path={DETAIL_ICON_PATHS.audio} label={$L('Audio')} onClick={handleOpenAudioModal} />},
 		{id: 'subtitles', when: supportsMediaSourceSelection, render: () => <ActionButton path={DETAIL_ICON_PATHS.subtitle} label={$L('Subtitle')} onClick={handleOpenSubtitleModal} />},
 		{id: 'trailer', when: hasTrailer, render: () => <ActionButton path={DETAIL_ICON_PATHS.trailer} label={$L('Trailer')} onClick={handleTrailer} />},
-		// Offered while in a SyncPlay group and lit in the accent so it reads
-		// as the group's, next to a Play that stays as it is.
-		{id: 'watchWithGroup', when: inSyncPlayGroup && !isBook, render: () => <ActionButton path={DETAIL_ICON_PATHS.group} label={$L('Watch with group')} group onClick={onWatchWithGroup} spotlightId="details-watch-with-group-btn" />},
 		{id: 'watched', when: !isPerson, render: () => <ActionButton path={DETAIL_ICON_PATHS.watched} label={played ? $L('Watched') : $L('Mark as Watched')} active={played} onClick={handleToggleWatched} spotlightId="details-watched-btn" />},
 		{id: 'favorite', when: !!handleToggleFavorite, render: () => <ActionButton path={DETAIL_ICON_PATHS.favorite} label={isFavorite ? $L('Favorited') : $L('Favorite')} active={isFavorite} onClick={handleToggleFavorite} spotlightId="details-favorite-btn" />},
 		{id: 'personalRating', when: false, render: () => <ActionButton path={personalRatingIconPath(personalRatingStyle, item.UserData)} label={personalRatingLabel(personalRatingStyle, item.UserData)} onClick={handleOpenRatingDialog} spotlightId="details-rating-btn" />},
