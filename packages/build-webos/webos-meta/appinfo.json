@@ -1,6 +1,6 @@
 {
     "id": "br.com.docaio.cgflix.tv",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "vendor": "CGFLIX",
     "type": "web",
     "main": "index.html",

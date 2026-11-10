@@ -532,6 +532,10 @@ async function main() {
 (function(){
 	var el = document.getElementById('cgf-splash');
 	if (!el) return;
+	try {
+		var bg = window.localStorage && window.localStorage.getItem('cgf_bootBackground');
+		if (bg && /^rgb\\(\\d{1,3}, \\d{1,3}, \\d{1,3}\\)$/.test(bg)) el.style.background = bg;
+	} catch (e) {}
 	el.setAttribute('data-shown-at', String(Date.now()));
 	setTimeout(function(){
 		if (!el.parentNode || el.getAttribute('data-leaving')) return;

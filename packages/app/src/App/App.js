@@ -67,7 +67,7 @@ import {resolveOverlayColor} from '../theme/overlayColors';
 import Login from '../views/Login';
 import Browse from '../views/Browse';
 import {isGameLibrary, refreshGameLibraries, resolveGameLibraryId} from '../utils/gameLibrary';
-import {hideBootSplash} from '../utils/bootSplash';
+import {hideBootSplash, rememberBootBackground} from '../utils/bootSplash';
 
 const Details = lazy(() => import('../views/Details'));
 const Library = lazy(() => import('../views/Library'));
@@ -466,6 +466,11 @@ const AppContent = (props) => {
 			root.setAttribute('data-theme-id', appliedTheme.id);
 		}
 	}, [appliedTheme]);
+
+	// The next boot splash wears the chosen theme background (Sumi stays black).
+	useEffect(() => {
+		if (activeTheme) rememberBootBackground(buildThemeCssVars(activeTheme)['--theme-background']);
+	}, [activeTheme]);
 
 	// The custom properties above only reach the newer engines. The injected
 	// stylesheet carries the same theme as literal colors for everything older.

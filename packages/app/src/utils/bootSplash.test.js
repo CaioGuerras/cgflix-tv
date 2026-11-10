@@ -1,4 +1,4 @@
-import {FADE_MS, MIN_VISIBLE_MS, SPLASH_ID, hideBootSplash} from './bootSplash';
+import {BOOT_BACKGROUND_KEY, FADE_MS, MIN_VISIBLE_MS, SPLASH_ID, hideBootSplash, rememberBootBackground} from './bootSplash';
 
 describe('hideBootSplash', () => {
 	beforeEach(() => {
@@ -36,5 +36,21 @@ describe('hideBootSplash', () => {
 		expect(hideBootSplash(MIN_VISIBLE_MS + 20)).toBe(false);
 		jest.advanceTimersByTime(0);
 		expect(el.style.opacity).toBe('0');
+	});
+});
+
+describe('rememberBootBackground', () => {
+	beforeEach(() => window.localStorage.removeItem(BOOT_BACKGROUND_KEY));
+
+	test('keeps the Sumi black for the next boot', () => {
+		expect(rememberBootBackground('rgb(0, 0, 0)')).toBe(true);
+		expect(window.localStorage.getItem(BOOT_BACKGROUND_KEY)).toBe('rgb(0, 0, 0)');
+	});
+
+	test('refuses anything that is not a plain rgb() value', () => {
+		expect(rememberBootBackground('url(x)')).toBe(false);
+		expect(rememberBootBackground('rgba(0, 0, 0, 0.5)')).toBe(false);
+		expect(rememberBootBackground(undefined)).toBe(false);
+		expect(window.localStorage.getItem(BOOT_BACKGROUND_KEY)).toBeNull();
 	});
 });
