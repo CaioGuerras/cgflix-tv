@@ -35,6 +35,14 @@ describe('buildThemeOverrideCss', () => {
 		expect(sumi).not.toContain('var(--theme');
 	});
 
+	it('paints the user avatar with the theme accent', () => {
+		const sumi = buildThemeOverrideCss(resolveThemeById('sumi'));
+		const gold = toCssColor(resolveThemeById('sumi').colors.accent);
+		const avatarRule = sumi.split('}').find((r) => r.includes('userAvatar') && r.includes('background'));
+		expect(avatarRule).toBeDefined();
+		expect(avatarRule).toContain(gold);
+	});
+
 	it('never paints a glow or a nav color cycle', () => {
 		for (const id of THEME_IDS) {
 			const css = buildThemeOverrideCss(resolveThemeById(id));

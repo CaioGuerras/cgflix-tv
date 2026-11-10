@@ -164,6 +164,8 @@ export const buildThemeOverrideCss = (theme, options = {}) => {
 	rule(`.${sidebarCss.sidebarItem}:hover, .${sidebarCss.libraryItem}:hover, .${navBarCss.navBtn}:hover`, `color: ${onSurface}; background: ${os(0.14)};`);
 	rule(`.${sidebarCss.sidebarItem}:focus, .${sidebarCss.libraryItem}:focus, .${navBarCss.navBtn}:focus`, `color: ${onSurfaceInk}; background: ${onSurface}; border-color: transparent; box-shadow: ${noGlow};`);
 	rule(`.${sidebarCss.active}`, `color: ${onSurface}; background: ${accentA(0.24)};`);
+	// CGFLIX: the avatar disc follows the theme accent (gold on Sumi), not the build-time lilac.
+	rule(`.${sidebarCss.userAvatar}, .${navBarCss.userAvatar}`, `background: ${accent}; color: rgb(${inkOn(c.accent)});`);
 	rule(`.${navBarCss.active}`, `color: ${onSurface}; background: ${accentA(0.28)};`);
 	rule(`.${navBarCss.navPill}`, `border: ${b.navBorder ? `${b.navBorder.width}px solid ${toCssColor(b.navBorder.color)}` : 'none'};`);
 
