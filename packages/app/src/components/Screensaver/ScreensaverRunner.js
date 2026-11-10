@@ -1,7 +1,6 @@
 import {useEffect, useRef} from 'react';
+import {runnerColors} from './runnerColors';
 
-const LEAD_COLOR = '#b8adde';
-const TRAIL_COLOR = '#756c9a';
 const HEAD_COLOR = '#f1eff5';
 const STRIDE_DURATION = 620;
 const FRAME_DELAY = 16;
@@ -47,7 +46,7 @@ const drawArm = (ctx, shoulderX, shoulderY, phase, scale) => {
 	stroke(ctx, elbowX, elbowY, elbowX + (foreArmLen * Math.sin(foreArmAngle)), elbowY + (foreArmLen * Math.cos(foreArmAngle)));
 };
 
-const drawRunner = (ctx, size, progress, facingLeft) => {
+const drawRunner = (ctx, size, progress, facingLeft, colors) => {
 	const scale = size / 100;
 	const strokeWidth = Math.max(3, Math.min(9.5, 6.5 * scale));
 
@@ -67,12 +66,12 @@ const drawRunner = (ctx, size, progress, facingLeft) => {
 	const shoulderX = hipX + (16 * scale);
 	const shoulderY = (28 * scale) + bounce;
 
-	ctx.strokeStyle = TRAIL_COLOR;
+	ctx.strokeStyle = colors.trail;
 	ctx.lineWidth = strokeWidth * 0.92;
 	drawLeg(ctx, hipX, hipY, phi + Math.PI, scale);
 	drawArm(ctx, shoulderX, shoulderY, phi, scale);
 
-	ctx.strokeStyle = LEAD_COLOR;
+	ctx.strokeStyle = colors.lead;
 	ctx.lineWidth = strokeWidth * 1.05;
 	stroke(ctx, hipX, hipY, shoulderX, shoulderY);
 
@@ -98,6 +97,7 @@ const ScreensaverRunner = ({size, speedMultiplier = 1, facingRef}) => {
 		const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
 		if (!ctx) return;
 
+		const colors = runnerColors();
 		const period = STRIDE_DURATION / (speedMultiplier || 1);
 		const started = Date.now();
 		let handle = null;
@@ -106,7 +106,7 @@ const ScreensaverRunner = ({size, speedMultiplier = 1, facingRef}) => {
 		const animate = () => {
 			if (!running) return;
 			const progress = ((Date.now() - started) % period) / period;
-			drawRunner(ctx, size, progress, facingRef ? facingRef.current : false);
+			drawRunner(ctx, size, progress, facingRef ? facingRef.current : false, colors);
 			handle = window.requestAnimationFrame ? window.requestAnimationFrame(animate) : setTimeout(animate, FRAME_DELAY);
 		};
 

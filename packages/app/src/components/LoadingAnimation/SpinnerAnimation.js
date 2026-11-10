@@ -1,14 +1,13 @@
 import {useEffect, useRef} from 'react';
 
 import css from './LoadingAnimation.module.less';
+import {readAccentRgb, dimRgb} from '../../utils/runtimeAccent';
 
 const SWEEP = Math.PI * 1.35;
-const TAIL = [55, 48, 76];
-const HEAD = [184, 173, 222];
 
 // The arc fades in from nothing to the dim lilac of Shikkoku over its first stretch, then turns to
 // the accent toward the head. Past the head, the round end caps included, it stays on the accent.
-const arcColor = (t) => {
+const arcColor = (t, HEAD, TAIL) => {
 	if (t > 1) return [HEAD[0], HEAD[1], HEAD[2], 1];
 	if (t < 0.45) return [TAIL[0], TAIL[1], TAIL[2], t / 0.45];
 	const mix = (t - 0.45) / 0.55;
@@ -25,6 +24,8 @@ const arcColor = (t) => {
 const paintArc = (canvas, size, strokeWidth) => {
 	const ctx = canvas.getContext('2d');
 	if (!ctx) return;
+	const HEAD = readAccentRgb();
+	const TAIL = dimRgb(HEAD, 0.3);
 	const center = size / 2;
 	const radius = (size - strokeWidth) / 2;
 	const half = strokeWidth / 2;
@@ -52,7 +53,7 @@ const paintArc = (canvas, size, strokeWidth) => {
 			coverage = Math.min(1, Math.max(0, coverage, toTail, toHead));
 			if (coverage <= 0) continue;
 
-			const color = arcColor(t);
+			const color = arcColor(t, HEAD, TAIL);
 			const i = ((y * size) + x) * 4;
 			data[i] = color[0];
 			data[i + 1] = color[1];
