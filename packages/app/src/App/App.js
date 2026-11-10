@@ -469,8 +469,9 @@ const AppContent = (props) => {
 
 	// The next boot splash wears the chosen theme background (Sumi stays black).
 	useEffect(() => {
-		if (activeTheme) rememberBootBackground(buildThemeCssVars(activeTheme)['--theme-background']);
-	}, [activeTheme]);
+		// Wait for the saved settings, or the default theme overwrites a Sumi choice.
+		if (settingsLoaded && activeTheme) rememberBootBackground(buildThemeCssVars(activeTheme)['--theme-background']);
+	}, [settingsLoaded, activeTheme]);
 
 	// The custom properties above only reach the newer engines. The injected
 	// stylesheet carries the same theme as literal colors for everything older.
